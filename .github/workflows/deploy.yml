@@ -32,13 +32,14 @@ jobs:
 
       - name: Rename war file
         run: |
-          mv ./build/libs/MySerblet-1.0-SNAPSHOT.war ./ROOT.war
+          mv ./build/libs/testserver-1.0-SNAPSHOT.war ./ROOT.war
 
       - name: Deploy to Tsuru
         env:
           TSURU_TOKEN: ${{ secrets.TSURU_TOKEN }}
         run: |
           tsuru app-deploy -a bioeng-neontl-app ROOT.war
+
 
 
 
