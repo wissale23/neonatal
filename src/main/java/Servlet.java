@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @WebServlet(
-        urlPatterns = {"/consultants", "/nurses"},
+        urlPatterns = {"/consultants", "/nurses","/researchers","/parents"},
         loadOnStartup = 1
 )
 public class Servlet extends HttpServlet {
@@ -28,6 +28,10 @@ public class Servlet extends HttpServlet {
 
         if ("/consultants".equals(path)) {
             resp.getWriter().write("Test for consultants endpoint");
+        } else if("/researchers".equals(path)){
+            resp.getWriter().write("Test for researchers endpoint");    
+        } else if("/parents".equals(path)){
+            resp.getWriter().write("Test for parents endpoint");       
         } else if ("/nurses".equals(path)) {
             // Load data from resources
             List<Double> timeData = loadDataFromResource(TIME_FILE);
