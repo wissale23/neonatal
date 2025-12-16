@@ -1,4 +1,3 @@
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -17,9 +16,9 @@ public class GlucoseServlet extends HttpServlet {
     private final List<Double> userSmoothValues = new ArrayList<>();
 
     // File paths for your original data
-    private final String TIME_FILE = "/path/to/t_glu.txt";
-    private final String RAW_FILE = "/path/to/glu_uM_unsmoothed.txt";
-    private final String SMOOTH_FILE = "/path/to/glu_uM_smoothed.txt";
+    private final String TIME_FILE = "/Users/rebeccashrestha/Desktop/Neonate Monitoring/t_glu.txt";
+    private final String RAW_FILE = "/Users/rebeccashrestha/Desktop/Neonate Monitoring/glu_uM_unsmoothed.txt";
+    private final String SMOOTH_FILE = "/Users/rebeccashrestha/Desktop/Neonate Monitoring/glu_uM_smoothed.txt";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
