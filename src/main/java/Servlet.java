@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
         urlPatterns = {"/consultants", "/nurses"},
         loadOnStartup = 1
 )
-public class GlucoseServlet extends HttpServlet {
+public class Servlet extends HttpServlet {
 
     // In-memory storage for user-submitted values
     private final List<Double> userRawValues = new ArrayList<>();
