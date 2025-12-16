@@ -16,9 +16,10 @@ public class GlucoseServlet extends HttpServlet {
     private final List<Double> userSmoothValues = new ArrayList<>();
 
     // File paths for your original data
-    private final String TIME_FILE = "/Users/rebeccashrestha/Desktop/Neonate Monitoring/t_glu.txt";
-    private final String RAW_FILE = "/Users/rebeccashrestha/Desktop/Neonate Monitoring/glu_uM_unsmoothed.txt";
-    private final String SMOOTH_FILE = "/Users/rebeccashrestha/Desktop/Neonate Monitoring/glu_uM_smoothed.txt";
+    private final String TIME_FILE = "/t_glu.txt";
+    private final String RAW_FILE = "/glu_uM_unsmoothed.txt";
+    private final String SMOOTH_FILE = "/glu_uM_smoothed.txt";
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
