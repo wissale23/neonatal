@@ -76,7 +76,7 @@ public class Servlet extends HttpServlet {
                     "      options: {\n" +
                     "        responsive: true,\n" +
                     "        scales: {\n" +
-                    "          y: { min: 0, max: 40, {display: true, text: 'Skin Glucose' } },\n" +
+                    "          y: { min: 0, max: 40, title: {display: true, text: 'Skin Glucose' } },\n" +
                     "          x: { title: { display: true, text: 'Time (hours)' } }\n" +
                     "        }\n" +
                     "      }\n" +
