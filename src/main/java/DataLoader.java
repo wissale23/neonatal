@@ -1,5 +1,3 @@
-package loader;
-
 import java.io.*;
 import java.util.*;
 
