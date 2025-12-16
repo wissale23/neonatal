@@ -11,40 +11,39 @@ import java.util.stream.Collectors;
 )
 public class GlucoseServlet extends HttpServlet {
 
-    // In-memory storage for user-submitted values (optional)
+    // In-memory storage for user-submitted values
     private final List<Double> userRawValues = new ArrayList<>();
     private final List<Double> userSmoothValues = new ArrayList<>();
 
-    // File paths for your original data
+    // Resource file paths
     private final String TIME_FILE = "/t_glu.txt";
     private final String RAW_FILE = "/glu_uM_unsmoothed.txt";
     private final String SMOOTH_FILE = "/glu_uM_smoothed.txt";
 
-
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         String path = req.getServletPath();
         resp.setContentType("text/html");
 
         if ("/consultants".equals(path)) {
             resp.getWriter().write("Test for consultants endpoint");
         } else if ("/nurses".equals(path)) {
+            // Load data from resources
+            List<Double> timeData = loadDataFromResource(TIME_FILE);
+            List<Double> rawData = loadDataFromResource(RAW_FILE);
+            List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
 
-            // Load data from files
-            List<Double> timeData = loadDataFromFile(TIME_FILE);
-            List<Double> rawData = loadDataFromFile(RAW_FILE);
-            List<Double> smoothData = loadDataFromFile(SMOOTH_FILE);
-
-            // Combine with user-submitted values (optional)
+            // Combine with user-submitted values
             rawData.addAll(userRawValues);
             smoothData.addAll(userSmoothValues);
 
-            // Convert Java lists to JavaScript arrays as strings
+            // Convert Java lists to JavaScript arrays
             String timeArray = timeData.toString();
             String rawArray = rawData.toString();
             String smoothArray = smoothData.toString();
 
-            // Serve HTML page with embedded Chart.js
+            // Serve HTML page with Chart.js
             resp.getWriter().write(
                     "<!DOCTYPE html>\n" +
                     "<html>\n" +
@@ -60,7 +59,6 @@ public class GlucoseServlet extends HttpServlet {
                     "  <input type='number' id='newValue' step='0.1'>\n" +
                     "  <button onclick='submitValue()'>Submit</button>\n" +
                     "  <script>\n" +
-                    "    // Parse Java arrays into JS arrays\n" +
                     "    const labels = " + timeArray + ";\n" +
                     "    const rawData = " + rawArray + ";\n" +
                     "    const smoothData = " + smoothArray + ";\n" +
@@ -77,15 +75,17 @@ public class GlucoseServlet extends HttpServlet {
                     "      },\n" +
                     "      options: {\n" +
                     "        responsive: true,\n" +
-                    "        scales: { y: { min: 0, max: 10 }, x: { title: { display: true, text: 'Time (hours)' } } }\n" +
+                    "        scales: {\n" +
+                    "          y: { min: 0, max: 10 },\n" +
+                    "          x: { title: { display: true, text: 'Time (hours)' } }\n" +
+                    "        }\n" +
                     "      }\n" +
                     "    });\n" +
                     "\n" +
-                    "    // Function to submit new glucose value\n" +
                     "    function submitValue() {\n" +
                     "      const val = document.getElementById('newValue').value;\n" +
                     "      fetch('/nurses', { method:'POST', body: val })\n" +
-                    "        .then(resp => location.reload()); // reload chart with new data\n" +
+                    "        .then(resp => location.reload());\n" +
                     "    }\n" +
                     "  </script>\n" +
                     "</body>\n" +
@@ -95,14 +95,15 @@ public class GlucoseServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         // Read user-submitted glucose value
         String reqBody = req.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
         try {
             double raw = Double.parseDouble(reqBody);
             userRawValues.add(raw);
 
-            // Simple smoothing: moving average of last 3 values
+            // Simple smoothing (moving average of last 3 values)
             double smooth = raw;
             if (userRawValues.size() >= 3) {
                 smooth = (userRawValues.get(userRawValues.size()-1)
@@ -117,10 +118,16 @@ public class GlucoseServlet extends HttpServlet {
         }
     }
 
-    // Helper method to read doubles from a file
-    private List<Double> loadDataFromFile(String path) {
+    // Helper method to read doubles from resources in the WAR
+    private List<Double> loadDataFromResource(String resourcePath) {
         List<Double> result = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+        try (InputStream is = getClass().getResourceAsStream(resourcePath);
+             BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+
+            if (is == null) {
+                throw new FileNotFoundException("Resource not found: " + resourcePath);
+            }
+
             String line;
             while ((line = br.readLine()) != null) {
                 line = line.trim();
@@ -128,9 +135,10 @@ public class GlucoseServlet extends HttpServlet {
                     result.add(Double.parseDouble(line));
                 }
             }
-        } catch (IOException | NumberFormatException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
     }
 }
+
