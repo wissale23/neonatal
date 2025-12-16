@@ -132,7 +132,11 @@ public class Servlet extends HttpServlet {
             while ((line = br.readLine()) != null) {
                 line = line.trim();
                 if (!line.isEmpty()) {
-                    result.add(Double.parseDouble(line));
+                    try {
+                            result.add(Double.parseDouble(line));
+                        } catch (NumberFormatException ignored) {
+                            // skip headers or labels
+                        }
                 }
             }
         } catch (Exception e) {
