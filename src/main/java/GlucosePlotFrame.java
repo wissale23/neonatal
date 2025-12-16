@@ -1,5 +1,3 @@
-package plot;
-
 import org.jfree.chart.*;
 import org.jfree.chart.plot.IntervalMarker;
 import org.jfree.chart.plot.XYPlot;
