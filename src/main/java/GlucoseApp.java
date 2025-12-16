@@ -1,6 +1,3 @@
-package app;
-
-import loader.DataLoader;
 import plot.GlucosePlotFrame;
 import org.jfree.data.xy.*;
 
