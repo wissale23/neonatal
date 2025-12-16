@@ -69,14 +69,14 @@ public class Servlet extends HttpServlet {
                     "      data: {\n" +
                     "        labels: labels,\n" +
                     "        datasets: [\n" +
-                    "          { label: 'Smoothed Glucose', data: smoothData, borderColor: 'rgb(142,11,11)', borderWidth: 1.5, fill: false }\n" +
                     "          { label: 'Raw Glucose', data: rawData, borderColor: 'rgb(255,160,160)', borderWidth: 3, fill: false },\n" +
+                    "          { label: 'Smoothed Glucose', data: smoothData, borderColor: 'rgb(142,11,11)', borderWidth: 1.5, fill: false }\n" +
                     "        ]\n" +
                     "      },\n" +
                     "      options: {\n" +
                     "        responsive: true,\n" +
                     "        scales: {\n" +
-                    "          y: { min: 0, max: 40, { display: true, text: 'Skin Glucose (µM)' } },\n" +
+                    "          y: { min: 0, max: 40, {display: true, text: 'Skin Glucose' } },\n" +
                     "          x: { title: { display: true, text: 'Time (hours)' } }\n" +
                     "        }\n" +
                     "      }\n" +
@@ -145,4 +145,3 @@ public class Servlet extends HttpServlet {
         return result;
     }
 }
-
