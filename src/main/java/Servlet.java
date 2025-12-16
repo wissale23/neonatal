@@ -70,7 +70,7 @@ public class Servlet extends HttpServlet {
                     "        labels: labels,\n" +
                     "        datasets: [\n" +
                     "          { label: 'Smoothed Glucose', data: smoothData, borderColor: 'rgb(142,11,11)', borderWidth: 1.5, fill: false, order: 2 }\n"+
-                    "          { label: 'Raw Glucose', data: rawData, borderColor: 'rgba(255,160,160,0.35)', borderWidth: 1.5, fill: false, order: 1 },\n" +
+                    "          { label: 'Raw Glucose', data: rawData, borderColor: 'rgba(255,160,160,0.35)', borderWidth: 3, fill: false, order: 1 },\n" +
                     "        ]\n" +
                     "      },\n" +
                     "      options: {\n" +
