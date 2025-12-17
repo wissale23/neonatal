@@ -21,13 +21,12 @@ public class Servlet extends HttpServlet {
     private final String SMOOTH_FILE = "/glu_uM_smoothed.txt";
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) 
+        throws ServletException, IOException {
         String path = req.getServletPath();
         resp.setContentType("text/html");
 
         if ("/consultants".equals(path)) {
-            resp.getWriter().write("Test for consultants endpoint");
             // Load data from files
             List<Double> timeData = loadDataFromResource(TIME_FILE);
             List<Double> rawData = loadDataFromResource(RAW_FILE);
@@ -56,29 +55,21 @@ public class Servlet extends HttpServlet {
             resp.getWriter().write("Test for parents endpoint");
 
         }
+    }
                     
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        // Read user-submitted glucose value
+        // Read user-submitted blood glucose value
         String reqBody = req.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
         try {
-            double raw = Double.parseDouble(reqBody);
-            userRawValues.add(raw);
-
-            // Simple smoothing (moving average of last 3 values)
-            double smooth = raw;
-            if (userRawValues.size() >= 3) {
-                smooth = (userRawValues.get(userRawValues.size()-1)
-                        + userRawValues.get(userRawValues.size()-2)
-                        + userRawValues.get(userRawValues.size()-3)) / 3.0;
+                double raw = Double.parseDouble(reqBody);
+                userRawValues.add(raw);
+                resp.getWriter().write("Value submitted: " + raw);
+            } catch (NumberFormatException e) {
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                resp.getWriter().write("Invalid number");
             }
-            userSmoothValues.add(smooth);
-            resp.getWriter().write("Value submitted: " + raw);
-        } catch (NumberFormatException e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("Invalid number");
-        }
     }
 
     // Helper method to read doubles from resources in the WAR
