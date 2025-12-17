@@ -54,7 +54,6 @@ public class Servlet extends HttpServlet {
                     "<head>\n" +
                     "  <title>Nurses Dashboard</title>\n" +
                     "  <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n" +
-                    "  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3"></script>" +
                     "</head>\n" +
                     "<body>\n" +
                     "  <h2>Neonatal Glucose Levels</h2>\n" +
