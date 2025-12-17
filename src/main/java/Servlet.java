@@ -28,110 +28,35 @@ public class Servlet extends HttpServlet {
 
         if ("/consultants".equals(path)) {
             resp.getWriter().write("Test for consultants endpoint");
-        } else if("/researchers".equals(path)){
-            resp.getWriter().write("Test for researchers endpoint");    
-        } else if("/parents".equals(path)){
-            resp.getWriter().write("Test for parents endpoint");       
-        } else if ("/nurses".equals(path)) {
-            // Load data from resources
+            // Load data from files
             List<Double> timeData = loadDataFromResource(TIME_FILE);
             List<Double> rawData = loadDataFromResource(RAW_FILE);
             List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
 
-            // Combine with user-submitted values
+            // Consultants only view the file data, no user input
+            GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, 2.6, 10.0);
+            resp.getWriter().write(chart.generateHTML());
+
+        } else if ("/nurses".equals(path)) {
+            // Load data from files
+            List<Double> timeData = loadDataFromResource(TIME_FILE);
+            List<Double> rawData = loadDataFromResource(RAW_FILE);
+            List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
+
+            // Nurses can add their own raw values
             rawData.addAll(userRawValues);
-            smoothData.addAll(userSmoothValues);
 
-            // Convert Java lists to JavaScript arrays
-            String timeArray = timeData.toString();
-            String rawArray = rawData.toString();
-            String smoothArray = smoothData.toString();
+            GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, 2.6, 10.0);
+            resp.getWriter().write(chart.generateHTML());
+                
+        } else if("/researchers".equals(path)){
+            resp.getWriter().write("Test for researchers endpoint");
+                
+        } else if("/parents".equals(path)){
+            resp.getWriter().write("Test for parents endpoint");
 
-            // Serve HTML page with Chart.js
-            resp.getWriter().write(
-                    "<!DOCTYPE html>\n" +
-                    "<html>\n" +
-                    "<head>\n" +
-                    "  <title>Nurses Dashboard</title>\n" +
-                    "  <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n" +
-                    "  <script src=\"https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3\"></script>\n" +
-                    "</head>\n" +
-                    "<body>\n" +
-                    "  <h2>Neonatal Glucose Levels</h2>\n" +
-                    "  <canvas id=\"glucoseChart\" width=\"800\" height=\"400\"></canvas>\n" +
-                    "  <br>\n" +
-                    "  <label>Enter new glucose value:</label>\n" +
-                    "  <input type='number' id='newValue' step='0.1'>\n" +
-                    "  <button onclick='submitValue()'>Submit</button>\n" +
-                    "  <script>\n" +
-                    "    const labels = " + timeArray + ";\n" +
-                    "    const rawData = " + rawArray + ";\n" +
-                    "    const smoothData = " + smoothArray + ";\n" +
-                    "\n" +
-                    
-                    // Set range
-                    "const LOWER = 2.6;\n" +
-                    "const UPPER = 10.0;\n" +
-                    
-                    "    Chart.register(window['chartjs-plugin-annotation']);\n" +
-                    "    const ctx = document.getElementById('glucoseChart').getContext('2d');\n" +
-                    "    const chart = new Chart(ctx, {\n" +
-                    "      type: 'line',\n" +
-                    "      data: {\n" +
-                    "        labels: labels,\n" +
-                    "        datasets: [\n" +
-                    "          { label: 'Raw Glucose', data: rawData, borderColor: 'rgba(255,160,160)', borderWidth: 1, fill: false, order: 2, pointRadius: 0, pointHoverRadius: 0, borderCapStyle: 'round', borderJoinStyle: 'round' },\n" +
-                    "          { label: 'Smoothed Glucose', data: smoothData, borderColor: 'rgb(142,11,11)', borderWidth: 0.5, fill: false, order: 1, pointRadius: 0, pointHoverRadius: 0, borderCapStyle: 'round', borderJoinStyle: 'round' }\n"+
-                    "        ]\n" +
-                    "      },\n" +
-                    "      options: {\n" +
-                    "        responsive: true,\n" +
-                    "        scales: {\n" +
-                    "          y: { min: 0, max: 40, title: {display: true, text: 'Skin Glucose (µM)' } },\n" +
-                    "          x: { title: { display: true, text: 'Time (hours)' } }\n" +
-                    "        },\n" +
-                    "        plugins: {\n" +
-                    "          annotation: {\n" +
-                    "            annotations: {\n" +
-                                   // Low values out of range
-                    "              low: {\n" +
-                    "                type: 'box', yMin: 0, yMax: LOWER,\n" +
-                    "                backgroundColor: 'rgba(255,0,0,0.15)',\n" +
-                    "                drawTime: 'beforeDatasetsDraw',\n" +
-                    "                label: { content: 'Below Safe Range', display: true, color: '#8b0000', font: { size: 11 } }\n" +
-                    "              },\n" +
-                                   // Normal values in range
-                    "              normal: {\n" +
-                    "                type: 'box', yMin: LOWER, yMax: UPPER,\n" +
-                    "                backgroundColor: 'rgba(144,238,144,0.35)',\n" +
-                    "                drawTime: 'beforeDatasetsDraw',\n" +
-                    "                label: { content: 'Normal Range (2.6 - 10.0 µM)', display: true, color: '#1b5e20', font: { size: 12, style: 'italic' } }\n" +
-                    "              },\n" +
-                                   // High values out of range
-                    "              high: {\n" +
-                    "                type: 'box', yMin: UPPER, yMax: 40,\n" +
-                    "                backgroundColor: 'rgba(255,0,0,0.15)',\n" +
-                    "                drawTime: 'beforeDatasetsDraw',\n" +
-                    "                label: { content: 'Above Safe Range', display: true, color: '#8b0000', font: { size: 11 } }\n" +
-                    "              }\n" +
-                    "            }\n" +
-                    "          }\n" +
-                    "        }\n" +
-                    "      }\n" +
-                    "});\n" +
-
-                    "    function submitValue() {\n" +
-                    "      const val = document.getElementById('newValue').value;\n" +
-                    "      fetch('/nurses', { method:'POST', body: val })\n" +
-                    "        .then(resp => location.reload());\n" +
-                    "    }\n" +
-                    "  </script>\n" +
-                    "</body>\n" +
-                    "</html>"
-            );
         }
-    }
-
+                    
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
