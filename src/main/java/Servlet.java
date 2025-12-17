@@ -73,7 +73,7 @@ public class Servlet extends HttpServlet {
                     "const LOWER = 2.6;\n" +
                     "const UPPER = 10.0;\n" +
                     
-                    "    Chart.register(window['chartjs-plugin-annotation']);\n" 
+                    "    Chart.register(window['chartjs-plugin-annotation']);\n" +
                     "    const ctx = document.getElementById('glucoseChart').getContext('2d');\n" +
                     "    const chart = new Chart(ctx, {\n" +
                     "      type: 'line',\n" +
