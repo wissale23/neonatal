@@ -1,0 +1,76 @@
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+import java.io.IOException;
+
+@WebServlet(urlPatterns = {"/login", "/logout"}, loadOnStartup = 1)
+public class AuthServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.setContentType("text/html");
+        String path = req.getServletPath();
+
+        if ("/".equals(path)) {
+            resp.getWriter().write("""
+                <h1>Neonatal App</h1>
+                <p>Choose your role:</p>
+                <a href="%s/login?role=nurse">Nurse</a><br/>
+                <a href="%s/login?role=consultant">Consultant</a>
+            """.formatted(req.getContextPath(), req.getContextPath()));
+            return;
+        }
+
+        if ("/login".equals(path)) {
+            String role = req.getParameter("role");
+            if (role == null) role = "";
+            resp.getWriter().write("""
+                <h1>Login (%s)</h1>
+                <form method="POST" action="%s/login">
+                  <input type="hidden" name="role" value="%s"/>
+                  Username: <input name="username"/><br/>
+                  Password: <input name="password" type="password"/><br/>
+                  <button type="submit">Sign in</button>
+                </form>
+                <p><a href="%s/">Back</a></p>
+            """.formatted(role, req.getContextPath(), role, req.getContextPath()));
+            return;
+        }
+
+        if ("/logout".equals(path)) {
+            HttpSession s = req.getSession(false);
+            if (s != null) s.invalidate();
+            resp.sendRedirect(req.getContextPath() + "/");
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        if (!"/login".equals(req.getServletPath())) {
+            resp.sendError(405);
+            return;
+        }
+
+        String role = req.getParameter("role");
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
+
+        boolean ok =
+                ("nurse".equals(role) && "nurse".equals(username) && "password".equals(password)) ||
+                ("consultant".equals(role) && "consultant".equals(username) && "password".equals(password));
+
+        if (!ok) {
+            resp.setContentType("text/html");
+            resp.getWriter().write("""
+                <h1>Login failed</h1>
+                <p><a href="%s/login?role=%s">Try again</a></p>
+            """.formatted(req.getContextPath(), role == null ? "" : role));
+            return;
+        }
+
+        HttpSession session = req.getSession(true);
+        session.setAttribute("role", role);
+
+        String target = "nurse".equals(role) ? "/nurses" : "/consultants";
+        resp.sendRedirect(req.getContextPath() + target);
+    }
+}
