@@ -1,0 +1,74 @@
+import java.util.List;
+
+public class GlucoseChart {
+
+    private final List<Double> timeData;
+    private final List<Double> rawData;
+    private final List<Double> smoothData;
+    private final double lower;
+    private final double upper;
+
+    public GlucoseChart(List<Double> timeData, List<Double> rawData, List<Double> smoothData,
+                        double lower, double upper) {
+        this.timeData = timeData;
+        this.rawData = rawData;
+        this.smoothData = smoothData;
+        this.lower = lower;
+        this.upper = upper;
+    }
+
+    public String generateHTML() {
+        String timeArray = timeData.toString();
+        String rawArray = rawData.toString();
+        String smoothArray = smoothData.toString();
+
+        return "<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "  <title>Glucose Chart</title>\n" +
+                "  <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n" +
+                "  <script src=\"https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3\"></script>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "  <h2>Glucose Levels</h2>\n" +
+                "  <canvas id='glucoseChart' width='800' height='400'></canvas>\n" +
+                "  <script>\n" +
+                "    const labels = " + timeArray + ";\n" +
+                "    const rawData = " + rawArray + ";\n" +
+                "    const smoothData = " + smoothArray + ";\n" +
+                "    const LOWER = " + lower + ";\n" +
+                "    const UPPER = " + upper + ";\n" +
+                "\n" +
+                "    Chart.register(window['chartjs-plugin-annotation']);\n" +
+                "    const ctx = document.getElementById('glucoseChart').getContext('2d');\n" +
+                "    const chart = new Chart(ctx, {\n" +
+                "      type: 'line',\n" +
+                "      data: {\n" +
+                "        labels: labels,\n" +
+                "        datasets: [\n" +
+                "          { label: 'Raw Glucose', data: rawData, borderColor: 'rgba(255,160,160)', borderWidth: 0.5, fill: false, order: 2, pointRadius: 0 },\n" +
+                "          { label: 'Smoothed Glucose', data: smoothData, borderColor: 'rgb(142,11,11)', borderWidth: 0.25, fill: false, order: 1, pointRadius: 0 }\n" +
+                "        ]\n" +
+                "      },\n" +
+                "      options: {\n" +
+                "        responsive: true,\n" +
+                "        scales: {\n" +
+                "          y: { min: 0, max: 40, title: {display: true, text: 'Skin Glucose (µM)'} },\n" +
+                "          x: { title: { display: true, text: 'Time (hours)'} }\n" +
+                "        },\n" +
+                "        plugins: {\n" +
+                "          annotation: {\n" +
+                "            annotations: {\n" +
+                "              low: { type: 'box', yMin: 0, yMax: LOWER, backgroundColor: 'rgba(255,0,0,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Below Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
+                "              normal: { type: 'box', yMin: LOWER, yMax: UPPER, backgroundColor: 'rgba(144,238,144,0.35)', drawTime: 'beforeDatasetsDraw', label: { content: 'Normal Range', display: true, color: '#1b5e20', font: { size: 12, style: 'italic' } } },\n" +
+                "              high: { type: 'box', yMin: UPPER, yMax: 40, backgroundColor: 'rgba(255,0,0,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Above Safe Range', display: true, color: '#8b0000', font: { size: 11 } } }\n" +
+                "            }\n" +
+                "          }\n" +
+                "        }\n" +
+                "      }\n" +
+                "    });\n" +
+                "  </script>\n" +
+                "</body>\n" +
+                "</html>";
+    }
+}
