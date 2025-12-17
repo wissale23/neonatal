@@ -80,8 +80,8 @@ public class Servlet extends HttpServlet {
                     "      data: {\n" +
                     "        labels: labels,\n" +
                     "        datasets: [\n" +
-                    "          { label: 'Raw Glucose', data: rawData, borderColor: 'rgba(255,160,160)', borderWidth: 0.5, fill: false, order: 2, pointRadius: 0, pointHoverRadius: 0, borderCapStyle: 'round', borderJoinStyle: 'round' },\n" +
-                    "          { label: 'Smoothed Glucose', data: smoothData, borderColor: 'rgb(142,11,11)', borderWidth: 0.25, fill: false, order: 1, pointRadius: 0, pointHoverRadius: 0, borderCapStyle: 'round', borderJoinStyle: 'round' }\n"+
+                    "          { label: 'Raw Glucose', data: rawData, borderColor: 'rgba(255,160,160)', borderWidth: 1, fill: false, order: 2, pointRadius: 0, pointHoverRadius: 0, borderCapStyle: 'round', borderJoinStyle: 'round' },\n" +
+                    "          { label: 'Smoothed Glucose', data: smoothData, borderColor: 'rgb(142,11,11)', borderWidth: 0.5, fill: false, order: 1, pointRadius: 0, pointHoverRadius: 0, borderCapStyle: 'round', borderJoinStyle: 'round' }\n"+
                     "        ]\n" +
                     "      },\n" +
                     "      options: {\n" +
@@ -105,7 +105,7 @@ public class Servlet extends HttpServlet {
                     "                type: 'box', yMin: LOWER, yMax: UPPER,\n" +
                     "                backgroundColor: 'rgba(144,238,144,0.35)',\n" +
                     "                drawTime: 'beforeDatasetsDraw',\n" +
-                    "                label: { content: 'Normal Range (2.6–10.0 µM)', display: true, color: '#1b5e20', font: { size: 12, style: 'italic' } }\n" +
+                    "                label: { content: 'Normal Range (2.6 - 10.0 µM)', display: true, color: '#1b5e20', font: { size: 12, style: 'italic' } }\n" +
                     "              },\n" +
                                    // High values out of range
                     "              high: {\n" +
