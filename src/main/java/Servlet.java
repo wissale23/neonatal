@@ -73,14 +73,15 @@ public class Servlet extends HttpServlet {
                     "const LOWER = 2.6;\n" +
                     "const UPPER = 10.0;\n" +
                     
+                    "    Chart.register(window['chartjs-plugin-annotation']);\n" 
                     "    const ctx = document.getElementById('glucoseChart').getContext('2d');\n" +
                     "    const chart = new Chart(ctx, {\n" +
                     "      type: 'line',\n" +
                     "      data: {\n" +
                     "        labels: labels,\n" +
                     "        datasets: [\n" +
-                    "          { label: 'Raw Glucose', data: rawData, borderColor: 'rgba(255,160,160)', borderWidth: 0.5, fill: false, order: 2 },\n" +
-                    "          { label: 'Smoothed Glucose', data: smoothData, borderColor: 'rgb(142,11,11)', borderWidth: 0.25, fill: false, order: 1 }\n"+
+                    "          { label: 'Raw Glucose', data: rawData, borderColor: 'rgba(255,160,160)', borderWidth: 0.5, fill: false, order: 2, pointRadius: 0, pointHoverRadius: 0, borderCapStyle: 'round', borderJoinStyle: 'round' },\n" +
+                    "          { label: 'Smoothed Glucose', data: smoothData, borderColor: 'rgb(142,11,11)', borderWidth: 0.25, fill: false, order: 1, pointRadius: 0, pointHoverRadius: 0, borderCapStyle: 'round', borderJoinStyle: 'round' }\n"+
                     "        ]\n" +
                     "      },\n" +
                     "      options: {\n" +
@@ -88,7 +89,7 @@ public class Servlet extends HttpServlet {
                     "        scales: {\n" +
                     "          y: { min: 0, max: 40, title: {display: true, text: 'Skin Glucose (µM)' } },\n" +
                     "          x: { title: { display: true, text: 'Time (hours)' } }\n" +
-                    "        }\n" +
+                    "        },\n" +
                     "        plugins: {\n" +
                     "          annotation: {\n" +
                     "            annotations: {\n" +
