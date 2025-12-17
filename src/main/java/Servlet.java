@@ -54,10 +54,11 @@ public class Servlet extends HttpServlet {
                     "<head>\n" +
                     "  <title>Nurses Dashboard</title>\n" +
                     "  <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n" +
+                    "  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3"></script>" +
                     "</head>\n" +
                     "<body>\n" +
                     "  <h2>Neonatal Glucose Levels</h2>\n" +
-                    "  <canvas id=\"glucoseChart\" width=\"900\" height=\"400\"></canvas>\n" +
+                    "  <canvas id=\"glucoseChart\" width=\"800\" height=\"400\"></canvas>\n" +
                     "  <br>\n" +
                     "  <label>Enter new glucose value:</label>\n" +
                     "  <input type='number' id='newValue' step='0.1'>\n" +
@@ -73,8 +74,8 @@ public class Servlet extends HttpServlet {
                     "      data: {\n" +
                     "        labels: labels,\n" +
                     "        datasets: [\n" +
-                    "          { label: 'Raw Glucose', data: rawData, borderColor: 'rgba(255,160,160)', borderWidth: 1, fill: false, order: 2 },\n" +
-                    "          { label: 'Smoothed Glucose', data: smoothData, borderColor: 'rgb(142,11,11)', borderWidth: 0.25, fill: false, order: 1 }\n"+
+                    "          { label: 'Raw Glucose', data: rawData, borderColor: 'rgba(255,160,160)', borderWidth: 0.5, fill: true, order: 2 },\n" +
+                    "          { label: 'Smoothed Glucose', data: smoothData, borderColor: 'rgb(142,11,11)', borderWidth: 0.25, fill: true, order: 1 }\n"+
                     "        ]\n" +
                     "      },\n" +
                     "      options: {\n" +
