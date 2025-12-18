@@ -135,8 +135,14 @@ public class Servlet extends HttpServlet {
             resp.getWriter().write("Test for researchers endpoint");
                 
         } else if("/parents".equals(path)){
-            resp.getWriter().write("Test for parents endpoint");
-
+            resp.getWriter().write(
+                    "<h1>Researcher Portal</h1>" +
+                            "<p>Download glucose monitoring data:</p>" +
+                            "<form method=\"POST\" action=\"" + req.getContextPath() + "/researchers\">" +
+                            "<button type=\"submit\" name=\"action\" value=\"download\">Download Data</button>" +
+                            "</form>" +
+                            "<p><a href=\"" + req.getContextPath() + "/logout\">Logout</a></p>"
+            );
         }
     }
 
@@ -185,6 +191,42 @@ public class Servlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + target);
             return;
         }
+
+        if ("/researchers".equals(req.getServletPath())) {
+            HttpSession s = req.getSession(false);
+            String role = (s == null) ? null : (String) s.getAttribute("role");
+            if (!"researcher".equals(role)) {
+                resp.sendError(403);
+                return;
+            }
+
+            String action = req.getParameter("action");
+            if ("download".equals(action)) {
+                // Load all data files
+                List<Double> timeData = loadDataFromResource(TIME_FILE);
+                List<Double> rawData = loadDataFromResource(RAW_FILE);
+                List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
+
+                // Set headers for file download
+                resp.setContentType("text/csv");
+                resp.setHeader("Content-Disposition", "attachment; filename=\"glucose_data.csv\"");
+
+                // Write CSV content
+                PrintWriter writer = resp.getWriter();
+                writer.println("Time,Raw_Glucose_uM,Smoothed_Glucose_uM");
+
+                int maxSize = Math.max(timeData.size(), Math.max(rawData.size(), smoothData.size()));
+                for (int i = 0; i < maxSize; i++) {
+                    String time = i < timeData.size() ? String.valueOf(timeData.get(i)) : "";
+                    String raw = i < rawData.size() ? String.valueOf(rawData.get(i)) : "";
+                    String smooth = i < smoothData.size() ? String.valueOf(smoothData.get(i)) : "";
+                    writer.println(time + "," + raw + "," + smooth);
+                }
+                writer.flush();
+                return;
+            }
+        }
+
         // Basic session-based access control for POST requests (nurses only)
         if (!"/nurses".equals(req.getServletPath())) {
             resp.sendError(405);
