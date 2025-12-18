@@ -136,7 +136,7 @@ public class Servlet extends HttpServlet {
                     "<h1>Researcher Portal</h1>" +
                             "<p>Download glucose monitoring data:</p>" +
                             "<form method=\"POST\" action=\"" + req.getContextPath() + "/researchers\">" +
-                            "<button type=\"submit\" name=\"action\" value=\"download\">Download Data</button>" +
+                            "<button type=\"button\" name=\"action\" value=\"download\">Download Data</button>" +
                             "</form>" +
                             "<p><a href=\"" + req.getContextPath() + "/logout\">Logout</a></p>"
             );
