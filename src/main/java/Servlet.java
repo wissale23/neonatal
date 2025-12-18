@@ -132,9 +132,6 @@ public class Servlet extends HttpServlet {
             resp.getWriter().write(chart.generateHTML());
                 
         } else if("/researchers".equals(path)){
-            resp.getWriter().write("Test for researchers endpoint");
-                
-        } else if("/parents".equals(path)){
             resp.getWriter().write(
                     "<h1>Researcher Portal</h1>" +
                             "<p>Download glucose monitoring data:</p>" +
@@ -143,6 +140,9 @@ public class Servlet extends HttpServlet {
                             "</form>" +
                             "<p><a href=\"" + req.getContextPath() + "/logout\">Logout</a></p>"
             );
+                
+        } else if("/parents".equals(path)){
+            resp.getWriter().write("Test for parents endpoint");
         }
     }
 
