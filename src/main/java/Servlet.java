@@ -120,10 +120,10 @@ public class Servlet extends HttpServlet {
             Object low = session.getAttribute("lowerLimit");
             Object upp = session.getAttribute("upperLimit");
             if (low != null){
-                lower = ((Number) low).doubleValue();
+                lower = (double) low;
             }
             if (upp != null) {
-                upper = ((Number) upp).doubleValue();
+                upper = (double) upp;
             }
         }
 
@@ -250,6 +250,30 @@ public class Servlet extends HttpServlet {
             }
         }
 
+        if ("/consultants".equals(req.getServletPath())) {
+            HttpSession session = req.getSession(true);
+        
+            String lowerString = req.getParameter("lowerLimit");
+            String upperString = req.getParameter("upperLimit");
+        
+            try {
+                if (lowerString != null && !lowerString.isEmpty()) {
+                    session.setAttribute("lowerLimit", Double.parseDouble(lowerString));
+                }
+                if (upperString != null && !upperString.isEmpty()) {
+                    session.setAttribute("upperLimit", Double.parseDouble(upperString));
+                }
+            } catch (NumberFormatException e) {
+               e.printStackTrace(); // change this later to link that displays erro rmessage
+
+            }
+        
+            resp.sendRedirect(req.getContextPath() + "/consultants");
+            return;    
+        }
+
+    
+
         // Basic session-based access control for POST requests (nurses only)
         if (!"/nurses".equals(req.getServletPath())) {
            resp.sendError(405);
@@ -275,26 +299,6 @@ public class Servlet extends HttpServlet {
 
 
             
-        if ("/consultants".equals(req.getServletPath())) {
-            HttpSession session = req.getSession(true);
-        
-            String lowerString = req.getParameter("lowerLimit");
-            String upperString = req.getParameter("upperLimit");
-        
-            try {
-                if (lowerString != null && !lowerString.isEmpty()) {
-                    session.setAttribute("lowerLimit", Double.parseDouble(lowerString));
-                }
-                if (upperString != null && !upperString.isEmpty()) {
-                    session.setAttribute("upperLimit", Double.parseDouble(upperString));
-                }
-            } catch (NumberFormatException e) {
-                
-            }
-        
-            resp.sendRedirect(req.getContextPath() + "/consultants");
-        }
-
 
    
     }
