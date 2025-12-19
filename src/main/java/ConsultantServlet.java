@@ -75,12 +75,19 @@ public class ConsultantServlet {
                 "      }\n" +
                 "    });\n" +
                 "  </script>\n" +
-                "<div style='background-color: #fff9c4; padding: 10px; border-radius: 5px; width: fit-content;'>"+
+                "<div style='"
+                + "background-color: #fff9c4;"
+                + "border: 2px solid black;" //might changee
+                + "padding: 20px;"
+                + "border-radius: 5px;"
+                + "width: 300px;"
+                + "margin: 20px auto;"
+                + "text-align: center;'>"
 
-                "<h3>Glucose Safety Range (μM)</h3>" +
+                "<h3>Glucose Safety Range (&mu;M)</h3>" +
                 "<form method='POST' action='" + pathString + "/consultants'>"
-                + "Lower limit : <input type='number'  name='lowerLimit' value='" + this.getLower() + "'/><br/>"
-                + "Upper limit: <input type='number'  name='upperLimit' value='" + this.getUpper() + "'/><br/><br/>"
+                + "Lower limit : <input type='number'  name='lowerLimit' step='0.1' value='" + this.getLower() + "'/><br/>"
+                + "Upper limit: <input type='number'  name='upperLimit' step='0.1' value='" + this.getUpper() + "'/><br/><br/>"
                 + "<button type='submit' style='background-color: #ffc0cb; border: none; padding: 5px 10px; border-radius: 4px;'>Apply</button>"
                 + "</form>"+
                 "</body>\n" +
