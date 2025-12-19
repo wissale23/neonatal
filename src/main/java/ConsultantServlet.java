@@ -29,6 +29,8 @@ public class ConsultantServlet {
 
     public String consultPage(List<Double>  timeArrayString, List<Double>  rawArrayString, List<Double>  smoothDataString, String pathString){
 
+        String warningHtml = buildWarningHtml(rawArrayString);
+
         return "<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<head>\n" +
@@ -37,6 +39,7 @@ public class ConsultantServlet {
                 "  <script src=\"https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3\"></script>\n" +
                 "</head>\n" +
                 "<body>\n" +
+                warningHtml +
                 "  <h2>Glucose Levels</h2>\n" +
                 "  <canvas id='glucoseChart' width='800' height='400'></canvas>\n" +
                 "  <script>\n" +
@@ -88,6 +91,19 @@ public class ConsultantServlet {
 
     }
 
+    private String buildWarningHtml(List<Double> glucoseData) {
+        WarningSystem warningSystem = new WarningSystem(this);
+        double latestGlucose = glucoseData.get(glucoseData.size() - 1);
+
+        if (!warningSystem.isUnsafe(latestGlucose)) {
+            return "";
+        }
+        return "<div style = 'background-color:#ffebee; color:#b71c1c; " +
+                "padding:10px; border-radius:6px; margin-bottom:12px;'>" +
+                "<strong>Alert:</strong>" +
+                warningSystem.getWarningMessage(latestGlucose)+
+                "<div>";
+    }
 
 }
 
