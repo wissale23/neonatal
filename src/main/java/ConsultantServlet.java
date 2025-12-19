@@ -37,6 +37,7 @@ public class ConsultantServlet {
                 "  <title>Glucose Chart</title>\n" +
                 "  <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n" +
                 "  <script src=\"https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3\"></script>\n" +
+                alertCSS +
                 "</head>\n" +
                 "<body>\n" +
                 warningHtml +
@@ -106,6 +107,29 @@ public class ConsultantServlet {
                 + "</body></html>";
 
     }
+    private static final String alertCSS = """
+    <style>
+        .alert-bubble {
+        position: sticky;
+        top: 15px;
+        margin: 0 auto 20px auto;
+        width: fit-content;
+        max-width: 90%;
+        background-color: #ffebee;
+        color: #b71c1c;
+        padding: 14px 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        font-weight: 600;
+        z-index: 1000;
+        }
+        .alert-bubble::before {
+        content: "WARNING";
+        margin-right: 10px;
+        font-size: 18px;
+        }
+    </style>
+    """;
 
     private String buildWarningHtml(List<Double> glucoseData) {
         WarningSystem warningSystem = new WarningSystem(this);
@@ -114,9 +138,7 @@ public class ConsultantServlet {
         if (!warningSystem.isUnsafe(latestGlucose)) {
             return "";
         }
-        return "<div style = 'background-color:#ffebee; color:#b71c1c; " +
-                "padding:10px; border-radius:6px; margin-bottom:12px;'>" +
-                "<strong>Alert:</strong>" +
+        return "<div class = 'alert-bubble'>" +
                 warningSystem.getWarningMessage(latestGlucose)+
                 "<div>";
     }
