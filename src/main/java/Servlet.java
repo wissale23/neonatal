@@ -274,27 +274,30 @@ public class Servlet extends HttpServlet {
             resp.sendError(400, "Invalid number");
         }
 
+
+            
         if ("/consultants".equals(req.getServletPath())) {
             HttpSession session = req.getSession(true);
             String lowerString = req.getParameter("lowerLimit");
             String upperString = req.getParameter("upperLimit");
-
-
-            try {
-                double lowerDouble = Double.parseDouble(lowerString);
-                double upperDouble = Double.parseDouble(upperString);
-
-                session.setAttribute("lowerLimit", lowerDouble);
-                session.setAttribute("upperLimit", upperDouble);
-
-                resp.sendRedirect(req.getContextPath() + "/consultants");
-                return;
-
-            } catch (NumberFormatException e) {
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "try another format");
-                return;
+        
+            if ((lowerString != null && !lowerString.isEmpty()) || (upperString != null && !upperString.isEmpty())) {
+                try {
+                    if (lowerString != null && !lowerString.isEmpty()) {
+                        session.setAttribute("lowerLimit", Double.parseDouble(lowerString));
+                    }
+                    if (upperString != null && !upperString.isEmpty()) {
+                        session.setAttribute("upperLimit", Double.parseDouble(upperString));
+                    }
+                } catch (NumberFormatException e) {
+                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "try another format");
+                    return;
+                }
             }
-        }    
+        
+            resp.sendRedirect(req.getContextPath() + "/consultants");
+        }
+   
     }
 
         
