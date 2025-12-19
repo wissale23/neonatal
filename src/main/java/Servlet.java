@@ -92,8 +92,8 @@ public class Servlet extends HttpServlet {
         resp.setContentType("text/html");
 
         // Require login + correct role before allowing access to role-specific endpoints
-        HttpSession s = req.getSession(false);
-        String role = (s == null) ? null : (String) s.getAttribute("role");
+        HttpSession session = req.getSession(false);
+        String role = (session == null) ? null : (String) session.getAttribute("role");
 
         if ("/nurses".equals(path) && !"nurse".equals(role)) {
             resp.sendRedirect(req.getContextPath() + "/login?role=nurse");
@@ -113,7 +113,6 @@ public class Servlet extends HttpServlet {
         }
 
 
-        HttpSession session = req.getSession(false);
         double lower = defaultLower;
         double upper = defaultUpper;
 
@@ -252,10 +251,10 @@ public class Servlet extends HttpServlet {
         }
 
         // Basic session-based access control for POST requests (nurses only)
-        //if (!"/nurses".equals(req.getServletPath())) {
-        //    resp.sendError(405);
-        //    return;
-        //}
+        if (!"/nurses".equals(req.getServletPath())) {
+           resp.sendError(405);
+           return;
+        }
 
         HttpSession s = req.getSession(false);
         String role = (s == null) ? null : (String) s.getAttribute("role");
@@ -278,25 +277,25 @@ public class Servlet extends HttpServlet {
             
         if ("/consultants".equals(req.getServletPath())) {
             HttpSession session = req.getSession(true);
+        
             String lowerString = req.getParameter("lowerLimit");
             String upperString = req.getParameter("upperLimit");
         
-            if ((lowerString != null && !lowerString.isEmpty()) || (upperString != null && !upperString.isEmpty())) {
-                try {
-                    if (lowerString != null && !lowerString.isEmpty()) {
-                        session.setAttribute("lowerLimit", Double.parseDouble(lowerString));
-                    }
-                    if (upperString != null && !upperString.isEmpty()) {
-                        session.setAttribute("upperLimit", Double.parseDouble(upperString));
-                    }
-                } catch (NumberFormatException e) {
-                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "try another format");
-                    return;
+            try {
+                if (lowerString != null && !lowerString.isEmpty()) {
+                    session.setAttribute("lowerLimit", Double.parseDouble(lowerString));
                 }
+                if (upperString != null && !upperString.isEmpty()) {
+                    session.setAttribute("upperLimit", Double.parseDouble(upperString));
+                }
+            } catch (NumberFormatException e) {
+                
             }
         
             resp.sendRedirect(req.getContextPath() + "/consultants");
         }
+
+
    
     }
 
