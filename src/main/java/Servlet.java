@@ -24,6 +24,9 @@ public class Servlet extends HttpServlet {
     private final String RAW_FILE = "/glu_uM_unsmoothed.txt";
     private final String SMOOTH_FILE = "/glu_uM_smoothed.txt";
 
+    private final double defaultLower = 2.6;
+    private final double defaultUpper = 10.0;    
+
     @Override
     public void init() {
         // Demo accounts (replace with real hospital identity system later)
@@ -109,15 +112,34 @@ public class Servlet extends HttpServlet {
             return;
         }
 
+
+        HttpSession session = req.getSession(false);
+        double lower = defaultLower;
+        double upper = defaultUpper;
+
+        if (session != null) {
+            Object low = session.getAttribute("lowerLimit");
+            Object upp = session.getAttribute("upperLimit");
+            if (low != null){
+                lower = ((Number) low).doubleValue();
+            }
+            if (upp != null) {
+                upper = ((Number) upp).doubleValue();
+            }
+        }
+
         if ("/consultants".equals(path)) {
+
             // Load data from files
+
             List<Double> timeData = loadDataFromResource(TIME_FILE);
             List<Double> rawData = loadDataFromResource(RAW_FILE);
             List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
 
             // Consultants only view the file data, no user input
-            GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, 2.6, 10.0);
-            resp.getWriter().write(chart.generateHTML());
+
+            ConsultantServlet consult = new ConsultantServlet(lower, upper);
+            resp.getWriter().write(consult.consultPage(timeData,rawData,smoothData,req.getContextPath()));
 
         } else if ("/nurses".equals(path)) {
             // Load data from files
@@ -128,8 +150,10 @@ public class Servlet extends HttpServlet {
             // Nurses can add their own raw values
             rawData.addAll(userRawValues);
 
-            GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, 2.6, 10.0);
+            GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, lower, upper);
             resp.getWriter().write(chart.generateHTML());
+
+
                 
         } else if("/researchers".equals(path)){
             resp.getWriter().write(
@@ -228,10 +252,10 @@ public class Servlet extends HttpServlet {
         }
 
         // Basic session-based access control for POST requests (nurses only)
-        if (!"/nurses".equals(req.getServletPath())) {
-            resp.sendError(405);
-            return;
-        }
+        //if (!"/nurses".equals(req.getServletPath())) {
+        //    resp.sendError(405);
+        //    return;
+        //}
 
         HttpSession s = req.getSession(false);
         String role = (s == null) ? null : (String) s.getAttribute("role");
@@ -249,7 +273,31 @@ public class Servlet extends HttpServlet {
         } catch (NumberFormatException e) {
             resp.sendError(400, "Invalid number");
         }
+
+        if ("/consultants".equals(req.getServletPath())) {
+            HttpSession session = req.getSession(true);
+            String lowerString = req.getParameter("lowerLimit");
+            String upperString = req.getParameter("upperLimit");
+
+
+            try {
+                double lowerDouble = Double.parseDouble(lowerString);
+                double upperDouble = Double.parseDouble(upperString);
+
+                session.setAttribute("lowerLimit", lowerDouble);
+                session.setAttribute("upperLimit", upperDouble);
+
+                resp.sendRedirect(req.getContextPath() + "/consultants");
+                return;
+
+            } catch (NumberFormatException e) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "try another format");
+                return;
+            }
+        }    
     }
+
+        
 
     // Helper method to read doubles from resources in the WAR
     private List<Double> loadDataFromResource(String resourcePath) {
