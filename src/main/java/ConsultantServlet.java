@@ -93,9 +93,10 @@ public class ConsultantServlet {
                 + "<form method='POST' action='" + pathString + "/consultants'>"
                 + "<div>"
                 + "<span style='display:inline-block; width:110px; text-align:right; color:black;'>Lower limit:</span>"
-                + "<input type='number' name='lowerLimit' step='0.1' value='" + this.getLower() + "' style='width:100px;'/><br/><br/>"
+                + "<input type='number' name='lowerLimit' step='0.1' value='" + this.getLower() + "' style='width:100px; text-align:center;'/><br/><br/>"
                 + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Upper limit:</span>"
-                + "<input type='number' name='upperLimit' step='0.1' value='" + this.getUpper() + "' style='width:100px;'/><br/><br/>"
+                + "<input type='number' name='upperLimit' step='0.1' value='" + this.getUpper() + "' style='width:100px; text-align:center;'/><br/><br/>"
+
 
                 + "<button type='submit' style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Apply</button>"
 
