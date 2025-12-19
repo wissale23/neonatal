@@ -80,7 +80,7 @@ public class ConsultantServlet {
                 "  </script>\n" 
 
             
-                + "<div style='background-color: #fff9c4; "
+                + "<div style='background-color: #fff0f5; "
                 + "border: 2px solid black;" 
                 + "padding: 20px;"
                 + "border-radius: 10px;"
