@@ -122,12 +122,37 @@ public class ConsultantServlet {
                     "box-shadow: 0 4px 10px rgba(0,0,0,0.15);" +
                     "font-weight: 600;" +
                     "z-index: 1000;" +
+                    "display: flex;" +
+                    "align-items: center;" +
+                    "animation: fadeIn 0.5s ease-out;" +
                     "}" +
-                    ".alert-bubble::before {" +
-                    "content: 'WARNING';" +
-                    "margin-right: 10px;" +
-                    "font-size: 18px;" +
+
+                    ".alert-high {" +
+                    "background-color: #ffebee;" +
+                    "border: 2px solid b71c1c;" +
+                    "color: #b71c1c;" +
                     "}" +
+
+                    ".alert-low {" +
+                    "background-color: #e3f2fd;" +
+                    "border: 2px solid #0d47a1;" +
+                    "color: #0d47a1;" +
+                    "}" +
+
+                    ".alert-close {" +
+                    "margin-left: 15px;" +
+                    "cursor: pointer;" +
+                    "font-weight: bold;" +
+                    "border: none;" +
+                    "background: none;" +
+                    "font-size: 16px;" +
+                    "}" +
+
+                    "@keyframes fadeIn {" +
+                    "from {opacity: 0; transform: translateY(-10px);}" +
+                    "to {opacity: 1; transform: translateY(0);}" +
+                    "}" +
+
             "</style>";
 
     private String buildWarningHtml(List<Double> glucoseData) {
@@ -137,8 +162,15 @@ public class ConsultantServlet {
         if (!warningSystem.isUnsafe(latestGlucose)) {
             return "";
         }
-        return "<div class='alert-bubble'>" +
+
+        String alertCategory = warningSystem.isAboveRange(latestGlucose)
+                ? "alert-bubble alert-high"
+                : "alert-bubble alert-low";
+
+        return "<div class='"+ alertCategory +"'>" +
                 warningSystem.getWarningMessage(latestGlucose)+
+                "<button class='alert-close'" +
+                "onclick=\"this.parentElement.style.display='none'\">✖</button>" +
                 "</div>";
     }
 
