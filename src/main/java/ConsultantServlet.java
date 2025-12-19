@@ -86,7 +86,7 @@ public class ConsultantServlet {
                 + "border-radius: 10px;"
                 + "width: 300px;"
                 + "margin: 20px auto;"
-                + "text-align: center;'>"+
+                + "text-align: center;'>"
 
                 + "<h3 style='color: black;'>Glucose Safety Range (&mu;M)</h3>"
 
