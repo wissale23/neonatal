@@ -129,7 +129,7 @@ public class ConsultantServlet {
 
                     ".alert-high {" +
                     "background-color: #ffebee;" +
-                    "border: 2px solid b71c1c;" +
+                    "border: 2px solid #b71c1c;" +
                     "color: #b71c1c;" +
                     "}" +
 
@@ -170,7 +170,7 @@ public class ConsultantServlet {
         return "<div class='"+ alertCategory +"'>" +
                 warningSystem.getWarningMessage(latestGlucose)+
                 "<button class='alert-close'" +
-                "onclick=\"this.parentElement.style.display='none'\">✖</button>" +
+                "onclick=\"this.parentElement.style.display='none'\">&times</button>" +
                 "</div>";
     }
 
