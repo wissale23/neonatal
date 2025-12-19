@@ -250,7 +250,7 @@ public class Servlet extends HttpServlet {
             }
         }
 
-        if ("/consultants".equals(req.getServletPath())) {
+        if ("/consultants".equals(req.getServletPath())  || "/nurses".equals(req.getServletPath())) {
             HttpSession session = req.getSession(true);
         
             String lowerString = req.getParameter("lowerLimit");
@@ -267,8 +267,13 @@ public class Servlet extends HttpServlet {
                e.printStackTrace(); // change this later to link that displays erro rmessage
 
             }
-        
-            resp.sendRedirect(req.getContextPath() + "/consultants");
+
+            if ("/consultants".equals(req.getServletPath())){
+               resp.sendRedirect(req.getContextPath() + "/consultants");
+            }  
+            if ("/nurses".equals(req.getServletPath())){
+               resp.sendRedirect(req.getContextPath() + "/nurses");
+            }
             return;    
         }
 
