@@ -200,7 +200,13 @@ public class Servlet extends HttpServlet {
             );
                 
         } else if("/parents".equals(path)){
-            resp.getWriter().write("Test for parents endpoint");
+
+            List<Double> timeData = loadDataFromResource(TIME_FILE);
+            List<Double> rawData = loadDataFromResource(RAW_FILE);
+            List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
+
+            ParentChart chart = new ParentChart(timeData, rawData, smoothData, 2.6, 10.0);
+            resp.getWriter().write(chart.generateHTML());
         }
     }
 
