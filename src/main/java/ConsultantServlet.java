@@ -78,22 +78,31 @@ public class ConsultantServlet {
                 "      }\n" +
                 "    });\n" +
                 "  </script>\n" 
+
+            
                 + "<div style='background-color: #fff9c4; "
                 + "border: 2px solid black;" 
                 + "padding: 20px;"
-                + "border-radius: 5px;"
+                + "border-radius: 10px;"
                 + "width: 300px;"
                 + "margin: 20px auto;"
                 + "text-align: center;'>"+
 
-                "<h3>Glucose Safety Range (&mu;M)</h3>" +
-                "<form method='POST' action='" + pathString + "/consultants'>"
-                + "Lower limit : <input type='number'  name='lowerLimit' step='0.1' value='" + this.getLower() + "'/><br/>"
-                + "Upper limit: <input type='number'  name='upperLimit' step='0.1' value='" + this.getUpper() + "'/><br/><br/>"
-                + "<button type='submit' style='background-color: #ffc0cb; border: none; padding: 5px 10px; border-radius: 4px;'>Apply</button>"
-                + "</form>"+
-                "</body>\n" +
-                "</html>";
+                + "<h3 style='color: black;'>Glucose Safety Range (&mu;M)</h3>"
+
+                + "<form method='POST' action='" + pathString + "/consultants'>"
+                + "<div>"
+                + "<span style='display:inline-block; width:110px; text-align:right; color:black;'>Lower limit:</span>"
+                + "<input type='number' name='lowerLimit' step='0.1' value='" + this.getLower() + "' style='width:100px;'/><br/><br/>"
+                + "<span style='display:inline-block; width:110px; text-align:right;'>Upper limit:</span>"
+                + "<input type='number' name='upperLimit' step='0.1' value='" + this.getUpper() + "' style='width:100px;'/><br/><br/>"
+
+                + "<button type='submit' style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black;'>Apply</button>"
+
+                + "</div>"
+                + "</form>"
+                + "</div>"
+                + "</body></html>";
 
     }
 
