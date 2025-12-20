@@ -20,10 +20,19 @@ public class NurseServlet {
     private List<Double> sampleValues;
 
 
-    public NurseServlet(List<Double> sampleValues,List<Double> sampleTimes) {
-
+    public NurseServlet(double bloodGlucose, double time,List<Double> sampleValues,List<Double> sampleTimes) {
+        this.bloodGlucose = bloodGlucose;
+        this.time = time;
         this.sampleValues = sampleValues;
         this.sampleTimes = sampleTimes;
+    }
+
+    public double getGlucoseValue() {
+        return this.bloodGlucose;
+    }
+
+    public double getTime() {
+        return this.time;
     }
 
     
