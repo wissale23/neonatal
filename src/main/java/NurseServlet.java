@@ -16,10 +16,15 @@ public class NurseServlet {
 
     private double bloodGlucose;
     private double time;
+    private List<Double> sampleTimes;
+    private List<Double> sampleValues;
 
-    public NurseServlet(double bloodGlucose, double time) {
+
+    public NurseServlet(double bloodGlucose, double time,List<Double> sampleValues,List<Double> sampleTimes) {
         this.bloodGlucose = bloodGlucose;
         this.time = time;
+        this.sampleValues = sampleValues;
+        this.sampleTimes = sampleTimes;
     }
 
     public double getGlucoseValue() {
@@ -29,6 +34,7 @@ public class NurseServlet {
     public double getTime() {
         return this.time;
     }
+
     
     public String getSamples(){
         String sampleTriangles = "";
