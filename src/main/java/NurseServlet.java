@@ -40,8 +40,7 @@ public class NurseServlet {
         String sampleTriangles = "";
         if (sampleTimes != null && sampleValues != null) {
             for (int i = 0; i < sampleTimes.size(); i++) {
-                sampleTriangles = sampleTriangles + "sample" + " number"+
-                        i + ": {\n" +
+                sampleTriangles = sampleTriangles + "sample" + i + ": {\n" +
                         "  type: 'point',\n" +
                         "  xValue: " + sampleTimes.get(i) + ",\n" +
                         "  yValue: " + sampleValues.get(i) + ",\n" +
