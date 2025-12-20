@@ -162,9 +162,26 @@ public class Servlet extends HttpServlet {
             List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
 
             // Nurses can add their own raw values
-            rawData.addAll(userRawValues);
+            //rawData.addAll(userRawValues);
 
-            NurseServlet nurseServ = new NurseServlet(gluc,time_);
+            List<Double> times = new ArrayList<>();
+            List<Double> glucoseValues = new ArrayList<>();
+
+            if (session != null) {
+                Object t = session.getAttribute("timeList");
+                Object g = session.getAttribute("glucoseList");
+
+                if (t instanceof List && g instanceof List) {
+                    times = (List<Double>) t;
+                    glucoseValues = (List<Double>) g;
+                }
+            }
+
+            req.setAttribute("timeList", times);
+            req.setAttribute("glucoseList", glucoseValues);
+    
+
+            NurseServlet nurseServ = new NurseServlet(gluc,time_,glucoseValues,times);
             //GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, lower, upper);
             resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData, lower, upper,req.getContextPath()));
 
@@ -296,16 +313,24 @@ public class Servlet extends HttpServlet {
             String glucoseString = req.getParameter("glucoseInp");
             String timeString = req.getParameter("timeInp");
 
+            List<Double> times = (List<Double>) session.getAttribute("timeList");
+            List<Double> glucoseValues = (List<Double>) session.getAttribute("glucoseList");
+            if (times == null) {
+                times = new ArrayList<>();
+                glucoseValues = new ArrayList<>();
+                session.setAttribute("timeList", times);
+                session.setAttribute("glucoseList", glucoseValues);
+            }
+
             try {
-                if (glucoseString != null && !glucoseString.isEmpty()) {
-                    session.setAttribute("glucoseInp", Double.parseDouble(glucoseString));
-                }
-                if (timeString != null && !timeString.isEmpty()) {
-                    session.setAttribute("timeInp", Double.parseDouble(timeString));
+                if (glucoseString != null && !glucoseString.isEmpty() &&
+                        timeString != null && !timeString.isEmpty()) {
+
+                    times.add(Double.parseDouble(timeString));
+                    glucoseValues.add(Double.parseDouble(glucoseString));
                 }
             } catch (NumberFormatException e) {
-                e.printStackTrace(); // change this later to link that displays erro rmessage
-
+                e.printStackTrace(); // later again
             }
 
             resp.sendRedirect(req.getContextPath() + "/nurses");
