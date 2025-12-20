@@ -24,7 +24,7 @@ public class Servlet extends HttpServlet {
     private final String RAW_FILE = "/glu_uM_unsmoothed.txt";
     private final String SMOOTH_FILE = "/glu_uM_smoothed.txt";
 
-    private final double defaultLower = 2.6;
+    private final double defaultLower = 2.6; //move these to another class
     private final double defaultUpper = 5.0;
     private final double defaultGlucose = 0.0;
     private final double defaultTime = 0.0;    
@@ -115,7 +115,7 @@ public class Servlet extends HttpServlet {
         }
 
 
-        double lower = defaultLower;
+        double lower = defaultLower; //move to nurse/consultant class
         double upper = defaultUpper;
         double gluc = defaultGlucose;
         double time_ = defaultTime;
@@ -164,7 +164,7 @@ public class Servlet extends HttpServlet {
             // Nurses can add their own raw values
             //rawData.addAll(userRawValues);
 
-            List<Double> times = new ArrayList<>();
+            List<Double> times = new ArrayList<>(); //move to nurse class
             List<Double> glucoseValues = new ArrayList<>();
 
             if (session != null) {
@@ -289,7 +289,7 @@ public class Servlet extends HttpServlet {
         
             String lowerString = req.getParameter("lowerLimit");
             String upperString = req.getParameter("upperLimit");
-        
+//move logic to consultant class
             try {
                 if (lowerString != null && !lowerString.isEmpty()) {
                     session.setAttribute("lowerLimit", Double.parseDouble(lowerString));
@@ -312,7 +312,7 @@ public class Servlet extends HttpServlet {
 
             String glucoseString = req.getParameter("glucoseInp");
             String timeString = req.getParameter("timeInp");
-
+//move logic to nurse class
             List<Double> times = (List<Double>) session.getAttribute("timeList");
             List<Double> glucoseValues = (List<Double>) session.getAttribute("glucoseList");
             if (times == null) {
