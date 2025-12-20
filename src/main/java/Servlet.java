@@ -25,7 +25,7 @@ public class Servlet extends HttpServlet {
     private final String SMOOTH_FILE = "/glu_uM_smoothed.txt";
 
     private final double defaultLower = 2.6;
-    private final double defaultUpper = 10.0;
+    private final double defaultUpper = 5.0;
     private final double defaultGlucose = 0.0;
     private final double defaultTime = 0.0;    
 
