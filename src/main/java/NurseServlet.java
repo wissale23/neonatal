@@ -29,7 +29,28 @@ public class NurseServlet {
     public double getTime() {
         return this.time;
     }
+    
+    public String getSamples(){
+        String sampleTriangles = "";
+        if (sampleTimes != null && sampleValues != null) {
+            for (int i = 0; i < sampleTimes.size(); i++) {
+                sampleTriangles = sampleTriangles + "sample" + " number"+
+                        i + ": {\n" +
+                        "  type: 'point',\n" +
+                        "  xValue: " + sampleTimes.get(i) + ",\n" +
+                        "  yValue: " + sampleValues.get(i) + ",\n" +
+                        "  yScaleID: 'y2',\n" +
+                        "  radius: 6,\n" +
+                        "  pointStyle: 'triangle',\n" +
+                        "  backgroundColor: '#000',\n" +
+                        "  borderColor: '#000'\n" +
+                        "},\n";
+            }
+        }
+        return sampleTriangles;
 
+
+    }
 
     public String nursePage(List<Double> timeArrayString, List<Double> rawArrayString, List<Double> smoothDataString, double lower, double upper, String pathString) {
 
@@ -76,7 +97,8 @@ public class NurseServlet {
                 "              low: { type: 'box', yScaleID: 'y2', yMin: 0, yMax: LOWER, backgroundColor: 'rgba(255,0,0,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Below Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
                 "              normal: { type: 'box', yScaleID: 'y2', yMin: LOWER, yMax: UPPER, backgroundColor: 'rgba(144,238,144,0.35)', drawTime: 'beforeDatasetsDraw', label: { content: 'Normal Range', display: true, color: '#1b5e20', font: { size: 12, style: 'italic' } } },\n" +
                 "              high: { type: 'box', yScaleID: 'y2',  yMin: UPPER, yMax: 8, backgroundColor: 'rgba(255,0,0,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Above Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
-                "              sample: { type: 'point', xValue: TIME, yValue: GLUCOSE, yScaleID: 'y2', radius: 6, pointStyle: 'triangle', backgroundColor: '#000', borderColor: '#000'}\n" +
+                               this.getSamples()+
+
                 "            }\n" +
                 "          }\n" +
                 "        }\n" +
@@ -98,9 +120,9 @@ public class NurseServlet {
                 + "<form method='POST' action='" + pathString + "/nurses'>"
                 + "<div>"
                 + "<span style='display:inline-block; width:110px; text-align:right; color:black;'>Sample value: </span>"
-                + "<input type='text' name='glucoseInp' step='0.1' value='" + this.getGlucoseValue() + "' style='width:100px; text-align:center;'/><br/><br/>"
+                + "<input type='text' name='glucoseInp' step='0.001' value='" + this.getGlucoseValue() + "' style='width:100px; text-align:center;'/><br/><br/>"
                 + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Time of day: </span>"
-                + "<input type='text' name='timeInp' step='0.1' value='" + this.getTime() + "' style='width:100px; text-align:center;'/><br/><br/>"
+                + "<input type='text' name='timeInp' step='0.001' value='" + this.getTime() + "' style='width:100px; text-align:center;'/><br/><br/>"
 
 
                 + "<button type='submit' style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add sample</button>"
