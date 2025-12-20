@@ -7,9 +7,11 @@ public class GlucoseChart {
     private final List<Double> smoothData;
     private final double lower;
     private final double upper;
+    private List<Double> sampleTimes;
+    private List<Double> sampleValues;
 
     public GlucoseChart(List<Double> timeData, List<Double> rawData, List<Double> smoothData,
-                        double lower, double upper) {
+                        double lower, double upper,List<Double> sampleValues,List<Double> sampleTimes) {
         this.timeData = timeData;
         this.rawData = rawData;
         this.smoothData = smoothData;
@@ -17,7 +19,7 @@ public class GlucoseChart {
         this.upper = upper;
     }
 
-    public String generateHTML() {
+    public String generateHTML(String samples) {
         String timeArray = timeData.toString();
         String rawArray = rawData.toString();
         String smoothArray = smoothData.toString();
@@ -33,11 +35,11 @@ public class GlucoseChart {
                 "  <h2>Glucose Levels</h2>\n" +
                 "  <canvas id='glucoseChart' width='800' height='400'></canvas>\n" +
                 "  <script>\n" +
-                "    const labels = " + timeArray + ";\n" +
-                "    const rawData = " + rawArray + ";\n" +
-                "    const smoothData = " + smoothArray + ";\n" +
+                "    const labels = " + timeArrayString + ";\n" +
+                "    const rawData = " + rawArrayString + ";\n" +
+                "    const smoothData = " + smoothDataString + ";\n" +
                 "    const LOWER = " + lower + ";\n" +
-                "    const UPPER = " + upper + ";\n" +
+                "    const UPPER = " + upper+ ";\n" +
                 "\n" +
                 "    Chart.register(window['chartjs-plugin-annotation']);\n" +
                 "    const ctx = document.getElementById('glucoseChart').getContext('2d');\n" +
@@ -46,29 +48,31 @@ public class GlucoseChart {
                 "      data: {\n" +
                 "        labels: labels,\n" +
                 "        datasets: [\n" +
-                "          { label: 'Raw Glucose', data: rawData, borderColor: 'rgba(255,160,160)', borderWidth: 0.5, fill: false, order: 2, pointRadius: 0 },\n" +
-                "          { label: 'Smoothed Glucose', data: smoothData, borderColor: 'rgb(142,11,11)', borderWidth: 0.25, fill: false, order: 1, pointRadius: 0 }\n" +
+                "          { label: 'Raw Glucose', data: rawData, yAxisID: 'y', borderColor: 'rgba(255,160,160)', borderWidth: 0.5, fill: false, order: 2, pointRadius: 0 },\n" +
+                "          { label: 'Smoothed Glucose', data: smoothData, yAxisID: 'y', borderColor: 'rgb(142,11,11)', borderWidth: 0.25, fill: false, order: 1, pointRadius: 0 }\n" +
                 "        ]\n" +
                 "      },\n" +
                 "      options: {\n" +
                 "        responsive: true,\n" +
                 "        scales: {\n" +
-                "          y: { min: 0, max: 40, title: {display: true, text: 'Skin Glucose (µM)'} },\n" +
-                "          x: { title: { display: true, text: 'Time (hours)'} }\n" +
+                "          y: {position: 'left',  min: 0, max: 40, title: {display: true, text: 'Skin Glucose (µM)'} },\n" +
+                "          y2: { position: 'right', min: 0, max: 8, title: {display: true, text: 'Blood Glucose (mM)'} },\n" +
+                "          x: { type: 'linear', min: 11.500188, max: 13.697, title: { display: true, text: 'Time (hours)'}, ticks:{stepSize: 0.066} }\n" +
                 "        },\n" +
                 "        plugins: {\n" +
                 "          annotation: {\n" +
                 "            annotations: {\n" +
-                "              low: { type: 'box', yMin: 0, yMax: LOWER, backgroundColor: 'rgba(255,0,0,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Below Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
-                "              normal: { type: 'box', yMin: LOWER, yMax: UPPER, backgroundColor: 'rgba(144,238,144,0.35)', drawTime: 'beforeDatasetsDraw', label: { content: 'Normal Range', display: true, color: '#1b5e20', font: { size: 12, style: 'italic' } } },\n" +
-                "              high: { type: 'box', yMin: UPPER, yMax: 40, backgroundColor: 'rgba(255,0,0,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Above Safe Range', display: true, color: '#8b0000', font: { size: 11 } } }\n" +
+                "              low: { type: 'box', yScaleID: 'y2', yMin: 0, yMax: LOWER, backgroundColor: 'rgba(255,0,0,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Below Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
+                "              normal: { type: 'box', yScaleID: 'y2', yMin: LOWER, yMax: UPPER, backgroundColor: 'rgba(144,238,144,0.35)', drawTime: 'beforeDatasetsDraw', label: { content: 'Normal Range', display: true, color: '#1b5e20', font: { size: 12, style: 'italic' } } },\n" +
+                "              high: { type: 'box', yScaleID: 'y2',  yMin: UPPER, yMax: 8, backgroundColor: 'rgba(255,0,0,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Above Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
+                               samples +
+
                 "            }\n" +
                 "          }\n" +
                 "        }\n" +
                 "      }\n" +
                 "    });\n" +
-                "  </script>\n" +
-                "</body>\n" +
-                "</html>";
+                "  </script>\n";
+
     }
 }
