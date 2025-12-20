@@ -25,7 +25,9 @@ public class Servlet extends HttpServlet {
     private final String SMOOTH_FILE = "/glu_uM_smoothed.txt";
 
     private final double defaultLower = 2.6;
-    private final double defaultUpper = 10.0;    
+    private final double defaultUpper = 10.0;
+    private final double defaultGlucose = 0.0;
+    private final double defaultTime = 0.0;    
 
     @Override
     public void init() {
@@ -115,16 +117,29 @@ public class Servlet extends HttpServlet {
 
         double lower = defaultLower;
         double upper = defaultUpper;
+        double gluc = defaultGlucose;
+        double time_ = defaultTime;
 
         if (session != null) {
             Object low = session.getAttribute("lowerLimit");
             Object upp = session.getAttribute("upperLimit");
+            Object gl = session.getAttribute("glucoseInp");
+            Object tm = session.getAttribute("timeInp");
+
             if (low != null){
                 lower = (double) low;
             }
             if (upp != null) {
                 upper = (double) upp;
             }
+
+            if (gl != null){
+                gluc = (double) gl;
+            }
+            if (tm != null) {
+                time_ = (double) tm;
+            }
+
         }
 
         if ("/consultants".equals(path)) {
@@ -149,8 +164,10 @@ public class Servlet extends HttpServlet {
             // Nurses can add their own raw values
             rawData.addAll(userRawValues);
 
-            GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, lower, upper);
-            resp.getWriter().write(chart.generateHTML());
+            NurseServlet nurseServ = new NurseServlet(gluc,time_);
+            //GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, lower, upper);
+            resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData, lower, upper,req.getContextPath()));
+
 
 
                 
@@ -250,7 +267,7 @@ public class Servlet extends HttpServlet {
             }
         }
 
-        if ("/consultants".equals(req.getServletPath())  || "/nurses".equals(req.getServletPath())) {
+        if ("/consultants".equals(req.getServletPath())) {
             HttpSession session = req.getSession(true);
         
             String lowerString = req.getParameter("lowerLimit");
@@ -268,16 +285,35 @@ public class Servlet extends HttpServlet {
 
             }
 
-            if ("/consultants".equals(req.getServletPath())){
-               resp.sendRedirect(req.getContextPath() + "/consultants");
-            }  
-            if ("/nurses".equals(req.getServletPath())){
-               resp.sendRedirect(req.getContextPath() + "/nurses");
-            }
+            resp.sendRedirect(req.getContextPath() + "/consultants");
             return;    
         }
+            
+        
+        if ("/nurses".equals(req.getServletPath())) {
+            HttpSession session = req.getSession(true);
 
-    
+            String glucoseString = req.getParameter("glucoseInp");
+            String timeString = req.getParameter("timeInp");
+
+            try {
+                if (glucoseString != null && !glucoseString.isEmpty()) {
+                    session.setAttribute("glucoseInp", Double.parseDouble(glucoseString));
+                }
+                if (timeString != null && !timeString.isEmpty()) {
+                    session.setAttribute("timeInp", Double.parseDouble(timeString));
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace(); // change this later to link that displays erro rmessage
+
+            }
+
+            resp.sendRedirect(req.getContextPath() + "/nurses");
+            return;
+        }
+
+        
+        
 
         // Basic session-based access control for POST requests (nurses only)
         if (!"/nurses".equals(req.getServletPath())) {
