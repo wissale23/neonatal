@@ -7,16 +7,16 @@ public class GlucoseChart {
     private final List<Double> smoothData;
     private final double lower;
     private final double upper;
-    private List<Double> sampleTimes;
-    private List<Double> sampleValues;
+
 
     public GlucoseChart(List<Double> timeData, List<Double> rawData, List<Double> smoothData,
-                        double lower, double upper,List<Double> sampleValues,List<Double> sampleTimes) {
+                        double lower, double upper) {
         this.timeData = timeData;
         this.rawData = rawData;
         this.smoothData = smoothData;
         this.lower = lower;
         this.upper = upper;
+
     }
 
     public String generateHTML(String samples) {
@@ -35,9 +35,9 @@ public class GlucoseChart {
                 "  <h2>Glucose Levels</h2>\n" +
                 "  <canvas id='glucoseChart' width='800' height='400'></canvas>\n" +
                 "  <script>\n" +
-                "    const labels = " + timeArrayString + ";\n" +
-                "    const rawData = " + rawArrayString + ";\n" +
-                "    const smoothData = " + smoothDataString + ";\n" +
+                "    const labels = " + timeArray + ";\n" +
+                "    const rawData = " + rawArray + ";\n" +
+                "    const smoothData = " + smoothArray + ";\n" +
                 "    const LOWER = " + lower + ";\n" +
                 "    const UPPER = " + upper+ ";\n" +
                 "\n" +
