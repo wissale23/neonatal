@@ -94,7 +94,7 @@ public class NurseServlet {
                 "        scales: {\n" +
                 "          y: {position: 'left',  min: 0, max: 40, title: {display: true, text: 'Skin Glucose (µM)'} },\n" +
                 "          y2: { position: 'right', min: 0, max: 8, title: {display: true, text: 'Blood Glucose (mM)'} },\n" +
-                "          x: { type: 'linear', min: 11.500188, max: 13.8, title: { display: true, text: 'Time (hours)'}, ticks:{stepSize: 0.066} }\n" +
+                "          x: { type: 'linear', min: 11.500188, max: 13.697, title: { display: true, text: 'Time (hours)'}, ticks:{stepSize: 0.066} }\n" +
                 "        },\n" +
                 "        plugins: {\n" +
                 "          annotation: {\n" +
