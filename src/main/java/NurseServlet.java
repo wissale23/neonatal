@@ -75,7 +75,7 @@ public class NurseServlet {
                 "            annotations: {\n" +
                 "              low: { type: 'box', yScaleID: 'y2', yMin: 0, yMax: LOWER, backgroundColor: 'rgba(255,0,0,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Below Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
                 "              normal: { type: 'box', yScaleID: 'y2', yMin: LOWER, yMax: UPPER, backgroundColor: 'rgba(144,238,144,0.35)', drawTime: 'beforeDatasetsDraw', label: { content: 'Normal Range', display: true, color: '#1b5e20', font: { size: 12, style: 'italic' } } },\n" +
-                "              high: { type: 'box', yScaleID: 'y2',  yMin: UPPER, yMax: 40, backgroundColor: 'rgba(255,0,0,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Above Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
+                "              high: { type: 'box', yScaleID: 'y2',  yMin: UPPER, yMax: 8, backgroundColor: 'rgba(255,0,0,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Above Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
                 "              sample: { type: 'point', xValue: TIME, yValue: GLUCOSE, yScaleID: 'y2', radius: 6, pointStyle: 'triangle', backgroundColor: '#000', borderColor: '#000'}\n" +
                 "            }\n" +
                 "          }\n" +
@@ -93,7 +93,7 @@ public class NurseServlet {
                 + "margin: 20px auto;"
                 + "text-align: center;'>"
 
-                + "<h3 style='color: black;'>Entering blood glucose values(&mu;M)</h3>"
+                + "<h3 style='color: black;'>Entering blood glucose values(mM)</h3>"
 
                 + "<form method='POST' action='" + pathString + "/nurses'>"
                 + "<div>"
