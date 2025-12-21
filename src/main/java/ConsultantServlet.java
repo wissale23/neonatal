@@ -90,7 +90,7 @@ public class ConsultantServlet {
                 + "margin: 20px auto;"
                 + "text-align: center;'>"
 
-                + "<h3 style='color: black;'>Glucose Safety Range (&mu;M)</h3>"
+                + "<h3 style='color: black;'>Blood Glucose Safety Range (mM)</h3>"
 
                 + "<form method='POST' action='" + pathString + "/consultants'>"
                 + "<div>"
