@@ -24,10 +24,14 @@ public class Servlet extends HttpServlet {
     private final String RAW_FILE = "/glu_uM_unsmoothed.txt";
     private final String SMOOTH_FILE = "/glu_uM_smoothed.txt";
 
+    // Default input values
     private final double defaultLower = 2.6;
     private final double defaultUpper = 10.0;
     private final double defaultGlucose = 0.0;
-    private final double defaultTime = 0.0;    
+    private final double defaultTime = 0.0;
+    private final double defaultFeedStart = 0.0;
+    private final double defaultFeedDuration = 0.0;
+    private final double defaultFeedType = 0.0;
 
     @Override
     public void init() {
@@ -184,7 +188,7 @@ public class Servlet extends HttpServlet {
 
             NurseServlet nurseServ = new NurseServlet(gluc,time_,12.4,30.0,"lunch");
             //GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, lower, upper);
-            resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData,lower,upper,glucoseValues,times,req.getContextPath()));
+            resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData,lower,upper,glucoseValues,times,feedStarts,feedDurations,feedTypes,req.getContextPath()));
 
 
 
@@ -306,7 +310,7 @@ public class Servlet extends HttpServlet {
                     session.setAttribute("upperLimit", Double.parseDouble(upperString));
                 }
             } catch (NumberFormatException e) {
-               e.printStackTrace(); // change this later to link that displays erro rmessage
+               e.printStackTrace(); // change this later to link that displays error message
 
             }
 
