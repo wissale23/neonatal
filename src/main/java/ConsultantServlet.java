@@ -6,7 +6,10 @@ public class ConsultantServlet {
     private double lower;
     private double upper;
 
-
+     public ConsultantServlet(double lower, double upper) {
+        this.lower = lower;
+        this.upper = upper;
+    }
 
 
     public double getLower(){
