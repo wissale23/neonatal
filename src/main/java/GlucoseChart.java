@@ -129,7 +129,7 @@ public class GlucoseChart {
                 "          x: { type: 'linear', min: 11.0, max: 14.0,\n" +
                 "            title: { display: true, text: 'Time (hours)' },\n" +
                 "            ticks: {\n" +
-                "              stepSize: 0.1,\n" +
+                "              stepSize: (0.5 / 6),\n" +
                 "              callback: function(value) {\n" +
                 "                if (Math.abs(value % 0.5) < 1e-6) {\n" +
                 "                  return value.toFixed(1);\n" +
