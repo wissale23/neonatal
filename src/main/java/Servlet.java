@@ -176,9 +176,13 @@ public class Servlet extends HttpServlet {
             Object fd = session.getAttribute("durationList");
             Object ft = session.getAttribute("typeList");
 
-            if (t instanceof List && g instanceof List) {
+            if (t instanceof List && g instanceof List && fs instanceof List && fd instanceof List && ft instanceof List) {
                 times = (List<Double>) t;
                 glucoseValues = (List<Double>) g;
+                feedStarts = (List<Double>) fs;
+                feedDurations = (List<Double>) fd;
+                feedTypes = (List<String>) ft;
+
             }
         }
 
@@ -199,7 +203,7 @@ public class Servlet extends HttpServlet {
             // Consultants only view the file data, no user input
             ConsultantServlet consult = new ConsultantServlet(lower,upper);        
 
-            resp.getWriter().write(consult.consultPage(session, timeData,rawData,smoothData,glucoseValues,times, req.getContextPath()));
+            resp.getWriter().write(consult.consultPage(session, timeData,rawData,smoothData,glucoseValues,times,feedStarts,feedDurations,feedTypes, req.getContextPath()));
 
         } else if ("/nurses".equals(path)) {
             // Load data from files
@@ -211,7 +215,7 @@ public class Servlet extends HttpServlet {
             rawData.addAll(userRawValues);
     
 
-            NurseServlet nurseServ = new NurseServlet(gluc,time_,12.4,30.0,"lunch");
+            NurseServlet nurseServ = new NurseServlet(gluc,time_,feedStart,feedDur,feedType);
             //GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, lower, upper);
             resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData,lower,upper,glucoseValues,times,feedStarts,feedDurations,feedTypes,req.getContextPath()));
 
