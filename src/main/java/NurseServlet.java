@@ -84,13 +84,13 @@ public class NurseServlet {
                 + "<div>"
             
                 + "<span style='display:inline-block; width:110px; text-align:right; color:black;'>Start of feeding: </span>"
-                + "<input type='text' name='feedStart' step='0.001' value='" + this.getFeedStart() + "' style='width:100px; text-align:center;'/><br/><br/>"
+                + "<input type='text' name='startInp' step='0.001' value='" + this.getFeedStart() + "' style='width:100px; text-align:center;'/><br/><br/>"
             
                 + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Duration of feeding: </span>"
-                + "<input type='text' name='feedDur' step='0.001' value='" + this.getFeedDur() + "' style='width:100px; text-align:center;'/><br/><br/>"
+                + "<input type='text' name='durInp' step='0.001' value='" + this.getFeedDur() + "' style='width:100px; text-align:center;'/><br/><br/>"
             
                 + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Feeding Description: </span>"
-                + "<input type='text' name='feedDescript' step='0.001' value='" + this.getFeedType() + "' style='width:100px; text-align:center;'/><br/><br/>"
+                + "<input type='text' name='typeInp' step='0.001' value='" + this.getFeedType() + "' style='width:100px; text-align:center;'/><br/><br/>"
 
 
                 + "<button type='submit' style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add feeding information</button>"
