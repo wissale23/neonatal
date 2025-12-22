@@ -10,7 +10,6 @@ public class GlucoseChart {
     private List<Double> sampleTimes;
     private List<Double> sampleValues;
 
-
     public GlucoseChart(List<Double> timeData, List<Double> rawData, List<Double> smoothData,
                         double lower, double upper,List<Double> sampleValues,List<Double> sampleTimes) {
         this.timeData = timeData;
@@ -20,7 +19,6 @@ public class GlucoseChart {
         this.upper = upper;
         this.sampleValues = sampleValues;
         this.sampleTimes = sampleTimes;
-
     }
 
     public String getSamples(){
@@ -40,11 +38,7 @@ public class GlucoseChart {
             }
         }
         return sampleTriangles;
-
-
     }
-
-
 
     public String generateHTML() {
         String timeArray = timeData.toString();
@@ -83,7 +77,7 @@ public class GlucoseChart {
                 "      options: {\n" +
                 "        responsive: true,\n" +
                 "        scales: {\n" +
-                "          y: {position: 'left',  min: 0, max: 60, title: {display: true, text: 'Skin Glucose (µM)'} },\n" +
+                "          y: {position: 'left',  min: 0, max: 90, title: {display: true, text: 'Skin Glucose (µM)'} },\n" +
                 "          y2: { position: 'right', min: 0, max: 12, title: {display: true, text: 'Blood Glucose (mM)'} },\n" +
                 "          x: { type: 'linear', min: 11.50, max: 14, title: { display: true, text: 'Time (hours)'}, ticks:{stepSize: 0.1} }\n" +
                 "        },\n" +
@@ -92,7 +86,7 @@ public class GlucoseChart {
                 "            annotations: {\n" +
                 "              low: { type: 'box', yScaleID: 'y2', yMin: 0, yMax: LOWER, backgroundColor: 'rgba(255,0,0,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Below Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
                 "              normal: { type: 'box', yScaleID: 'y2', yMin: LOWER, yMax: UPPER, backgroundColor: 'rgba(144,238,144,0.35)', drawTime: 'beforeDatasetsDraw', label: { content: 'Normal Range', display: true, color: '#1b5e20', font: { size: 12, style: 'italic' } } },\n" +
-                "              high: { type: 'box', yScaleID: 'y2',  yMin: UPPER, yMax: 8, backgroundColor: 'rgba(255,0,0,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Above Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
+                "              high: { type: 'box', yScaleID: 'y2',  yMin: UPPER, yMax: 12, backgroundColor: 'rgba(255,0,0,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Above Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
                                this.getSamples() +
 
                 "            }\n" +
@@ -103,6 +97,5 @@ public class GlucoseChart {
                 "  </script>\n" +
                 "</body>\n" +
                 "</html>\n";
-
     }
 }
