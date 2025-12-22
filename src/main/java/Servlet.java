@@ -259,6 +259,9 @@ public class Servlet extends HttpServlet {
 
             String action = req.getParameter("action");
             if ("download".equals(action)) {
+
+                System.out.println("Download button pressed");
+
                 // Load all data files
                 List<Double> timeData = loadDataFromResource(TIME_FILE);
                 List<Double> rawData = loadDataFromResource(RAW_FILE);
