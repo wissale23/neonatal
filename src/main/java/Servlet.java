@@ -196,9 +196,6 @@ public class Servlet extends HttpServlet {
                             "<form method=\"POST\" action=\"" + req.getContextPath() + "/researchers\">" +
                             "<button type=\"button\" name=\"action\" value=\"download\">Download Data</button>" +
                             "</form>" +
-                            "<script>" +
-                            "console.log('Researcher page opened');" +
-                            "</script>" +
                             "<p><a href=\"" + req.getContextPath() + "/logout\">Logout</a></p>"
             );
                 
@@ -263,14 +260,6 @@ public class Servlet extends HttpServlet {
 
             String action = req.getParameter("action");
             if ("download".equals(action)) {
-
-                resp.setContentType("text/html");
-                resp.getWriter().write(
-                        "<script>" +
-                        "console.log('Download button pressed');" +
-                        "</script>"
-                );
-
                 // Load all data files
                 List<Double> timeData = loadDataFromResource(TIME_FILE);
                 List<Double> rawData = loadDataFromResource(RAW_FILE);
