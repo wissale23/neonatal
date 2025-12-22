@@ -61,6 +61,9 @@ public class GlucoseChart {
                         "  type: 'box',\n" +
                         "  xMin: " + start + ",\n" +
                         "  xMax: " + end + ",\n" +
+                        "  yScaleID: 'y2',\n" +
+                        "  yMin: 0,\n" +
+                        "  yMax: 12,\n" +
                         "  backgroundColor: 'rgba(0,255,0,0.25)',\n" +
                         "  borderColor: 'rgb(0,0,0)',\n" +
                         "  borderWidth: 1,\n" +
