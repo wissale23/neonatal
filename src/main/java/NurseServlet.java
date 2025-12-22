@@ -16,15 +16,13 @@ public class NurseServlet {
 
     private double bloodGlucose;
     private double time;
-    private List<Double> sampleTimes;
-    private List<Double> sampleValues;
 
 
-    public NurseServlet(double bloodGlucose, double time,List<Double> sampleValues,List<Double> sampleTimes) {
+
+    public NurseServlet(double bloodGlucose, double time) {
         this.bloodGlucose = bloodGlucose;
         this.time = time;
-        this.sampleValues = sampleValues;
-        this.sampleTimes = sampleTimes;
+
     }
 
     public double getGlucoseValue() {
@@ -36,32 +34,13 @@ public class NurseServlet {
     }
 
     
-    public String getSamples(){
-        String sampleTriangles = "";
-        if (sampleTimes != null && sampleValues != null) {
-            for (int i = 0; i < sampleTimes.size(); i++) {
-                sampleTriangles = sampleTriangles + "sample" + i + ": {\n" +
-                        "  type: 'point',\n" +
-                        "  xValue: " + sampleTimes.get(i) + ",\n" +
-                        "  yValue: " + sampleValues.get(i) + ",\n" +
-                        "  yScaleID: 'y2',\n" +
-                        "  radius: 6,\n" +
-                        "  pointStyle: 'triangle',\n" +
-                        "  backgroundColor: '#000',\n" +
-                        "  borderColor: '#000'\n" +
-                        "},\n";
-            }
-        }
-        return sampleTriangles;
 
 
-    }
+    public String nursePage(List<Double> timeArrayString, List<Double> rawArrayString, List<Double> smoothDataString, double lower, double upper, List<Double> sampleValues,List<Double> sampleTimes, String pathString) {
 
-    public String nursePage(List<Double> timeArrayString, List<Double> rawArrayString, List<Double> smoothDataString, double lower, double upper, String pathString) {
+        GlucoseChart glucoseChart = new GlucoseChart(timeArrayString, rawArrayString, smoothDataString,lower, upper,List<Double> sampleValues,List<Double> sampleTimes);
 
-        GlucoseChart glucoseChart = new GlucoseChart(timeArrayString, rawArrayString, smoothDataString,lower, upper);
-
-        return glucoseChart.generateHTML(this.getSamples()) + "<div style='background-color: #fedae6; "
+        return glucoseChart.generateHTML() + "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;"
                 + "padding: 20px;"
                 + "border-radius: 10px;"
