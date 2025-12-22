@@ -11,12 +11,12 @@ public class GlucoseChart {
     private List<Double> sampleValues;
     private List<Double> feedingStarts;
     private List<Double> feedingDurations;
-    private List<Double> feedingTypes;
+    private List<String> feedingTypes;
 
     // Instantiate Data and Inputs
     public GlucoseChart(List<Double> timeData, List<Double> rawData, List<Double> smoothData,
                         double lower, double upper,List<Double> sampleValues,List<Double> sampleTimes,
-                        List<Double> feedingStarts, List<Double> feedingDurations, List<Double> feedingTypes) {
+                        List<Double> feedingStarts, List<Double> feedingDurations, List<String> feedingTypes) {
         this.timeData = timeData;
         this.rawData = rawData;
         this.smoothData = smoothData;
