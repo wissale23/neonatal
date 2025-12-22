@@ -54,17 +54,20 @@ public class GlucoseChart {
         String feedingBars = "";
         if (feedingStarts != null && feedingDurations != null && feedingTypes != null) {
             for (int i = 0; i < feedingStarts.size(); i++) {
+                double start = feedingStarts.get(i);
+                double end = start + feedingDurations.get(i);
+                String type = feedingTypes.get(i);
                 feedingBars = feedingBars + "feed" + i + ": {\n" +
                         "  type: 'box',\n" +
-                        "  xMin: " + feedingStarts.get(i) + ",\n" +
-                        "  xMax: " + start + feedingDurations.get(i) + ",\n" +
+                        "  xMin: " + start + ",\n" +
+                        "  xMax: " + end + ",\n" +
                         "  backgroundColor: 'rgba(0,255,0,0.25)',\n" +
                         "  borderColor: 'rgb(0,0,0)',\n" +
                         "  borderWidth: 1,\n" +
                         "  drawTime: 'beforeDatasetsDraw',\n" +
                         "  label: {\n" +
                         "    display: true,\n" +
-                        "    content: '" + feedingTypes.get(i) + "',\n" +
+                        "    content: '" + type + "',\n" +
                         "    position: 'center',\n" +
                         "    color: '#003366',\n" +
                         "    font: { size: 11, weight: 'bold' }\n" +
