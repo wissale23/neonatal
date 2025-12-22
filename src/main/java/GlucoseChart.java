@@ -50,7 +50,7 @@ public class GlucoseChart {
     }
 
     // Plot Feeding Times, Durations, and Types
-    public String getFeedings({
+    public String getFeedings(){
         String feedingBars = "";
         if (feedingStarts != null && feedingDurations != null && feedingTypes != null) {
             for (int i = 0; i < feedingStarts.size(); i++) {
