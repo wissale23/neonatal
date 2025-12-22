@@ -181,9 +181,9 @@ public class Servlet extends HttpServlet {
             req.setAttribute("glucoseList", glucoseValues);
     
 
-            NurseServlet nurseServ = new NurseServlet(gluc,time_,glucoseValues,times);
+            NurseServlet nurseServ = new NurseServlet(gluc,time_);
             //GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, lower, upper);
-            resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData, lower, upper,req.getContextPath()));
+            resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData, lower, upper,glucoseValues,times,req.getContextPath()));
 
 
 
