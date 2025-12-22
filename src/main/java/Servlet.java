@@ -24,8 +24,7 @@ public class Servlet extends HttpServlet {
     private final String RAW_FILE = "/glu_uM_unsmoothed.txt";
     private final String SMOOTH_FILE = "/glu_uM_smoothed.txt";
 
-    private final double defaultLower = 2.6; //move these to another class
-    private final double defaultUpper = 10.0;
+
     private final double defaultGlucose = 0.0;
     private final double defaultTime = 0.0;    
 
@@ -115,23 +114,15 @@ public class Servlet extends HttpServlet {
         }
 
 
-        double lower = defaultLower; //move to nurse/consultant class
-        double upper = defaultUpper;
+      
         double gluc = defaultGlucose;
         double time_ = defaultTime;
 
         if (session != null) {
-            Object low = session.getAttribute("lowerLimit");
-            Object upp = session.getAttribute("upperLimit");
+            
             Object gl = session.getAttribute("glucoseInp");
             Object tm = session.getAttribute("timeInp");
 
-            if (low != null){
-                lower = (double) low;
-            }
-            if (upp != null) {
-                upper = (double) upp;
-            }
 
             if (gl != null){
                 gluc = (double) gl;
@@ -169,7 +160,7 @@ public class Servlet extends HttpServlet {
             // Consultants only view the file data, no user input
 
             ConsultantServlet consult = new ConsultantServlet(lower, upper);
-            resp.getWriter().write(consult.consultPage(timeData,rawData,smoothData,glucoseValues,times, req.getContextPath()));
+            resp.getWriter().write(consult.consultPage(session, timeData,rawData,smoothData,glucoseValues,times, req.getContextPath()));
 
         } else if ("/nurses".equals(path)) {
             // Load data from files
