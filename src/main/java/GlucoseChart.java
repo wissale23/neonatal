@@ -76,7 +76,8 @@ public class GlucoseChart {
                 "        labels: labels,\n" +
                 "        datasets: [\n" +
                 "          { label: 'Raw Glucose', data: rawData, yAxisID: 'y', borderColor: 'rgba(255,160,160)', borderWidth: 0.5, fill: false, order: 2, pointRadius: 0 },\n" +
-                "          { label: 'Smoothed Glucose', data: smoothData, yAxisID: 'y', borderColor: 'rgb(142,11,11)', borderWidth: 0.25, fill: false, order: 1, pointRadius: 0 }\n" +
+                "          { label: 'Smoothed Glucose', data: smoothData, yAxisID: 'y', borderColor: 'rgb(142,11,11)', borderWidth: 0.25, fill: false, order: 1, pointRadius: 0 },\n" +
+                "          { label: 'Estimated Blood Glucose', data: rawData.map(v => (v - 1.5) / 3.5), yAxisID: 'y2', borderColor: 'rgba(255,160,160)', borderWidth: 6, fill: false, order: 3, pointRadius: 0 }\n" +
                 "        ]\n" +
                 "      },\n" +
                 "      options: {\n" +
@@ -99,7 +100,9 @@ public class GlucoseChart {
                 "        }\n" +
                 "      }\n" +
                 "    });\n" +
-                "  </script>\n";
+                "  </script>\n" +
+                "</body>\n" +
+                "</html>\n";
 
     }
 }
