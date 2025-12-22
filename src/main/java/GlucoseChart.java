@@ -49,6 +49,32 @@ public class GlucoseChart {
         return sampleTriangles;
     }
 
+    // Plot Feeding Times, Durations, and Types
+    public String getFeedings({
+        String feedingBars = "";
+        if (feedingStarts != null && feedingDurations != null && feedingTypes != null) {
+            for (int i = 0; i < feedingStarts.size(); i++) {
+                feedingBars = feedingBars + "feed" + i + ": {\n" +
+                        "  type: 'box',\n" +
+                        "  xMin: " + feedingStarts.get(i) + ",\n" +
+                        "  xMax: " + start + feedingDurations.get(i) + ",\n" +
+                        "  backgroundColor: 'rgba(0,255,0,0.25)',\n" +
+                        "  borderColor: 'rgb(0,0,0)',\n" +
+                        "  borderWidth: 1,\n" +
+                        "  drawTime: 'beforeDatasetsDraw',\n" +
+                        "  label: {\n" +
+                        "    display: true,\n" +
+                        "    content: '" + feedingTypes.get(i) + "',\n" +
+                        "    position: 'center',\n" +
+                        "    color: '#003366',\n" +
+                        "    font: { size: 11, weight: 'bold' }\n" +
+                        "  }\n" +
+                        " },\n";
+            }
+        }
+        return feedingBars;
+    }
+
     public String generateHTML() {
         String timeArray = timeData.toString();
         String rawArray = rawData.toString();
@@ -105,6 +131,7 @@ public class GlucoseChart {
                 "              high: { type: 'box', yScaleID: 'y2',  yMin: UPPER, yMax: 12, backgroundColor: 'rgba(216,216,216,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Blood Glucose: Above Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
             // Plot Heel Prick Sample inputs
                                this.getSamples() +
+                               this.getFeedings() +
                 "            }\n" +
                 "          }\n" +
                 "        }\n" +
