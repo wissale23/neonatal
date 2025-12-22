@@ -143,7 +143,7 @@ public class Servlet extends HttpServlet {
 
         }
 
-        List<Double> times = new ArrayList<>(); //move to nurse class
+        List<Double> times = new ArrayList<>(); 
         List<Double> glucoseValues = new ArrayList<>();
 
         if (session != null) {
@@ -179,7 +179,7 @@ public class Servlet extends HttpServlet {
             List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
 
             // Nurses can add their own raw values
-            //rawData.addAll(userRawValues);
+            rawData.addAll(userRawValues);
     
 
             NurseServlet nurseServ = new NurseServlet(gluc,time_,12.4,30.0,"lunch");
@@ -297,7 +297,7 @@ public class Servlet extends HttpServlet {
         
             String lowerString = req.getParameter("lowerLimit");
             String upperString = req.getParameter("upperLimit");
-//move logic to consultant class
+                
             try {
                 if (lowerString != null && !lowerString.isEmpty()) {
                     session.setAttribute("lowerLimit", Double.parseDouble(lowerString));
@@ -320,7 +320,7 @@ public class Servlet extends HttpServlet {
 
             String glucoseString = req.getParameter("glucoseInp");
             String timeString = req.getParameter("timeInp");
-//move logic to nurse class
+                
             List<Double> times = (List<Double>) session.getAttribute("timeList");
             List<Double> glucoseValues = (List<Double>) session.getAttribute("glucoseList");
             if (times == null) {
