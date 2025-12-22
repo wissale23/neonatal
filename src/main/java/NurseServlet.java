@@ -104,7 +104,7 @@ public class NurseServlet {
     
 
 
-    public String nursePage(List<Double> timeArrayString, List<Double> rawArrayString, List<Double> smoothDataString, double lower, double upper, List<Double> sampleValues,List<Double> sampleTimes, String pathString) {
+    public String nursePage(List<Double> timeArrayString, List<Double> rawArrayString, List<Double> smoothDataString, double lower, double upper, List<Double> sampleValues,List<Double> sampleTimes,List<Double> feedingStarts,List<Double> feedingDurations,List<Double> feedingTypes,String pathString) {
 
         GlucoseChart glucoseChart = new GlucoseChart(timeArrayString, rawArrayString, smoothDataString,lower, upper,sampleValues,sampleTimes,feedingStarts,feedingDurations,feedingTypes);
 
