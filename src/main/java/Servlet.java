@@ -189,13 +189,15 @@ public class Servlet extends HttpServlet {
 
                 
         } else if("/researchers".equals(path)){
-            System.out.println("Researcher page opened");
             resp.getWriter().write(
                     "<h1>Researcher Portal</h1>" +
                             "<p>Download glucose monitoring data:</p>" +
                             "<form method=\"POST\" action=\"" + req.getContextPath() + "/researchers\">" +
                             "<button type=\"button\" name=\"action\" value=\"download\">Download Data</button>" +
                             "</form>" +
+                            "<script>" +
+                            "console.log('Researcher page opened');" +
+                            "</script>" +
                             "<p><a href=\"" + req.getContextPath() + "/logout\">Logout</a></p>"
             );
                 
