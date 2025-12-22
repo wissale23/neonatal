@@ -139,7 +139,7 @@ public class GlucoseChart {
                 "            },\n" +
                 "            grid: { drawTicks: true }\n" +
                 "          }\n" +
-                "        },\n"
+                "        },\n" +
                 "        plugins: {\n" +
                 "          annotation: {\n" +
                 "            annotations: {\n" +
