@@ -353,9 +353,15 @@ public class Servlet extends HttpServlet {
 
             String glucoseString = req.getParameter("glucoseInp");
             String timeString = req.getParameter("timeInp");
+            String startString = req.getParameter("startInp");
+            String durString = req.getParameter("durInp");
+            String typeString = req.getParameter("typeInp");
                 
             List<Double> times = (List<Double>) session.getAttribute("timeList");
             List<Double> glucoseValues = (List<Double>) session.getAttribute("glucoseList");
+            List<Double> feedStarts = (List<Double>) session.getAttribute("startList");
+            List<Double> feedDurations = (List<Double>) session.getAttribute("durationList");
+            List<String> feedTypes = (List<String>) session.getAttribute("typeList");
             if (times == null) {
                 times = new ArrayList<>();
                 glucoseValues = new ArrayList<>();
@@ -369,6 +375,28 @@ public class Servlet extends HttpServlet {
 
                     times.add(Double.parseDouble(timeString));
                     glucoseValues.add(Double.parseDouble(glucoseString));
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace(); // later again
+            }
+
+            if (feedStarts == null) {
+                feedStarts = new ArrayList<>();
+                feedDurations = new ArrayList<>();
+                feedTypes = new ArrayList<>();
+                session.setAttribute("startList", feedStarts);
+                session.setAttribute("durationList", feedDurations);
+                session.setAttribute("typeList", feedTypes);
+            }
+
+            try {
+                if (startString != null && !startString.isEmpty() &&
+                    durString != null && !durString.isEmpty() && 
+                    typerString != null && !typeString.isEmpty()) {
+
+                    feedStarts.add(Double.parseDouble(startString));
+                    feedDurations.add(Double.parseDouble(durString));
+                    feedTypes.add(String.parseString(typeString));
                 }
             } catch (NumberFormatException e) {
                 e.printStackTrace(); // later again
