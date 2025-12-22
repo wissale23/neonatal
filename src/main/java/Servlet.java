@@ -159,7 +159,7 @@ public class Servlet extends HttpServlet {
 
             // Consultants only view the file data, no user input
 
-            ConsultantServlet consult = new ConsultantServlet(lower, upper);
+            ConsultantServlet consult = new ConsultantServlet();
             resp.getWriter().write(consult.consultPage(session, timeData,rawData,smoothData,glucoseValues,times, req.getContextPath()));
 
         } else if ("/nurses".equals(path)) {
