@@ -24,7 +24,8 @@ public class Servlet extends HttpServlet {
     private final String RAW_FILE = "/glu_uM_unsmoothed.txt";
     private final String SMOOTH_FILE = "/glu_uM_smoothed.txt";
 
-
+    private final double defaultLower = 2.6;
+    private final double defaultUpper = 10.0;
     private final double defaultGlucose = 0.0;
     private final double defaultTime = 0.0;    
 
@@ -115,14 +116,23 @@ public class Servlet extends HttpServlet {
 
 
       
+        double lower = defaultLower; 
+        double upper = defaultUpper;
         double gluc = defaultGlucose;
         double time_ = defaultTime;
 
         if (session != null) {
-            
+            Object low = session.getAttribute("lowerLimit");
+            Object upp = session.getAttribute("upperLimit");
             Object gl = session.getAttribute("glucoseInp");
             Object tm = session.getAttribute("timeInp");
 
+            if (low != null){
+                lower = (double) low;
+            }
+            if (upp != null) {
+                upper = (double) upp;
+            }
 
             if (gl != null){
                 gluc = (double) gl;
@@ -148,7 +158,6 @@ public class Servlet extends HttpServlet {
 
         req.setAttribute("timeList", times);
         req.setAttribute("glucoseList", glucoseValues);  
-        ConsultantServlet consult = new ConsultantServlet();        
 
         if ("/consultants".equals(path)) {
 
@@ -159,6 +168,7 @@ public class Servlet extends HttpServlet {
             List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
 
             // Consultants only view the file data, no user input
+            ConsultantServlet consult = new ConsultantServlet(lower,upper);        
 
             resp.getWriter().write(consult.consultPage(session, timeData,rawData,smoothData,glucoseValues,times, req.getContextPath()));
 
@@ -174,7 +184,7 @@ public class Servlet extends HttpServlet {
 
             NurseServlet nurseServ = new NurseServlet(gluc,time_);
             //GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, lower, upper);
-            resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData, consult.getLowAttr(), consult.getUppAttr(),glucoseValues,times,req.getContextPath()));
+            resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData,lower,upper,glucoseValues,times,req.getContextPath()));
 
 
 
