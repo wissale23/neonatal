@@ -38,7 +38,7 @@ public class NurseServlet {
 
     public String nursePage(List<Double> timeArrayString, List<Double> rawArrayString, List<Double> smoothDataString, double lower, double upper, List<Double> sampleValues,List<Double> sampleTimes, String pathString) {
 
-        GlucoseChart glucoseChart = new GlucoseChart(timeArrayString, rawArrayString, smoothDataString,lower, upper,List<Double> sampleValues,List<Double> sampleTimes);
+        GlucoseChart glucoseChart = new GlucoseChart(timeArrayString, rawArrayString, smoothDataString,lower, upper,sampleValues,sampleTimes);
 
         return glucoseChart.generateHTML() + "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;"
