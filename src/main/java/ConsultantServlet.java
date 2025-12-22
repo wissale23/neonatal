@@ -4,15 +4,10 @@ import java.util.List;
 public class ConsultantServlet {
 
 
-    private double lower;
-    private double upper;
     private final double defaultLower = 2.6;
     private final double defaultUpper = 10.0;
 
-    public ConsultantServlet(double lower, double upper) {
-        this.lower = lower;
-        this.upper = upper;
-    }
+
 
     public double getLowAttr(HttpSession session) {
 
