@@ -106,7 +106,7 @@ public class NurseServlet {
 
     public String nursePage(List<Double> timeArrayString, List<Double> rawArrayString, List<Double> smoothDataString, double lower, double upper, List<Double> sampleValues,List<Double> sampleTimes, String pathString) {
 
-        GlucoseChart glucoseChart = new GlucoseChart(timeArrayString, rawArrayString, smoothDataString,lower, upper,sampleValues,sampleTimes);
+        GlucoseChart glucoseChart = new GlucoseChart(timeArrayString, rawArrayString, smoothDataString,lower, upper,sampleValues,sampleTimes,feedingStarts,feedingDurations,feedingTypes);
 
         return glucoseChart.generateHTML() 
                + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>" 
