@@ -7,19 +7,46 @@ public class GlucoseChart {
     private final List<Double> smoothData;
     private final double lower;
     private final double upper;
+    private List<Double> sampleTimes;
+    private List<Double> sampleValues;
 
 
     public GlucoseChart(List<Double> timeData, List<Double> rawData, List<Double> smoothData,
-                        double lower, double upper) {
+                        double lower, double upper,List<Double> sampleValues,List<Double> sampleTimes) {
         this.timeData = timeData;
         this.rawData = rawData;
         this.smoothData = smoothData;
         this.lower = lower;
         this.upper = upper;
+        this.sampleValues = sampleValues;
+        this.sampleTimes = sampleTimes;
 
     }
 
-    public String generateHTML(String samples) {
+    public String getSamples(){
+        String sampleTriangles = "";
+        if (sampleTimes != null && sampleValues != null) {
+            for (int i = 0; i < sampleTimes.size(); i++) {
+                sampleTriangles = sampleTriangles + "sample" + i + ": {\n" +
+                        "  type: 'point',\n" +
+                        "  xValue: " + sampleTimes.get(i) + ",\n" +
+                        "  yValue: " + sampleValues.get(i) + ",\n" +
+                        "  yScaleID: 'y2',\n" +
+                        "  radius: 6,\n" +
+                        "  pointStyle: 'triangle',\n" +
+                        "  backgroundColor: '#000',\n" +
+                        "  borderColor: '#000'\n" +
+                        "},\n";
+            }
+        }
+        return sampleTriangles;
+
+
+    }
+
+
+
+    public String generateHTML() {
         String timeArray = timeData.toString();
         String rawArray = rawData.toString();
         String smoothArray = smoothData.toString();
@@ -65,7 +92,7 @@ public class GlucoseChart {
                 "              low: { type: 'box', yScaleID: 'y2', yMin: 0, yMax: LOWER, backgroundColor: 'rgba(255,0,0,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Below Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
                 "              normal: { type: 'box', yScaleID: 'y2', yMin: LOWER, yMax: UPPER, backgroundColor: 'rgba(144,238,144,0.35)', drawTime: 'beforeDatasetsDraw', label: { content: 'Normal Range', display: true, color: '#1b5e20', font: { size: 12, style: 'italic' } } },\n" +
                 "              high: { type: 'box', yScaleID: 'y2',  yMin: UPPER, yMax: 8, backgroundColor: 'rgba(255,0,0,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Above Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
-                               samples +
+                               this.getSamples() +
 
                 "            }\n" +
                 "          }\n" +
