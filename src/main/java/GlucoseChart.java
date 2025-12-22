@@ -77,15 +77,15 @@ public class GlucoseChart {
                 "        datasets: [\n" +
                 "          { label: 'Raw Glucose', data: rawData, yAxisID: 'y', borderColor: 'rgba(255,160,160)', borderWidth: 0.5, fill: false, order: 2, pointRadius: 0 },\n" +
                 "          { label: 'Smoothed Glucose', data: smoothData, yAxisID: 'y', borderColor: 'rgb(142,11,11)', borderWidth: 0.25, fill: false, order: 1, pointRadius: 0 },\n" +
-                "          { label: 'Estimated Blood Glucose', data: rawData.map(v => (v - 1.5) / 3.5), yAxisID: 'y2', borderColor: 'rgba(255,160,160)', borderWidth: 6, fill: false, order: 3, pointRadius: 0 }\n" +
+                "          { label: 'Estimated Blood Glucose', data: smoothData.map(v => (v - 1.5) / 3.5), yAxisID: 'y2', borderColor: 'rgba(255,160,160)', borderWidth: 6, fill: false, order: 3, pointRadius: 0 }\n" +
                 "        ]\n" +
                 "      },\n" +
                 "      options: {\n" +
                 "        responsive: true,\n" +
                 "        scales: {\n" +
-                "          y: {position: 'left',  min: 0, max: 40, title: {display: true, text: 'Skin Glucose (µM)'} },\n" +
-                "          y2: { position: 'right', min: 0, max: 8, title: {display: true, text: 'Blood Glucose (mM)'} },\n" +
-                "          x: { type: 'linear', min: 11.500188, max: 13.697, title: { display: true, text: 'Time (hours)'}, ticks:{stepSize: 0.066} }\n" +
+                "          y: {position: 'left',  min: 0, max: 60, title: {display: true, text: 'Skin Glucose (µM)'} },\n" +
+                "          y2: { position: 'right', min: 0, max: 12, title: {display: true, text: 'Blood Glucose (mM)'} },\n" +
+                "          x: { type: 'linear', min: 11.50, max: 14, title: { display: true, text: 'Time (hours)'}, ticks:{stepSize: 0.1} }\n" +
                 "        },\n" +
                 "        plugins: {\n" +
                 "          annotation: {\n" +
