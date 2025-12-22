@@ -362,6 +362,7 @@ public class Servlet extends HttpServlet {
             List<Double> feedStarts = (List<Double>) session.getAttribute("startList");
             List<Double> feedDurations = (List<Double>) session.getAttribute("durationList");
             List<String> feedTypes = (List<String>) session.getAttribute("typeList");
+                
             if (times == null) {
                 times = new ArrayList<>();
                 glucoseValues = new ArrayList<>();
@@ -392,11 +393,11 @@ public class Servlet extends HttpServlet {
             try {
                 if (startString != null && !startString.isEmpty() &&
                     durString != null && !durString.isEmpty() && 
-                    typerString != null && !typeString.isEmpty()) {
+                    typeString != null && !typeString.isEmpty()) {
 
                     feedStarts.add(Double.parseDouble(startString));
                     feedDurations.add(Double.parseDouble(durString));
-                    feedTypes.add(String.parseString(typeString));
+                    feedTypes.add(typeString);
                 }
             } catch (NumberFormatException e) {
                 e.printStackTrace(); // later again
