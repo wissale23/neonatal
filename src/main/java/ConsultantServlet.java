@@ -1,3 +1,4 @@
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 public class ConsultantServlet {
@@ -5,11 +6,41 @@ public class ConsultantServlet {
 
     private double lower;
     private double upper;
+    private final double defaultLower = 2.6;
+    private final double defaultUpper = 10.0;
 
     public ConsultantServlet(double lower, double upper) {
         this.lower = lower;
         this.upper = upper;
     }
+
+    public double getLowAttr(HttpSession session) {
+
+        if (session != null) {
+            Object low = session.getAttribute("lowerLimit");
+
+            if (low != null) {
+                return (double) low;
+            }
+
+        }
+        return defaultLower;
+
+    }
+    public double getUppAttr(HttpSession session) {
+
+        if (session != null) {
+            Object upp = session.getAttribute("lowerLimit");
+
+            if (upp != null) {
+                return (double) upp;
+            }
+
+        }
+        return defaultUpper;
+
+    }
+
 
     public double getLower(){
         return this.lower;
@@ -27,9 +58,9 @@ public class ConsultantServlet {
         this.upper = upNumber;
     }
 
-    public String consultPage(List<Double>  timeArrayString, List<Double>  rawArrayString, List<Double>  smoothDataString, List<Double> sampleValues,List<Double> sampleTimes, String pathString){
+    public String consultPage(HttpSession session, List<Double>  timeArrayString, List<Double>  rawArrayString, List<Double>  smoothDataString, List<Double> sampleValues,List<Double> sampleTimes, String pathString){
 
-        GlucoseChart glucoseChart = new GlucoseChart(timeArrayString, rawArrayString, smoothDataString,lower, upper,sampleValues,sampleTimes);
+        GlucoseChart glucoseChart = new GlucoseChart(timeArrayString, rawArrayString, smoothDataString,this.getLowAttr(session), this.getUppAttr(session),sampleValues,sampleTimes);
 
         return glucoseChart.generateHTML()+ "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;" 
@@ -44,9 +75,9 @@ public class ConsultantServlet {
                 + "<form method='POST' action='" + pathString + "/consultants'>"
                 + "<div>"
                 + "<span style='display:inline-block; width:110px; text-align:right; color:black;'>Lower limit: </span>"
-                + "<input type='text' name='lowerLimit' step='0.1' value='" + this.getLower() + "' style='width:100px; text-align:center;'/><br/><br/>"
+                + "<input type='text' name='lowerLimit' step='0.1' value='" + this.getLowAttr(session) + "' style='width:100px; text-align:center;'/><br/><br/>"
                 + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Upper limit: </span>"
-                + "<input type='text' name='upperLimit' step='0.1' value='" + this.getUpper() + "' style='width:100px; text-align:center;'/><br/><br/>"
+                + "<input type='text' name='upperLimit' step='0.1' value='" + this.getUppAttr(session) + "' style='width:100px; text-align:center;'/><br/><br/>"
 
 
                 + "<button type='submit' style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Apply</button>"
@@ -57,6 +88,10 @@ public class ConsultantServlet {
                 + "</body></html>";
 
     }
+
+
+
+
     private static final String alertCSS =
             "<style>" +
                     ".alert-bubble {" +
