@@ -189,6 +189,7 @@ public class Servlet extends HttpServlet {
 
                 
         } else if("/researchers".equals(path)){
+            resp.setContentType("text/html");
             resp.getWriter().write(
                     "<h1>Researcher Portal</h1>" +
                             "<p>Download glucose monitoring data:</p>" +
@@ -263,7 +264,12 @@ public class Servlet extends HttpServlet {
             String action = req.getParameter("action");
             if ("download".equals(action)) {
 
-                System.out.println("Download button pressed");
+                resp.setContentType("text/html");
+                resp.getWriter().write(
+                        "<script>" +
+                        "console.log('Download button pressed');" +
+                        "</script>"
+                );
 
                 // Load all data files
                 List<Double> timeData = loadDataFromResource(TIME_FILE);
