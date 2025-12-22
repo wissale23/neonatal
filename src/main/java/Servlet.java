@@ -31,7 +31,7 @@ public class Servlet extends HttpServlet {
     private final double defaultTime = 0.0;
     private final double defaultFeedStart = 0.0;
     private final double defaultFeedDuration = 0.0;
-    private final double defaultFeedType = 0.0;
+    private final String defaultFeedType = "";
 
     @Override
     public void init() {
@@ -124,12 +124,19 @@ public class Servlet extends HttpServlet {
         double upper = defaultUpper;
         double gluc = defaultGlucose;
         double time_ = defaultTime;
+        double feedStart = defaultFeedStart;
+        double feedDur = defaultFeedDuration;
+        String feedType = defaultFeedType;
+        
 
         if (session != null) {
             Object low = session.getAttribute("lowerLimit");
             Object upp = session.getAttribute("upperLimit");
             Object gl = session.getAttribute("glucoseInp");
             Object tm = session.getAttribute("timeInp");
+            Object fs = session.getAttribute("startInp");
+            Object fd = session.getAttribute("durInp");
+            Object ft = session.getAttribute("typeInp");
 
             if (low != null){
                 lower = (double) low;
@@ -144,15 +151,30 @@ public class Servlet extends HttpServlet {
             if (tm != null) {
                 time_ = (double) tm;
             }
+            if (fs != null) {
+                feedStart = (double) fs;
+            }
+            if (fd != null) {
+                feedDur = (double) fd;
+            }
+            if (ft != null) {
+                feedType = (String) ft;
+            }
 
         }
 
         List<Double> times = new ArrayList<>(); 
         List<Double> glucoseValues = new ArrayList<>();
+        List<Double> feedStarts = new ArrayList<>(); 
+        List<Double> feedDurations = new ArrayList<>();
+        List<String> feedTypes = new ArrayList<>();
 
         if (session != null) {
             Object t = session.getAttribute("timeList");
             Object g = session.getAttribute("glucoseList");
+            Object fs = session.getAttribute("startList");
+            Object fd = session.getAttribute("durationList");
+            Object ft = session.getAttribute("typeList");
 
             if (t instanceof List && g instanceof List) {
                 times = (List<Double>) t;
@@ -162,6 +184,9 @@ public class Servlet extends HttpServlet {
 
         req.setAttribute("timeList", times);
         req.setAttribute("glucoseList", glucoseValues);  
+        req.setAttribute("startList", feedStarts); 
+        req.setAttribute("durationList", feedDurations);
+        req.setAttribute("typeList", feedTypes); 
 
         if ("/consultants".equals(path)) {
 
