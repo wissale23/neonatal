@@ -142,6 +142,22 @@ public class Servlet extends HttpServlet {
 
         }
 
+        List<Double> times = new ArrayList<>(); //move to nurse class
+        List<Double> glucoseValues = new ArrayList<>();
+
+        if (session != null) {
+            Object t = session.getAttribute("timeList");
+            Object g = session.getAttribute("glucoseList");
+
+            if (t instanceof List && g instanceof List) {
+                times = (List<Double>) t;
+                glucoseValues = (List<Double>) g;
+            }
+        }
+
+        req.setAttribute("timeList", times);
+        req.setAttribute("glucoseList", glucoseValues);        
+
         if ("/consultants".equals(path)) {
 
             // Load data from files
@@ -153,7 +169,7 @@ public class Servlet extends HttpServlet {
             // Consultants only view the file data, no user input
 
             ConsultantServlet consult = new ConsultantServlet(lower, upper);
-            resp.getWriter().write(consult.consultPage(timeData,rawData,smoothData,req.getContextPath()));
+            resp.getWriter().write(consult.consultPage(timeData,rawData,smoothData,glucoseValues,times, req.getContextPath()));
 
         } else if ("/nurses".equals(path)) {
             // Load data from files
@@ -163,22 +179,6 @@ public class Servlet extends HttpServlet {
 
             // Nurses can add their own raw values
             //rawData.addAll(userRawValues);
-
-            List<Double> times = new ArrayList<>(); //move to nurse class
-            List<Double> glucoseValues = new ArrayList<>();
-
-            if (session != null) {
-                Object t = session.getAttribute("timeList");
-                Object g = session.getAttribute("glucoseList");
-
-                if (t instanceof List && g instanceof List) {
-                    times = (List<Double>) t;
-                    glucoseValues = (List<Double>) g;
-                }
-            }
-
-            req.setAttribute("timeList", times);
-            req.setAttribute("glucoseList", glucoseValues);
     
 
             NurseServlet nurseServ = new NurseServlet(gluc,time_);
