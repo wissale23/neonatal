@@ -64,15 +64,15 @@ public class GlucoseChart {
                         "  yScaleID: 'y2',\n" +
                         "  yMin: 0,\n" +
                         "  yMax: 12,\n" +
-                        "  backgroundColor: 'rgba(0,255,0,0.25)',\n" +
-                        "  borderColor: 'rgb(0,0,0)',\n" +
+                        "  backgroundColor: 'rgba(0,0,255,0.25)',\n" +
+                        "  borderColor: 'rgb(0,0,255)',\n" +
                         "  borderWidth: 1,\n" +
                         "  drawTime: 'beforeDatasetsDraw',\n" +
                         "  label: {\n" +
                         "    display: true,\n" +
                         "    content: '" + type + "',\n" +
                         "    position: 'center',\n" +
-                        "    color: '#003366',\n" +
+                        "    color: 'rgb(0,0,255)',\n" +
                         "    font: { size: 11, weight: 'bold' }\n" +
                         "  }\n" +
                         " },\n";
@@ -126,8 +126,20 @@ public class GlucoseChart {
             // Define Axes
                 "          y: {position: 'left',  min: 0, max: 90, title: {display: true, text: 'Skin Glucose (µM)'} },\n" +
                 "          y2: { position: 'right', min: 0, max: 12, title: {display: true, text: 'Blood Glucose (mM)'} },\n" +
-                "          x: { type: 'linear', min: 11.50, max: 14, title: { display: true, text: 'Time (hours)'}, ticks:{stepSize: 0.1} }\n" +
-                "        },\n" +
+                "          x: { type: 'linear', min: 11.0, max: 14.0,\n" +
+                "            title: { display: true, text: 'Time (hours)' },\n" +
+                "            ticks: {\n" +
+                "              stepSize: 0.1,\n" +
+                "              callback: function(value) {\n" +
+                "                if (Math.abs(value % 0.5) < 1e-6) {\n" +
+                "                  return value.toFixed(1);\n" +
+                "                }\n" +
+                "                return '';\n" +
+                "              }\n" +
+                "            },\n" +
+                "            grid: { drawTicks: true }\n" +
+                "          }\n" +
+                "        },\n"
                 "        plugins: {\n" +
                 "          annotation: {\n" +
                 "            annotations: {\n" +
