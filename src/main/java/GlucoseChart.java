@@ -9,10 +9,14 @@ public class GlucoseChart {
     private final double upper;
     private List<Double> sampleTimes;
     private List<Double> sampleValues;
+    private List<Double> feedingStarts;
+    private List<Double> feedingDurations;
+    private List<Double> feedingTypes;
 
     // Instantiate Data and Inputs
     public GlucoseChart(List<Double> timeData, List<Double> rawData, List<Double> smoothData,
-                        double lower, double upper,List<Double> sampleValues,List<Double> sampleTimes) {
+                        double lower, double upper,List<Double> sampleValues,List<Double> sampleTimes,
+                        List<Double> feedingStarts, List<Double> feedingDurations, List<Double> feedingTypes) {
         this.timeData = timeData;
         this.rawData = rawData;
         this.smoothData = smoothData;
@@ -20,6 +24,9 @@ public class GlucoseChart {
         this.upper = upper;
         this.sampleValues = sampleValues;
         this.sampleTimes = sampleTimes;
+        this.feedingStarts = feedingStarts;
+        this.feedingDurations = feedingDurations;
+        this.feedingTypes = feedingTypes;
     }
 
     // Plot Heel Prick Sample Inputs
