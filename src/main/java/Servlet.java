@@ -147,7 +147,8 @@ public class Servlet extends HttpServlet {
         }
 
         req.setAttribute("timeList", times);
-        req.setAttribute("glucoseList", glucoseValues);        
+        req.setAttribute("glucoseList", glucoseValues);  
+        ConsultantServlet consult = new ConsultantServlet();        
 
         if ("/consultants".equals(path)) {
 
@@ -159,7 +160,6 @@ public class Servlet extends HttpServlet {
 
             // Consultants only view the file data, no user input
 
-            ConsultantServlet consult = new ConsultantServlet();
             resp.getWriter().write(consult.consultPage(session, timeData,rawData,smoothData,glucoseValues,times, req.getContextPath()));
 
         } else if ("/nurses".equals(path)) {
@@ -174,7 +174,7 @@ public class Servlet extends HttpServlet {
 
             NurseServlet nurseServ = new NurseServlet(gluc,time_);
             //GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, lower, upper);
-            resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData, lower, upper,glucoseValues,times,req.getContextPath()));
+            resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData, consult.getLowAttr(), consult.getUppAttr(),glucoseValues,times,req.getContextPath()));
 
 
 
