@@ -49,7 +49,7 @@ public class GlucoseChart {
         return sampleTriangles;
     }
 
-    // Plot Feeding Times, Durations, and Types
+    // Plot Feeding Times, Feeding Durations, and Feeding Descriptions
     public String getFeedings(){
         String feedingBars = "";
         if (feedingStarts != null && feedingDurations != null && feedingTypes != null) {
