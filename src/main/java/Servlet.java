@@ -182,7 +182,7 @@ public class Servlet extends HttpServlet {
             //rawData.addAll(userRawValues);
     
 
-            NurseServlet nurseServ = new NurseServlet(gluc,time_);
+            NurseServlet nurseServ = new NurseServlet(gluc,time_,12.4,30.0,"lunch");
             //GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, lower, upper);
             resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData,lower,upper,glucoseValues,times,req.getContextPath()));
 
