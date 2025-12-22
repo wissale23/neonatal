@@ -1,14 +1,3 @@
-// Unfinished
-//import javax.servlet.http.*;
-//import java.io.IOException;
-
-//public class NurseServlet {
-//  public void display(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-//        GlucoseGraph graph = new GlucoseGraph(data);
-//        resp.getWriter().write(graph.generateHTML(true, false)); // nurse input
-//    }
-//}
-
 import java.util.List;
 
 public class NurseServlet {
@@ -16,12 +5,18 @@ public class NurseServlet {
 
     private double bloodGlucose;
     private double time;
+    private double feedingStart;
+    private double feedingDuration;
+    private String feedingType;
 
 
 
-    public NurseServlet(double bloodGlucose, double time) {
+    public NurseServlet(double bloodGlucose, double time, double feedingStart, double feedingDuration,String feedingType) {
         this.bloodGlucose = bloodGlucose;
         this.time = time;
+        this.feedingStart = feedingStart;
+        this.feedingDuration = feedingDuration;
+        this.feedingType = feedingType;
 
     }
 
@@ -32,20 +27,28 @@ public class NurseServlet {
     public double getTime() {
         return this.time;
     }
+    
+    public double getFeedStart(){
+        return this.feedingStart;
+    } 
+    
+    public double getFeedDur(){
+        return this.feedingDuration;
+    } 
+
+    public String getFeedType(){
+        return this.feedingType;
+    }    
 
     
 
-
-    public String nursePage(List<Double> timeArrayString, List<Double> rawArrayString, List<Double> smoothDataString, double lower, double upper, List<Double> sampleValues,List<Double> sampleTimes, String pathString) {
-
-        GlucoseChart glucoseChart = new GlucoseChart(timeArrayString, rawArrayString, smoothDataString,lower, upper,sampleValues,sampleTimes);
-
-        return glucoseChart.generateHTML() + "<div style='background-color: #fedae6; "
+    public String glucoseInputLayout(String pathString){
+        return "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;"
                 + "padding: 20px;"
                 + "border-radius: 10px;"
                 + "width: 300px;"
-                + "margin: 20px auto;"
+                + "margin: 20px ;"
                 + "text-align: center;'>"
 
                 + "<h3 style='color: black;'>Entering blood glucose values(mM)</h3>"
@@ -59,11 +62,60 @@ public class NurseServlet {
 
 
                 + "<button type='submit' style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add sample</button>"
-
+                            
                 + "</div>"
                 + "</form>"
+                + "</div>";
+
+    }    
+
+    public String feedingInputLayout (String pathString){
+        return "<div style='background-color: #fedae6; "
+                + "border: 2px solid black;"
+                + "padding: 20px;"
+                + "border-radius: 10px;"
+                + "width: 300px;"
+                + "margin: 20px ;"
+                + "text-align: center;'>"
+
+                + "<h3 style='color: black;'>Feeding Information</h3>"
+
+                + "<form method='POST' action='" + pathString + "/nurses'>"
+                + "<div>"
+            
+                + "<span style='display:inline-block; width:110px; text-align:right; color:black;'>Start of feeding: </span>"
+                + "<input type='text' name='feedStart' step='0.001' value='" + this.getFeedStart() + "' style='width:100px; text-align:center;'/><br/><br/>"
+            
+                + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Duration of feeding: </span>"
+                + "<input type='text' name='feedDur' step='0.001' value='" + this.getFeedDur() + "' style='width:100px; text-align:center;'/><br/><br/>"
+            
+                + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Feeding Description: </span>"
+                + "<input type='text' name='feedDescript' step='0.001' value='" + this.getFeedType() + "' style='width:100px; text-align:center;'/><br/><br/>"
+
+
+                + "<button type='submit' style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add feeding information</button>"
+                            
                 + "</div>"
-                + "</body></html>";
+                + "</form>"
+                + "</div>";
+
+    }
+
+    
+
+
+    public String nursePage(List<Double> timeArrayString, List<Double> rawArrayString, List<Double> smoothDataString, double lower, double upper, List<Double> sampleValues,List<Double> sampleTimes, String pathString) {
+
+        GlucoseChart glucoseChart = new GlucoseChart(timeArrayString, rawArrayString, smoothDataString,lower, upper,sampleValues,sampleTimes);
+
+        return glucoseChart.generateHTML() 
+               + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>" 
+               + this.glucoseInputLayout(pathString) 
+               + this.feedingInputLayout(pathString)
+                
+
+               + "</div>"
+               + "</body></html>";
 
     }
 
