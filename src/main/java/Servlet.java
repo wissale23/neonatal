@@ -24,10 +24,14 @@ public class Servlet extends HttpServlet {
     private final String RAW_FILE = "/glu_uM_unsmoothed.txt";
     private final String SMOOTH_FILE = "/glu_uM_smoothed.txt";
 
-    private final double defaultLower = 2.6; //move these to another class
-    private final double defaultUpper = 5.0;
+    // Default input values
+    private final double defaultLower = 2.6;
+    private final double defaultUpper = 10.0;
     private final double defaultGlucose = 0.0;
-    private final double defaultTime = 0.0;    
+    private final double defaultTime = 0.0;
+    private final double defaultFeedStart = 0.0;
+    private final double defaultFeedDuration = 0.0;
+    private final String defaultFeedType = "";
 
     @Override
     public void init() {
@@ -115,16 +119,24 @@ public class Servlet extends HttpServlet {
         }
 
 
-        double lower = defaultLower; //move to nurse/consultant class
+      
+        double lower = defaultLower; 
         double upper = defaultUpper;
         double gluc = defaultGlucose;
         double time_ = defaultTime;
+        double feedStart = defaultFeedStart;
+        double feedDur = defaultFeedDuration;
+        String feedType = defaultFeedType;
+        
 
         if (session != null) {
             Object low = session.getAttribute("lowerLimit");
             Object upp = session.getAttribute("upperLimit");
             Object gl = session.getAttribute("glucoseInp");
             Object tm = session.getAttribute("timeInp");
+            Object fs = session.getAttribute("startInp");
+            Object fd = session.getAttribute("durInp");
+            Object ft = session.getAttribute("typeInp");
 
             if (low != null){
                 lower = (double) low;
@@ -139,8 +151,42 @@ public class Servlet extends HttpServlet {
             if (tm != null) {
                 time_ = (double) tm;
             }
+            if (fs != null) {
+                feedStart = (double) fs;
+            }
+            if (fd != null) {
+                feedDur = (double) fd;
+            }
+            if (ft != null) {
+                feedType = (String) ft;
+            }
 
         }
+
+        List<Double> times = new ArrayList<>(); 
+        List<Double> glucoseValues = new ArrayList<>();
+        List<Double> feedStarts = new ArrayList<>(); 
+        List<Double> feedDurations = new ArrayList<>();
+        List<String> feedTypes = new ArrayList<>();
+
+        if (session != null) {
+            Object t = session.getAttribute("timeList");
+            Object g = session.getAttribute("glucoseList");
+            Object fs = session.getAttribute("startList");
+            Object fd = session.getAttribute("durationList");
+            Object ft = session.getAttribute("typeList");
+
+            if (t instanceof List && g instanceof List) {
+                times = (List<Double>) t;
+                glucoseValues = (List<Double>) g;
+            }
+        }
+
+        req.setAttribute("timeList", times);
+        req.setAttribute("glucoseList", glucoseValues);  
+        req.setAttribute("startList", feedStarts); 
+        req.setAttribute("durationList", feedDurations);
+        req.setAttribute("typeList", feedTypes); 
 
         if ("/consultants".equals(path)) {
 
@@ -151,9 +197,9 @@ public class Servlet extends HttpServlet {
             List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
 
             // Consultants only view the file data, no user input
+            ConsultantServlet consult = new ConsultantServlet(lower,upper);        
 
-            ConsultantServlet consult = new ConsultantServlet(lower, upper);
-            resp.getWriter().write(consult.consultPage(timeData,rawData,smoothData,req.getContextPath()));
+            resp.getWriter().write(consult.consultPage(session, timeData,rawData,smoothData,glucoseValues,times, req.getContextPath()));
 
         } else if ("/nurses".equals(path)) {
             // Load data from files
@@ -162,28 +208,12 @@ public class Servlet extends HttpServlet {
             List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
 
             // Nurses can add their own raw values
-            //rawData.addAll(userRawValues);
-
-            List<Double> times = new ArrayList<>(); //move to nurse class
-            List<Double> glucoseValues = new ArrayList<>();
-
-            if (session != null) {
-                Object t = session.getAttribute("timeList");
-                Object g = session.getAttribute("glucoseList");
-
-                if (t instanceof List && g instanceof List) {
-                    times = (List<Double>) t;
-                    glucoseValues = (List<Double>) g;
-                }
-            }
-
-            req.setAttribute("timeList", times);
-            req.setAttribute("glucoseList", glucoseValues);
+            rawData.addAll(userRawValues);
     
 
-            NurseServlet nurseServ = new NurseServlet(gluc,time_,glucoseValues,times);
+            NurseServlet nurseServ = new NurseServlet(gluc,time_,12.4,30.0,"lunch");
             //GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, lower, upper);
-            resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData, lower, upper,req.getContextPath()));
+            resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData,lower,upper,glucoseValues,times,feedStarts,feedDurations,feedTypes,req.getContextPath()));
 
 
 
@@ -200,7 +230,13 @@ public class Servlet extends HttpServlet {
             );
                 
         } else if("/parents".equals(path)){
-            resp.getWriter().write("Test for parents endpoint");
+
+            List<Double> timeData = loadDataFromResource(TIME_FILE);
+            List<Double> rawData = loadDataFromResource(RAW_FILE);
+            List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
+
+            ParentChart chart = new ParentChart(timeData, rawData, smoothData, 2.6, 10.0);
+            resp.getWriter().write(chart.generateHTML());
         }
     }
 
@@ -290,7 +326,7 @@ public class Servlet extends HttpServlet {
         
             String lowerString = req.getParameter("lowerLimit");
             String upperString = req.getParameter("upperLimit");
-//move logic to consultant class
+                
             try {
                 if (lowerString != null && !lowerString.isEmpty()) {
                     session.setAttribute("lowerLimit", Double.parseDouble(lowerString));
@@ -299,7 +335,7 @@ public class Servlet extends HttpServlet {
                     session.setAttribute("upperLimit", Double.parseDouble(upperString));
                 }
             } catch (NumberFormatException e) {
-               e.printStackTrace(); // change this later to link that displays erro rmessage
+               e.printStackTrace(); // change this later to link that displays error message
 
             }
 
@@ -313,7 +349,7 @@ public class Servlet extends HttpServlet {
 
             String glucoseString = req.getParameter("glucoseInp");
             String timeString = req.getParameter("timeInp");
-//move logic to nurse class
+                
             List<Double> times = (List<Double>) session.getAttribute("timeList");
             List<Double> glucoseValues = (List<Double>) session.getAttribute("glucoseList");
             if (times == null) {
