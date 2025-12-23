@@ -8,17 +8,16 @@ public class NurseServlet {
     private double feedingStart;
     private double feedingDuration;
     private String feedingType;
-    private String comment;
 
 
 
-    public NurseServlet(double bloodGlucose, double time, double feedingStart, double feedingDuration,String feedingType,String comment) {
+
+    public NurseServlet(double bloodGlucose, double time, double feedingStart, double feedingDuration,String feedingType) {
         this.bloodGlucose = bloodGlucose;
         this.time = time;
         this.feedingStart = feedingStart;
         this.feedingDuration = feedingDuration;
         this.feedingType = feedingType;
-        this.comment = comment;
 
     }
 
@@ -42,9 +41,6 @@ public class NurseServlet {
         return this.feedingType;
     }   
 
-    public String getComment(){
-        return this.comment;
-    }    
 
     
 
@@ -135,9 +131,9 @@ public class NurseServlet {
     
 
 
-    public String nursePage(List<Double> timeArrayString, List<Double> rawArrayString, List<Double> smoothDataString, double lower, double upper, List<Double> sampleValues,List<Double> sampleTimes,List<Double> feedingStarts,List<Double> feedingDurations,List<String> feedingTypes,String pathString) {
+    public String nursePage(List<Double> timeArrayString, List<Double> rawArrayString, List<Double> smoothDataString, double lower, double upper, List<Double> sampleValues,List<Double> sampleTimes,List<Double> feedingStarts,List<Double> feedingDurations,List<String> feedingTypes,List<String> comments, String pathString) {
 
-        GlucoseChart glucoseChart = new GlucoseChart(timeArrayString, rawArrayString, smoothDataString,lower, upper,sampleValues,sampleTimes,feedingStarts,feedingDurations,feedingTypes);
+        GlucoseChart glucoseChart = new GlucoseChart(timeArrayString, rawArrayString, smoothDataString,lower, upper,sampleValues,sampleTimes,feedingStarts,feedingDurations,feedingTypes,comments);
 
         return glucoseChart.generateHTML() 
                + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>" 
