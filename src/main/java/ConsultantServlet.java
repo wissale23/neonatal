@@ -60,7 +60,7 @@ public class ConsultantServlet {
 
         return glucoseChart.generateHTML()
                 + this.rangeLayout(pathString)
-                + glucoseChart.commentsInp()
+                + glucoseChart.commentsInpLayout()
                 + "</body></html>";
 
     }
