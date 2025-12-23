@@ -86,11 +86,13 @@ public class GlucoseChart {
     }
 
     public String commentsInpLayout(){
-        return "    const comments = " + getCommentsStorage() + ";\n" +
+        return "<script>\n" +
+                "    const comments = " + getCommentsStorage() + ";\n" +
                 "\n" +
                 "    function showComment(index) {\n" +
                 "      document.getElementById('commentCanvas').innerText = comments[index];\n" +
-                "    }\n"+            
+                "    }\n"+    
+                "<script>\n" +
                 "<div id='commentCanvas' " +
                 "style='margin-top:15px; padding:10px; " +
                 "border:2px solid black; width:400px; min-height:60px; max-height:150px; overflow-y:auto;'>" +
