@@ -201,10 +201,10 @@ public class GlucoseChart {
                 "    }\n"+
                 "  </script>\n" +
             
-                "<div id='commentCanvas' "+
-                "style='margin-top:15px; padding:10px; "+
-                "border:2px solid black; width:400px; min-height:60px;'>"+
-                "Select a comment to view it"+
+                "<div id='commentCanvas' " +
+                "style='margin-top:15px; padding:10px; " +
+                "border:2px solid black; width:400px; min-height:60px; max-height:150px; overflow-y:auto;'>" +
+                "Select a comment to view it" +
                 "</div>"+
             
                 "<select onchange='showComment(this.value)'>"+
