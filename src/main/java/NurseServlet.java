@@ -103,7 +103,7 @@ public class NurseServlet {
 
     }
 
-    public String commentInputLayout(String pathString) {
+    public String commentBox(String pathString) {
         return "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;"
                 + "padding: 20px;"
@@ -139,7 +139,7 @@ public class NurseServlet {
                + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>" 
                + this.glucoseInputLayout(pathString) 
                + this.feedingInputLayout(pathString)
-               + this.commentInputLayout(pathString)
+               + this.commentBox(pathString)
                + "</div>"
                + glucoseChart.commentsInpLayout()
             
