@@ -29,7 +29,7 @@ public class Servlet extends HttpServlet {
     private final double defaultGlucose = 0.0;
     private final double defaultTime = 0.0;
 
-    private ArrayList<Adult> users;
+    private ArrayList<Adult> users = new ArrayList<Adult>();
 
     @Override
     public void init() {
