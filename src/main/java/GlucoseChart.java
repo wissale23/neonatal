@@ -80,17 +80,16 @@ public class GlucoseChart {
         if (comments != null) {
             for (int i = 0; i < comments.size(); i++) {
     
-                String time = LocalDateTime.now().format(formatter);
+               String time = LocalDateTime.now().format(formatter);
     
-               String commentWithTime = "<b>[" + time + "]</b> <b>" + comments.get(i).split(":")[0] + "</b>:" + comments.get(i).substring(comments.get(i).indexOf(":") + 1);
+               String commentWithTime = time + "<br>"  + comments.get(i);
                 // this takes the  comment, with time on first line and text on second line
 
     
                 commentsStore += "\"" +
                         commentWithTime
                             .replace("\\", "\\\\")   //  backslashes woudl end the string so we have to remove them
-                            .replace("\"", "\\\"")   // quotes will also end the string so wwe have to remove them 
-                            .replace("\n", "\\n") +  // and this just goes to a new line
+                            .replace("\"", "\\\"")+   // quotes will also end the string so wwe have to remove them 
                         "\"";
     
                 if (i < comments.size() - 1) {
@@ -99,8 +98,8 @@ public class GlucoseChart {
             }
         }
 
-    commentsStore += "]";
-    return commentsStore;
+        commentsStore += "]";
+        return commentsStore;
 }
 
 
