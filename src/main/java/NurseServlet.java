@@ -131,7 +131,7 @@ public class NurseServlet {
     
 
 
-    public String nursePage(List<Double> timeArrayString, List<Double> rawArrayString, List<Double> smoothDataString, double lower, double upper, List<Double> sampleValues,List<Double> sampleTimes,List<Double> feedingStarts,List<Double> feedingDurations,List<String> feedingTypes,List<String> comments, String nurseUser, String pathString) {
+    public String nursePage(List<Double> timeArrayString, List<Double> rawArrayString, List<Double> smoothDataString, double lower, double upper, List<Double> sampleValues,List<Double> sampleTimes,List<Double> feedingStarts,List<Double> feedingDurations,List<String> feedingTypes,List<String> comments, String pathString) {
 
         GlucoseChart glucoseChart = new GlucoseChart(timeArrayString, rawArrayString, smoothDataString,lower, upper,sampleValues,sampleTimes,feedingStarts,feedingDurations,feedingTypes,comments);
 
@@ -141,7 +141,7 @@ public class NurseServlet {
                + this.feedingInputLayout(pathString)
                + this.commentBox(pathString)
                + "</div>"
-               + glucoseChart.commentsInpLayout(nurseUser)
+               + glucoseChart.commentsInpLayout()
             
                + "</body></html>";
 
