@@ -71,7 +71,7 @@ public class GlucoseChart {
     }
     //adding new comment to select whenever there is a new one
 
-    public String getCommentsStorage(String nurseUsername) {
+    public String getCommentsStorage() {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     
@@ -82,12 +82,12 @@ public class GlucoseChart {
     
                 String time = LocalDateTime.now().format(formatter);
     
-                String commentWithTimeAndUser =
-                        "[" + time + "]" + " " + nurseUsername +"\n" + comments.get(i);                 // this takes the  comment, with time on first line and text on second line
+               String commentWithTime = "<b>[" + time + "]</b>\n" + comments.get(i);
+                // this takes the  comment, with time on first line and text on second line
 
     
                 commentsStore += "\"" +
-                        commentWithTimeAndUser
+                        commentWithTime
                             .replace("\\", "\\\\")   //  backslashes woudl end the string so we have to remove them
                             .replace("\"", "\\\"")   // quotes will also end the string so wwe have to remove them 
                             .replace("\n", "\\n") +  // and this just goes to a new line
@@ -104,9 +104,9 @@ public class GlucoseChart {
 }
 
 
-    public String commentsInpLayout(String nurseUsername){
+    public String commentsInpLayout(){
         return "<script>\n" +
-                "    const comments = " + getCommentsStorage(nurseUsername) + ";\n" +
+                "    const comments = " + getCommentsStorage() + ";\n" +
                 "\n" +
                 "    function showComment(index) {\n" +
                 "      document.getElementById('commentCanvas').innerText = comments[index];\n" +
