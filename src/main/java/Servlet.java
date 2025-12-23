@@ -58,7 +58,7 @@ public class Servlet extends HttpServlet {
         if ("/".equals(path)) {
             resp.setContentType("text/html");
             resp.getWriter().write(
-                    "<h1>Neonatal App OOP Branch</h1>" +
+                    "<h1>Neonatal App [OOP Branch]</h1>" +
                             "<p>Choose your role:</p>" +
                             "<a href=\"" + req.getContextPath() + "/login?role=nurse\">Nurse</a><br/>" +
                             "<a href=\"" + req.getContextPath() + "/login?role=consultant\">Consultant</a><br/>" +
