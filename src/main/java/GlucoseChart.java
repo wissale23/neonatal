@@ -73,34 +73,34 @@ public class GlucoseChart {
 
     public String getCommentsStorage() {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        DateTimeFormatter formatter =  DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     
         String commentsStore = "[";
     
         if (comments != null) {
             for (int i = 0; i < comments.size(); i++) {
     
-               String time = LocalDateTime.now().format(formatter);
+                String time = LocalDateTime.now().format(formatter);
     
-               String commentWithTime = time + "\\n"  + comments.get(i);
-                // this takes the  comment, with time on first line and text on second line
-
+                String commentWithTime = time + "\n" + comments.get(i);
     
                 commentsStore += "\"" +
                         commentWithTime
-                            .replace("\\", "\\\\")   //  backslashes woudl end the string so we have to remove them
-                            .replace("\"", "\\\"")+   // quotes will also end the string so wwe have to remove them 
-                        "\"";
+                            .replace("\\", "\\\\")  // backslashes woudl end the string so we have to remove them
+                            .replace("\"", "\\\"")  // quotes will also end the string so wwe have to remove them
+                            .replace("\n", "\\n")  
+                        + "\"";
     
                 if (i < comments.size() - 1) {
                     commentsStore += ",";
                 }
             }
         }
-
+    
         commentsStore += "]";
         return commentsStore;
-}
+    }
+
 
 
     public String commentsInpLayout(){
