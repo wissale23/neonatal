@@ -20,7 +20,7 @@ public class Researcher extends Adult implements Pageable{
         for (int i = 0; i < patients.size(); i++) {
             Baby baby = patients.get(i);
             options.append("<option value=\"").append(i).append("\">")
-                    .append(baby.getName()).append(" (ID: ").append(baby.getId()).append(")")
+                    .append("ID: ").append(baby.getId()).append("")
                     .append("</option>");
         }
 
