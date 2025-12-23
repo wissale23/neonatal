@@ -87,7 +87,7 @@ public class GlucoseChart {
 
     
                 commentsStore += "\"" +
-                        commentWithTime
+                        commentWithTimeAndUser
                             .replace("\\", "\\\\")   //  backslashes woudl end the string so we have to remove them
                             .replace("\"", "\\\"")   // quotes will also end the string so wwe have to remove them 
                             .replace("\n", "\\n") +  // and this just goes to a new line
@@ -104,9 +104,9 @@ public class GlucoseChart {
 }
 
 
-    public String commentsInpLayout(){
+    public String commentsInpLayout(String nurseUsername){
         return "<script>\n" +
-                "    const comments = " + getCommentsStorage() + ";\n" +
+                "    const comments = " + getCommentsStorage(nurseUsername) + ";\n" +
                 "\n" +
                 "    function showComment(index) {\n" +
                 "      document.getElementById('commentCanvas').innerText = comments[index];\n" +
