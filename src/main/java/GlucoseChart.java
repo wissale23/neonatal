@@ -58,7 +58,7 @@ public class GlucoseChart {
 
             // Body
                 "<body>\n" +
-                "  <h2>Glucose Levels</h2>\n" +
+                "  <h2>Glucose Levels OOP Branch</h2>\n" +
                 "  <canvas id='glucoseChart' width='800' height='400'></canvas>\n" +
                 "  <script>\n" +
                 "    const labels = " + timeArray + ";\n" +

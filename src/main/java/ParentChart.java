@@ -41,7 +41,7 @@ public class ParentChart {
         html.append("<head>\n");
         html.append("  <meta charset=\"utf-8\" />\n");
         html.append("  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n");
-        html.append("  <title>Parents Glucose View</title>\n");
+        html.append("  <title>Parents Glucose View OOP Branch</title>\n");
         html.append("  <style>\n");
         html.append("    body { font-family: Arial, sans-serif; padding: 18px; }\n");
         html.append("    .wrap { max-width: 640px; }\n");
