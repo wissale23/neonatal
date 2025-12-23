@@ -13,10 +13,25 @@ public class Researcher extends Adult implements Pageable{
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html");
+
+        // Build dropdown options from patients list
+        StringBuilder options = new StringBuilder();
+        List<Baby> patients = getPatients();
+        for (int i = 0; i < patients.size(); i++) {
+            Baby baby = patients.get(i);
+            options.append("<option value=\"").append(i).append("\">")
+                    .append(baby.getName()).append(" (ID: ").append(baby.getId()).append(")")
+                    .append("</option>");
+        }
+
         resp.getWriter().write(
                 "<h1>Researcher Portal OOP Branch</h1>" +
                         "<p>Download glucose monitoring data:</p>" +
                         "<form method=\"POST\" action=\"" + req.getContextPath() + "/researchers\">" +
+                        "<label for=\"babySelect\">Select Baby: </label>" +
+                        "<select name=\"babyIndex\" id=\"babySelect\" required>" +
+                        options.toString() +
+                        "</select><br><br>" +
                         "<button type=\"submit\" name=\"action\" value=\"download\">Download Data</button>" +
                         "</form>" +
                         "<p><a href=\"" + req.getContextPath() + "/logout\">Logout</a></p>"
@@ -33,14 +48,31 @@ public class Researcher extends Adult implements Pageable{
 
         String action = req.getParameter("action");
         if ("download".equals(action)) {
-            // Load all data files
-            List<Double> timeData = getPatients().get(0).getTimeData();
-            List<Double> rawData = getPatients().get(0).getRawData();
-            List<Double> smoothData = getPatients().get(0).getSmoothData();
+            // Get selected baby index from dropdown
+            String babyIndexParam = req.getParameter("babyIndex");
+            if (babyIndexParam == null) {
+                resp.sendError(400, "No baby selected");
+                return;
+            }
+
+            int babyIndex = Integer.parseInt(babyIndexParam);
+            List<Baby> patients = getPatients();
+
+            if (babyIndex < 0 || babyIndex >= patients.size()) {
+                resp.sendError(400, "Invalid baby selection");
+                return;
+            }
+
+            // Load data for selected baby
+            Baby selectedBaby = patients.get(babyIndex);
+            List<Double> timeData = selectedBaby.getTimeData();
+            List<Double> rawData = selectedBaby.getRawData();
+            List<Double> smoothData = selectedBaby.getSmoothData();
 
             // Set headers for file download
+            String filename = "glucose_data_" + selectedBaby.getName().replaceAll("\\s+", "_") + ".csv";
             resp.setContentType("text/csv");
-            resp.setHeader("Content-Disposition", "attachment; filename=\"glucose_data.csv\"");
+            resp.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
 
             // Write CSV content
             PrintWriter writer = resp.getWriter();
