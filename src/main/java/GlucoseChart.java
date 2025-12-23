@@ -92,7 +92,7 @@ public class GlucoseChart {
                 "    function showComment(index) {\n" +
                 "      document.getElementById('commentCanvas').innerText = comments[index];\n" +
                 "    }\n"+    
-                "<script>\n" +
+                "</script>\n" +
                 "<div id='commentCanvas' " +
                 "style='margin-top:15px; padding:10px; " +
                 "border:2px solid black; width:400px; min-height:60px; max-height:150px; overflow-y:auto;'>" +
