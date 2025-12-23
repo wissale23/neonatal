@@ -12,11 +12,12 @@ public class GlucoseChart {
     private List<Double> feedingStarts;
     private List<Double> feedingDurations;
     private List<String> feedingTypes;
+    private List<String> comments;
 
     // Instantiate Data and Inputs
     public GlucoseChart(List<Double> timeData, List<Double> rawData, List<Double> smoothData,
                         double lower, double upper,List<Double> sampleValues,List<Double> sampleTimes,
-                        List<Double> feedingStarts, List<Double> feedingDurations, List<String> feedingTypes) {
+                        List<Double> feedingStarts, List<Double> feedingDurations, List<String> feedingTypes,List<String> comments) {
         this.timeData = timeData;
         this.rawData = rawData;
         this.smoothData = smoothData;
@@ -27,6 +28,7 @@ public class GlucoseChart {
         this.feedingStarts = feedingStarts;
         this.feedingDurations = feedingDurations;
         this.feedingTypes = feedingTypes;
+        this.comments = comments;
     }
 
     // Plot Heel Prick Sample Inputs
@@ -48,6 +50,41 @@ public class GlucoseChart {
         }
         return sampleTriangles;
     }
+
+    public String getComments() {
+        String commentsString = "";
+    
+        if (comments != null) {
+            for (int i = 0; i < comments.size(); i++) {
+                commentsString +=
+                    "<option value='" + i + "'>" +
+                    "Comment " + (i + 1) +
+                    "</option>";
+            }
+        }
+    
+        return commentsString;
+    }
+
+    public String getCommentsStorage() {
+        String commentsStore = "[";
+    
+        if (comments != null) {
+            for (int i = 0; i < comments.size(); i++) {
+                commentsStore += "\"" +
+                    comments.get(i).replace("\"", "\\\"") +
+                    "\"";
+    
+                if (i < comments.size() - 1) {
+                    commentsStore += ",";
+                }
+            }
+        }
+    
+        commentsStore += "]";
+        return commentsStore;
+    }
+
 
     // Plot Feeding Times, Feeding Durations, and Feeding Descriptions
     public String getFeedings(){
@@ -80,6 +117,7 @@ public class GlucoseChart {
         }
         return feedingBars;
     }
+
 
     public String generateHTML() {
         String timeArray = timeData.toString();
@@ -155,7 +193,25 @@ public class GlucoseChart {
                 "        }\n" +
                 "      }\n" +
                 "    });\n" +
+            
+                "    const comments = " + getCommentsStorage() + ";\n" +
+                "\n" +
+                "    function showComment(index) {\n" +
+                "      document.getElementById('commentCanvas').innerText = comments[index];\n" +
+                "    }\n"+
                 "  </script>\n" +
+            
+                "<div id='commentCanvas' "+
+                "style='margin-top:15px; padding:10px; "+
+                "border:2px solid black; width:400px; min-height:60px;'>"+
+                "Select a comment to view it"+
+                "</div>"+
+            
+                "<select onchange='showComment(this.value)'>"+
+                "<option disabled selected>See all comments</option>"+
+                 getComments()+
+                "</select>"+
+            
                 "</body>\n" +
                 "</html>\n";
     }
