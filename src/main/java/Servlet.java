@@ -164,7 +164,7 @@ public class Servlet extends HttpServlet {
                 feedType = (String) ft;
             }
             if (com != null){
-                commentt = (String) com    
+                commentt = (String) com;    
             }        
                 
 
@@ -202,7 +202,7 @@ public class Servlet extends HttpServlet {
         req.setAttribute("startList", feedStarts); 
         req.setAttribute("durationList", feedDurations);
         req.setAttribute("typeList", feedTypes);
-        req.setAttribute("commentsList",comments)        
+        req.setAttribute("commentsList",comments);        
 
         if ("/consultants".equals(path)) {
 
