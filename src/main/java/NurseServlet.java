@@ -141,6 +141,7 @@ public class NurseServlet {
                + this.feedingInputLayout(pathString)
                + this.commentInputLayout(pathString)
                + "</div>"
+               + glucoseChart.commentsInpLayout()
             
                + "</body></html>";
 
