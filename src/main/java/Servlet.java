@@ -429,7 +429,7 @@ public class Servlet extends HttpServlet {
             if (commentString != null && !commentString.isEmpty()) {
                 String nurseUsername = (String) session.getAttribute("username");    
 
-                comments.add(nurseUsername + ":" +  commentString);
+                comments.add("<b>" + nurseUsername + "</b>: " + commentString);
             }
          
 
