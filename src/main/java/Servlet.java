@@ -364,7 +364,7 @@ public class Servlet extends HttpServlet {
         
         if ("/nurses".equals(req.getServletPath())) {
             HttpSession session = req.getSession(true);
-            String nurseUsername = (String) session.getAttribute("username")    
+            String nurseUsername = (String) session.getAttribute("username");    
 
             String glucoseString = req.getParameter("glucoseInp");
             String timeString = req.getParameter("timeInp");
