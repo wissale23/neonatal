@@ -82,7 +82,7 @@ public class GlucoseChart {
     
                String time = LocalDateTime.now().format(formatter);
     
-               String commentWithTime = time + "<br>"  + comments.get(i);
+               String commentWithTime = time + "\n"  + comments.get(i);
                 // this takes the  comment, with time on first line and text on second line
 
     
