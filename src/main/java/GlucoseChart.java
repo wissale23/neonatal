@@ -17,6 +17,7 @@ public class GlucoseChart {
     private List<String> feedingTypes;
     private List<String> comments;
 
+
     // Instantiate Data and Inputs
     public GlucoseChart(List<Double> timeData, List<Double> rawData, List<Double> smoothData,
                         double lower, double upper,List<Double> sampleValues,List<Double> sampleTimes,
@@ -70,7 +71,7 @@ public class GlucoseChart {
     }
     //adding new comment to select whenever there is a new one
 
-    public String getCommentsStorage() {
+    public String getCommentsStorage(String nurseUsername) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     
@@ -81,8 +82,8 @@ public class GlucoseChart {
     
                 String time = LocalDateTime.now().format(formatter);
     
-                String commentWithTime =
-                        "[" + time + "]\n" + comments.get(i);                 // this takes the  comment, with time on first line and text on second line
+                String commentWithTimeAndUser =
+                        "[" + time + "]" + " " + nurseUsername +"\n" + comments.get(i);                 // this takes the  comment, with time on first line and text on second line
 
     
                 commentsStore += "\"" +
