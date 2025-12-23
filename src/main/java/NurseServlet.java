@@ -124,7 +124,7 @@ public class NurseServlet {
                 + "<button type='submit' style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add comment</button>"
         
                 + "</div>"
-                + "</form>";
+                + "</form>"
                 + "</div>";
     }
 
