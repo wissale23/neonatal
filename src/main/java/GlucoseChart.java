@@ -85,6 +85,24 @@ public class GlucoseChart {
         return commentsStore;
     }
 
+    public String commentsInpLayout(){
+        return "    const comments = " + getCommentsStorage() + ";\n" +
+                "\n" +
+                "    function showComment(index) {\n" +
+                "      document.getElementById('commentCanvas').innerText = comments[index];\n" +
+                "    }\n"+            
+                "<div id='commentCanvas' " +
+                "style='margin-top:15px; padding:10px; " +
+                "border:2px solid black; width:400px; min-height:60px; max-height:150px; overflow-y:auto;'>" +
+                "Select a comment to view it" +
+                "</div>"+
+            
+                "<select onchange='showComment(this.value)'>"+
+                "<option disabled selected>See all comments</option>"+
+                 getComments()+
+                "</select>";
+    }    
+
 
     // Plot Feeding Times, Feeding Durations, and Feeding Descriptions
     public String getFeedings(){
@@ -193,25 +211,7 @@ public class GlucoseChart {
                 "        }\n" +
                 "      }\n" +
                 "    });\n" +
-            
-                "    const comments = " + getCommentsStorage() + ";\n" +
-                "\n" +
-                "    function showComment(index) {\n" +
-                "      document.getElementById('commentCanvas').innerText = comments[index];\n" +
-                "    }\n"+
-                "  </script>\n" +
-            
-                "<div id='commentCanvas' " +
-                "style='margin-top:15px; padding:10px; " +
-                "border:2px solid black; width:400px; min-height:60px; max-height:150px; overflow-y:auto;'>" +
-                "Select a comment to view it" +
-                "</div>"+
-            
-                "<select onchange='showComment(this.value)'>"+
-                "<option disabled selected>See all comments</option>"+
-                 getComments()+
-                "</select>"+
-            
+                "  </script>\n" 
                 "</body>\n" +
                 "</html>\n";
     }
