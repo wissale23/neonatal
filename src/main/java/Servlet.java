@@ -202,7 +202,9 @@ public class Servlet extends HttpServlet {
         req.setAttribute("startList", feedStarts); 
         req.setAttribute("durationList", feedDurations);
         req.setAttribute("typeList", feedTypes);
-        req.setAttribute("commentsList",comments);        
+        req.setAttribute("commentsList",comments);    
+        String getNurseUsername = (session != null) ? (String) session.getAttribute("username") : "unknown nurse";   //is session is not null we get the nurse username else set it to unknown nurse
+        
 
         if ("/consultants".equals(path)) {
 
@@ -215,7 +217,7 @@ public class Servlet extends HttpServlet {
             // Consultants only view the file data, no user input
             ConsultantServlet consult = new ConsultantServlet(lower,upper);        
 
-            resp.getWriter().write(consult.consultPage(session, timeData,rawData,smoothData,glucoseValues,times,feedStarts,feedDurations,feedTypes,comments, req.getContextPath()));
+            resp.getWriter().write(consult.consultPage(session, timeData,rawData,smoothData,glucoseValues,times,feedStarts,feedDurations,feedTypes,comments,getNurseUsername, req.getContextPath()));
 
         } else if ("/nurses".equals(path)) {
             // Load data from files
@@ -229,7 +231,7 @@ public class Servlet extends HttpServlet {
 
             NurseServlet nurseServ = new NurseServlet(gluc,time_,feedStart,feedDur,feedType);
             //GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, lower, upper);
-            resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData,lower,upper,glucoseValues,times,feedStarts,feedDurations,feedTypes,comments,req.getContextPath()));
+            resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData,lower,upper,glucoseValues,times,feedStarts,feedDurations,feedTypes,comments,getNurseUsername,req.getContextPath()));
 
 
 
@@ -362,6 +364,7 @@ public class Servlet extends HttpServlet {
         
         if ("/nurses".equals(req.getServletPath())) {
             HttpSession session = req.getSession(true);
+            String nurseUsername = (String) session.getAttribute("username")    
 
             String glucoseString = req.getParameter("glucoseInp");
             String timeString = req.getParameter("timeInp");
