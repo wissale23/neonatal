@@ -101,6 +101,17 @@ public class NurseServlet {
 
     }
 
+    public String commentInputLayout(String pathString) {
+        return "<form method='POST' action='" + pathString + "/nurses'>"
+                + "<div>"
+                + "<span style='display:inline-block; width:110px; text-align:right; color:black;'>Comment: </span>"
+                + "<textarea name='commentInp' placeholder='Add a comment...' "
+                + "style='width:300px; height:80px; text-align:left; padding:5px;'></textarea><br/><br/>"
+                + "<button type='submit' style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add comment</button>"
+                + "</div>"
+                + "</form>";
+    }
+
     
 
 
@@ -112,9 +123,9 @@ public class NurseServlet {
                + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>" 
                + this.glucoseInputLayout(pathString) 
                + this.feedingInputLayout(pathString)
-                
-
                + "</div>"
+               + this.commentInputLayout(pathString)
+            
                + "</body></html>";
 
     }
