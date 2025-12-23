@@ -27,7 +27,9 @@ public class Servlet extends HttpServlet {
     private final double defaultLower = 2.6; //move these to another class
     private final double defaultUpper = 10.0;
     private final double defaultGlucose = 0.0;
-    private final double defaultTime = 0.0;    
+    private final double defaultTime = 0.0;
+
+    private ArrayList<Adult> users;
 
     @Override
     public void init() {
@@ -43,6 +45,10 @@ public class Servlet extends HttpServlet {
 
         passwords.put("research1", "researchpass");
         roles.put("research1", "researcher");
+        Researcher research1 = new Researcher("research1", 1, "/researchers");
+        Baby baby1 = new Baby("baby1",2,TIME_FILE,RAW_FILE,SMOOTH_FILE);
+        research1.addPatient(baby1);
+        users.add(research1);
     }
 
     @Override
@@ -189,15 +195,7 @@ public class Servlet extends HttpServlet {
 
                 
         } else if("/researchers".equals(path)){
-            resp.setContentType("text/html");
-            resp.getWriter().write(
-                    "<h1>Researcher Portal</h1>" +
-                            "<p>Download glucose monitoring data:</p>" +
-                            "<form method=\"POST\" action=\"" + req.getContextPath() + "/researchers\">" +
-                            "<button type=\"submit\" name=\"action\" value=\"download\">Download Data</button>" +
-                            "</form>" +
-                            "<p><a href=\"" + req.getContextPath() + "/logout\">Logout</a></p>"
-            );
+            users.get(0).doGet(req,resp);
                 
         } else if("/parents".equals(path)){
 
@@ -257,38 +255,7 @@ public class Servlet extends HttpServlet {
         }
 
         if ("/researchers".equals(req.getServletPath())) {
-            HttpSession s = req.getSession(false);
-            String role = (s == null) ? null : (String) s.getAttribute("role");
-            if (!"researcher".equals(role)) {
-                resp.sendError(403);
-                return;
-            }
-
-            String action = req.getParameter("action");
-            if ("download".equals(action)) {
-                // Load all data files
-                List<Double> timeData = loadDataFromResource(TIME_FILE);
-                List<Double> rawData = loadDataFromResource(RAW_FILE);
-                List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
-
-                // Set headers for file download
-                resp.setContentType("text/csv");
-                resp.setHeader("Content-Disposition", "attachment; filename=\"glucose_data.csv\"");
-
-                // Write CSV content
-                PrintWriter writer = resp.getWriter();
-                writer.println("Time,Raw_Glucose_uM,Smoothed_Glucose_uM");
-
-                int maxSize = Math.max(timeData.size(), Math.max(rawData.size(), smoothData.size()));
-                for (int i = 0; i < maxSize; i++) {
-                    String time = i < timeData.size() ? String.valueOf(timeData.get(i)) : "";
-                    String raw = i < rawData.size() ? String.valueOf(rawData.get(i)) : "";
-                    String smooth = i < smoothData.size() ? String.valueOf(smoothData.get(i)) : "";
-                    writer.println(time + "," + raw + "," + smooth);
-                }
-                writer.flush();
-                return;
-            }
+            users.get(0).doPost(req,resp);
         }
 
         if ("/consultants".equals(req.getServletPath())) {
