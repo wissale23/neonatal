@@ -54,13 +54,13 @@ public class ConsultantServlet {
                 + "</div>";
     }    
 
-    public String consultPage(HttpSession session, List<Double>  timeArrayString, List<Double>  rawArrayString, List<Double>  smoothDataString, List<Double> sampleValues, List<Double> sampleTimes, List<Double> feedStarts, List<Double> feedDurations, List<String> feedTypes,List<String> comments, String pathString){
+    public String consultPage(HttpSession session, List<Double>  timeArrayString, List<Double>  rawArrayString, List<Double>  smoothDataString, List<Double> sampleValues, List<Double> sampleTimes, List<Double> feedStarts, List<Double> feedDurations, List<String> feedTypes,List<String> comments, String nurseUser, String pathString){
 
         GlucoseChart glucoseChart = new GlucoseChart(timeArrayString, rawArrayString, smoothDataString,lower, upper,sampleValues,sampleTimes,feedStarts,feedDurations,feedTypes,comments);
 
         return glucoseChart.generateHTML()
                 + this.rangeLayout(pathString)
-                + glucoseChart.commentsInpLayout()
+                + glucoseChart.commentsInpLayout(nurseUser)
                 + "</body></html>";
 
     }
