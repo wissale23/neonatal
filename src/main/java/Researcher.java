@@ -86,6 +86,7 @@ public class Researcher extends Adult implements Pageable{
                 writer.println(time + "," + raw + "," + smooth);
             }
             writer.flush();
+            writer.close();
         }
     }
 }
