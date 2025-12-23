@@ -28,11 +28,8 @@ public class ConsultantServlet {
         this.upper = upNumber;
     }
 
-    public String consultPage(HttpSession session, List<Double>  timeArrayString, List<Double>  rawArrayString, List<Double>  smoothDataString, List<Double> sampleValues, List<Double> sampleTimes, List<Double> feedStarts, List<Double> feedDurations, List<String> feedTypes,List<String> comments, String pathString){
-
-        GlucoseChart glucoseChart = new GlucoseChart(timeArrayString, rawArrayString, smoothDataString,lower, upper,sampleValues,sampleTimes,feedStarts,feedDurations,feedTypes,comments);
-
-        return glucoseChart.generateHTML()+ "<div style='background-color: #fedae6; "
+    public String rangeLayout(String pathString){
+        return "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;" 
                 + "padding: 20px;"
                 + "border-radius: 10px;"
@@ -54,7 +51,16 @@ public class ConsultantServlet {
 
                 + "</div>"
                 + "</form>"
-                + "</div>"
+                + "</div>";
+    }    
+
+    public String consultPage(HttpSession session, List<Double>  timeArrayString, List<Double>  rawArrayString, List<Double>  smoothDataString, List<Double> sampleValues, List<Double> sampleTimes, List<Double> feedStarts, List<Double> feedDurations, List<String> feedTypes,List<String> comments, String pathString){
+
+        GlucoseChart glucoseChart = new GlucoseChart(timeArrayString, rawArrayString, smoothDataString,lower, upper,sampleValues,sampleTimes,feedStarts,feedDurations,feedTypes,comments);
+
+        return glucoseChart.generateHTML()
+                + this.rangeLayout(pathString)
+                + glucoseChart.commentsInp()
                 + "</body></html>";
 
     }
