@@ -1,4 +1,7 @@
 import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 public class GlucoseChart {
 
@@ -68,28 +71,37 @@ public class GlucoseChart {
     //adding new comment to select whenever there is a new one
 
     public String getCommentsStorage() {
-        DateTimeFormatter stringFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String timedateString = LocalDateTime.now().format(stringFormat); //to make the time and date a string we can use
-        
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    
         String commentsStore = "[";
     
         if (comments != null) {
             for (int i = 0; i < comments.size(); i++) {
-               String commentsAndTime = "[" + timedateString + "]\n" + comments.get(i);
+    
+                String time = LocalDateTime.now().format(formatter);
+    
+                String commentWithTime =
+                        "[" + time + "]\n" + comments.get(i);                 // this takes the  comment, with time on first line and text on second line
 
+    
                 commentsStore += "\"" +
-                    commentsAndTime.get(i).replace("\"", "\\\"") +
-                    "\"";
+                        commentWithTime
+                            .replace("\\", "\\\\")   //  backslashes woudl end the string so we have to remove them
+                            .replace("\"", "\\\"")   // quotes will also end the string so wwe have to remove them 
+                            .replace("\n", "\\n") +  // and this just goes to a new line
+                        "\"";
     
                 if (i < comments.size() - 1) {
                     commentsStore += ",";
                 }
             }
         }
-    
-        commentsStore += "]";
-        return commentsStore;
-    }
+
+    commentsStore += "]";
+    return commentsStore;
+}
+
 
     public String commentsInpLayout(){
         return "<script>\n" +
