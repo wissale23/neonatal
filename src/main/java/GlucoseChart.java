@@ -50,7 +50,7 @@ public class GlucoseChart {
         }
         return sampleTriangles;
     }
-
+    //concatenating comments
     public String getComments() {
         String commentsString = "";
     
@@ -65,14 +65,20 @@ public class GlucoseChart {
     
         return commentsString;
     }
+    //adding new comment to select whenever there is a new one
 
     public String getCommentsStorage() {
+        DateTimeFormatter stringFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String timedateString = LocalDateTime.now().format(stringFormat); //to make the time and date a string we can use
+        
         String commentsStore = "[";
     
         if (comments != null) {
             for (int i = 0; i < comments.size(); i++) {
+               String commentsAndTime = "[" + timedateString + "]\n" + comments.get(i);
+
                 commentsStore += "\"" +
-                    comments.get(i).replace("\"", "\\\"") +
+                    commentsAndTime.get(i).replace("\"", "\\\"") +
                     "\"";
     
                 if (i < comments.size() - 1) {
