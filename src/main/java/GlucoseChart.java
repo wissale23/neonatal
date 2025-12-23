@@ -73,7 +73,7 @@ public class GlucoseChart {
 
     public String getCommentsStorage() {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     
         String commentsStore = "[";
     
@@ -82,7 +82,7 @@ public class GlucoseChart {
     
                String time = LocalDateTime.now().format(formatter);
     
-               String commentWithTime = time + "\n"  + comments.get(i);
+               String commentWithTime = time + "\\n"  + comments.get(i);
                 // this takes the  comment, with time on first line and text on second line
 
     
