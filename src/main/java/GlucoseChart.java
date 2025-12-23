@@ -211,7 +211,7 @@ public class GlucoseChart {
                 "        }\n" +
                 "      }\n" +
                 "    });\n" +
-                "  </script>\n" 
+                "  </script>\n" +
                 "</body>\n" +
                 "</html>\n";
     }
