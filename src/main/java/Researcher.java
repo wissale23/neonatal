@@ -14,7 +14,7 @@ public class Researcher extends Adult implements Pageable{
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html");
         resp.getWriter().write(
-                "<h1>Researcher Portal</h1>" +
+                "<h1>Researcher Portal OOP Branch</h1>" +
                         "<p>Download glucose monitoring data:</p>" +
                         "<form method=\"POST\" action=\"" + req.getContextPath() + "/researchers\">" +
                         "<button type=\"submit\" name=\"action\" value=\"download\">Download Data</button>" +
