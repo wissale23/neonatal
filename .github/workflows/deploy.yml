@@ -3,7 +3,7 @@ name: Deploy to Tsuru
 on:
   push:
     branches:
-      - OOP  # Trigger on push to the main branch. Change this as needed.
+      - main  # Trigger on push to the main branch. Change this as needed.
 
 jobs:
   deploy:
