@@ -32,6 +32,7 @@ public class Servlet extends HttpServlet {
     private final double defaultFeedStart = 0.0;
     private final double defaultFeedDuration = 0.0;
     private final String defaultFeedType = "";
+    private final String defaultComment = "Add a comment";    
 
     @Override
     public void init() {
@@ -127,6 +128,7 @@ public class Servlet extends HttpServlet {
         double feedStart = defaultFeedStart;
         double feedDur = defaultFeedDuration;
         String feedType = defaultFeedType;
+        String commentt = defaultComment;        
         
 
         if (session != null) {
@@ -137,6 +139,7 @@ public class Servlet extends HttpServlet {
             Object fs = session.getAttribute("startInp");
             Object fd = session.getAttribute("durInp");
             Object ft = session.getAttribute("typeInp");
+            Object com = session.getAttribute("commInp");
 
             if (low != null){
                 lower = (double) low;
@@ -160,6 +163,10 @@ public class Servlet extends HttpServlet {
             if (ft != null) {
                 feedType = (String) ft;
             }
+            if (com != null){
+                commentt = (String) com    
+            }        
+                
 
         }
 
@@ -168,6 +175,8 @@ public class Servlet extends HttpServlet {
         List<Double> feedStarts = new ArrayList<>(); 
         List<Double> feedDurations = new ArrayList<>();
         List<String> feedTypes = new ArrayList<>();
+        List<String> comments = new ArrayList<>();
+    
 
         if (session != null) {
             Object t = session.getAttribute("timeList");
@@ -175,13 +184,15 @@ public class Servlet extends HttpServlet {
             Object fs = session.getAttribute("startList");
             Object fd = session.getAttribute("durationList");
             Object ft = session.getAttribute("typeList");
+            Object com = session.getAttribute("commentsList");    
 
-            if (t instanceof List && g instanceof List && fs instanceof List && fd instanceof List && ft instanceof List) {
-                times = (List<Double>) t;
+            if (t instanceof List && g instanceof List && fs instanceof List && fd instanceof List && ft instanceof List && com instanceof List) {
+                times = (List<Double>) t; //casting current lists to the ones used for classes 
                 glucoseValues = (List<Double>) g;
                 feedStarts = (List<Double>) fs;
                 feedDurations = (List<Double>) fd;
                 feedTypes = (List<String>) ft;
+                comments = (List<String>)com;    
 
             }
         }
@@ -190,7 +201,8 @@ public class Servlet extends HttpServlet {
         req.setAttribute("glucoseList", glucoseValues);  
         req.setAttribute("startList", feedStarts); 
         req.setAttribute("durationList", feedDurations);
-        req.setAttribute("typeList", feedTypes); 
+        req.setAttribute("typeList", feedTypes);
+        req.setAttribute("commentsList",comments)        
 
         if ("/consultants".equals(path)) {
 
@@ -215,7 +227,7 @@ public class Servlet extends HttpServlet {
             rawData.addAll(userRawValues);
     
 
-            NurseServlet nurseServ = new NurseServlet(gluc,time_,feedStart,feedDur,feedType);
+            NurseServlet nurseServ = new NurseServlet(gluc,time_,feedStart,feedDur,feedType,commentt);
             //GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, lower, upper);
             resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData,lower,upper,glucoseValues,times,feedStarts,feedDurations,feedTypes,req.getContextPath()));
 
