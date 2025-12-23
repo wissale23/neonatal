@@ -33,6 +33,9 @@ public class Servlet extends HttpServlet {
 
     @Override
     public void init() {
+        // Adding babies
+        Baby baby1 = new Baby("baby1",2,TIME_FILE,RAW_FILE,SMOOTH_FILE);
+
         // Demo accounts (replace with real hospital identity system later)
         passwords.put("nurse1", "nursepass");
         roles.put("nurse1", "nurse");
@@ -42,11 +45,13 @@ public class Servlet extends HttpServlet {
 
         passwords.put("parent1", "parentpass");
         roles.put("parent1", "parent");
+        Parent parent1 = new Parent ("parent1",3,"/parents");
+        parent1.addPatient(baby1);
+        users.add(parent1);
 
         passwords.put("research1", "researchpass");
         roles.put("research1", "researcher");
         Researcher research1 = new Researcher("research1", 1, "/researchers");
-        Baby baby1 = new Baby("baby1",2,TIME_FILE,RAW_FILE,SMOOTH_FILE);
         research1.addPatient(baby1);
         users.add(research1);
     }
@@ -195,16 +200,10 @@ public class Servlet extends HttpServlet {
 
                 
         } else if("/researchers".equals(path)){
-            users.get(0).doGet(req,resp);
+            users.get(1).doGet(req,resp);
                 
         } else if("/parents".equals(path)){
-
-            List<Double> timeData = loadDataFromResource(TIME_FILE);
-            List<Double> rawData = loadDataFromResource(RAW_FILE);
-            List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
-
-            ParentChart chart = new ParentChart(timeData, rawData, smoothData, 2.6, 10.0);
-            resp.getWriter().write(chart.generateHTML());
+            users.get(0).doGet(req, resp);
         }
     }
 
@@ -255,7 +254,7 @@ public class Servlet extends HttpServlet {
         }
 
         if ("/researchers".equals(req.getServletPath())) {
-            users.get(0).doPost(req,resp);
+            users.get(1).doPost(req,resp);
         }
 
         if ("/consultants".equals(req.getServletPath())) {

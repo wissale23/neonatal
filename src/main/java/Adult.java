@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
 public abstract class Adult extends Person implements Pageable{
-    private ArrayList<Baby> patients = new ArrayList<Baby>();
-    private String endpoint;
+    private ArrayList<Baby> patients = new ArrayList<>();
+    private final String endpoint;
 
     public Adult(String name, int id, String endpoint) {
         super(name, id);

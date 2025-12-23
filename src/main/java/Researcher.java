@@ -20,7 +20,7 @@ public class Researcher extends Adult implements Pageable{
         for (int i = 0; i < patients.size(); i++) {
             Baby baby = patients.get(i);
             options.append("<option value=\"").append(i).append("\">")
-                    .append("ID: ").append(baby.getId()).append("")
+                    .append("ID: ").append(baby.getId())
                     .append("</option>");
         }
 
@@ -30,7 +30,7 @@ public class Researcher extends Adult implements Pageable{
                         "<form method=\"POST\" action=\"" + req.getContextPath() + "/researchers\">" +
                         "<label for=\"babySelect\">Select Baby: </label>" +
                         "<select name=\"babyIndex\" id=\"babySelect\" required>" +
-                        options.toString() +
+                        options +
                         "</select><br><br>" +
                         "<button type=\"submit\" name=\"action\" value=\"download\">Download Data</button>" +
                         "</form>" +
