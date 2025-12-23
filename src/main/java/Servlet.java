@@ -215,7 +215,7 @@ public class Servlet extends HttpServlet {
             // Consultants only view the file data, no user input
             ConsultantServlet consult = new ConsultantServlet(lower,upper);        
 
-            resp.getWriter().write(consult.consultPage(session, timeData,rawData,smoothData,glucoseValues,times,feedStarts,feedDurations,feedTypes, req.getContextPath()));
+            resp.getWriter().write(consult.consultPage(session, timeData,rawData,smoothData,glucoseValues,times,feedStarts,feedDurations,feedTypes,comments, req.getContextPath()));
 
         } else if ("/nurses".equals(path)) {
             // Load data from files
@@ -227,9 +227,9 @@ public class Servlet extends HttpServlet {
             rawData.addAll(userRawValues);
     
 
-            NurseServlet nurseServ = new NurseServlet(gluc,time_,feedStart,feedDur,feedType,commentt);
+            NurseServlet nurseServ = new NurseServlet(gluc,time_,feedStart,feedDur,feedType);
             //GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, lower, upper);
-            resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData,lower,upper,glucoseValues,times,feedStarts,feedDurations,feedTypes,req.getContextPath()));
+            resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData,lower,upper,glucoseValues,times,feedStarts,feedDurations,feedTypes,comments,req.getContextPath()));
 
 
 
@@ -368,12 +368,15 @@ public class Servlet extends HttpServlet {
             String startString = req.getParameter("startInp");
             String durString = req.getParameter("durInp");
             String typeString = req.getParameter("typeInp");
+            String commentString = req.getParameter("commInp");    
                 
             List<Double> times = (List<Double>) session.getAttribute("timeList");
             List<Double> glucoseValues = (List<Double>) session.getAttribute("glucoseList");
             List<Double> feedStarts = (List<Double>) session.getAttribute("startList");
             List<Double> feedDurations = (List<Double>) session.getAttribute("durationList");
             List<String> feedTypes = (List<String>) session.getAttribute("typeList");
+            List<String> comments = (List<String>) session.getAttribute("commentsList");
+
                 
             if (times == null) {
                 times = new ArrayList<>();
@@ -414,6 +417,18 @@ public class Servlet extends HttpServlet {
             } catch (NumberFormatException e) {
                 e.printStackTrace(); // later again
             }
+                        
+           
+           if (comments == null) {
+                comments = new ArrayList<>();
+                session.setAttribute("commentsList", comments);
+            }
+
+            
+            if (commentString != null && !commentString.isEmpty()) {
+                comments.add(commentString);
+            }
+         
 
             resp.sendRedirect(req.getContextPath() + "/nurses");
             return;
