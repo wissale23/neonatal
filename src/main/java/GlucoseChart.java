@@ -157,11 +157,11 @@ public class GlucoseChart {
     }
 
     // Display warning alert message box
-    public String buildWarningHtml(List<Double> glucoseData) {
+    public String buildWarningHTML(List<Double> glucoseData) {
         double latestGlucose = glucoseData.get(glucoseData.size() - 1);
         WarningSystem warningSystem = new WarningSystem(lower, upper);
 
-        return AlertRenderer.buildAlertHtml(warningSystem, latestGlucose);
+        return AlertRenderer.buildAlertHTML(warningSystem, latestGlucose);
     }
 
 
@@ -169,6 +169,7 @@ public class GlucoseChart {
         String timeArray = timeData.toString();
         String rawArray = rawData.toString();
         String smoothArray = smoothData.toString();
+        String warningHTML = buildWarningHTML(rawData);
 
         return "<!DOCTYPE html>\n" +
                 "<html>\n" +
@@ -182,6 +183,7 @@ public class GlucoseChart {
 
             // Body
                 "<body>\n" +
+                warningHTML +
                 "  <h2>Glucose Levels</h2>\n" +
                 "  <canvas id='glucoseChart' width='800' height='400'></canvas>\n" +
                 "  <script>\n" +

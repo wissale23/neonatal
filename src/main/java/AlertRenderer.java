@@ -48,7 +48,7 @@ public class AlertRenderer {
 
                     "</style>";
 
-    public static String buildAlertHtml(WarningSystem warningSystem, double latestGlucose) {
+    public static String buildAlertHTML(WarningSystem warningSystem, double latestGlucose) {
 
         if (!warningSystem.isUnsafe(latestGlucose)) {
             return "";
