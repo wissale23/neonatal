@@ -156,6 +156,14 @@ public class GlucoseChart {
         return feedingBars;
     }
 
+    // Display warning alert message box
+    public String buildWarningHtml(List<Double> glucoseData) {
+        double latestGlucose = glucoseData.get(glucoseData.size() - 1);
+        WarningSystem warningSystem = new WarningSystem(lower, upper);
+
+        return AlertRenderer.buildAlertHtml(warningSystem, latestGlucose);
+    }
+
 
     public String generateHTML() {
         String timeArray = timeData.toString();
@@ -166,6 +174,7 @@ public class GlucoseChart {
                 "<html>\n" +
             // Header
                 "<head>\n" +
+                AlertRenderer.alertCSS +
                 "  <title>Glucose Chart</title>\n" +
                 "  <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n" +
                 "  <script src=\"https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3\"></script>\n" +

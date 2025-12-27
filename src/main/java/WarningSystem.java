@@ -1,17 +1,19 @@
 public class WarningSystem {
 
-    private final ConsultantServlet consultant;
+    private final double lower;
+    private final double upper;
 
-    public WarningSystem(ConsultantServlet consultant) {
-        this.consultant = consultant;
+    public WarningSystem(double lower, double upper) {
+        this.lower = lower;
+        this.upper = upper;
     }
 
     public boolean isAboveRange(double glucoseLevel) {
-        return glucoseLevel > consultant.getUpper();
+        return glucoseLevel > upper;
     }
 
     public boolean isBelowRange(double glucoseLevel) {
-        return glucoseLevel < consultant.getLower();
+        return glucoseLevel < lower;
     }
 
     public boolean isUnsafe(double glucoseLevel) {
