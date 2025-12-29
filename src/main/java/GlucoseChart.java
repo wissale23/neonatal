@@ -1,4 +1,7 @@
 import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 public class GlucoseChart {
 
@@ -9,10 +12,16 @@ public class GlucoseChart {
     private final double upper;
     private List<Double> sampleTimes;
     private List<Double> sampleValues;
+    private List<Double> feedingStarts;
+    private List<Double> feedingDurations;
+    private List<String> feedingTypes;
+    private List<String> comments;
+
 
     // Instantiate Data and Inputs
     public GlucoseChart(List<Double> timeData, List<Double> rawData, List<Double> smoothData,
-                        double lower, double upper,List<Double> sampleValues,List<Double> sampleTimes) {
+                        double lower, double upper,List<Double> sampleValues,List<Double> sampleTimes,
+                        List<Double> feedingStarts, List<Double> feedingDurations, List<String> feedingTypes,List<String> comments) {
         this.timeData = timeData;
         this.rawData = rawData;
         this.smoothData = smoothData;
@@ -20,6 +29,10 @@ public class GlucoseChart {
         this.upper = upper;
         this.sampleValues = sampleValues;
         this.sampleTimes = sampleTimes;
+        this.feedingStarts = feedingStarts;
+        this.feedingDurations = feedingDurations;
+        this.feedingTypes = feedingTypes;
+        this.comments = comments;
     }
 
     // Plot Heel Prick Sample Inputs
@@ -41,16 +54,128 @@ public class GlucoseChart {
         }
         return sampleTriangles;
     }
+    //concatenating comments
+    public String getComments() {
+        String commentsString = "";
+    
+        if (comments != null) {
+            for (int i = 0; i < comments.size(); i++) {
+                commentsString +=
+                    "<option value='" + i + "'>" +
+                    "Comment " + (i + 1) +
+                    "</option>";
+            }
+        }
+    
+        return commentsString;
+    }
+    //adding new comment to select whenever there is a new one
+
+    public String getCommentsStorage() {
+
+        DateTimeFormatter formatter =  DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    
+        String commentsStore = "[";
+    
+        if (comments != null) {
+            for (int i = 0; i < comments.size(); i++) {
+    
+                String time = LocalDateTime.now().format(formatter);
+    
+                String commentWithTime = time + "\n" + comments.get(i);
+    
+                commentsStore += "\"" +
+                        commentWithTime
+                            .replace("\\", "\\\\")  // backslashes woudl end the string so we have to remove them
+                            .replace("\"", "\\\"")  // quotes will also end the string so wwe have to remove them
+                            .replace("\n", "\\n")  
+                        + "\"";
+    
+                if (i < comments.size() - 1) {
+                    commentsStore += ",";
+                }
+            }
+        }
+    
+        commentsStore += "]";
+        return commentsStore;
+    }
+
+
+
+    public String commentsInpLayout(){
+        return "<script>\n" +
+                "    const comments = " + getCommentsStorage() + ";\n" +
+                "\n" +
+                "    function showComment(index) {\n" +
+                "      document.getElementById('commentCanvas').innerText = comments[index];\n" +
+                "    }\n"+    
+                "</script>\n" +
+                "<div id='commentCanvas' " +
+                "style='margin-top:15px; padding:10px; " +
+                "border:2px solid black; width:400px; min-height:60px; max-height:150px; overflow-y:auto;'>" +
+                "Select a comment to view it" +
+                "</div>"+
+            
+                "<select onchange='showComment(this.value)'>"+
+                "<option disabled selected>See all comments</option>"+
+                 getComments()+
+                "</select>";
+    }    
+
+
+    // Plot Feeding Times, Feeding Durations, and Feeding Descriptions
+    public String getFeedings(){
+        String feedingBars = "";
+        if (feedingStarts != null && feedingDurations != null && feedingTypes != null) {
+            for (int i = 0; i < feedingStarts.size(); i++) {
+                double start = feedingStarts.get(i);
+                double end = start + feedingDurations.get(i);
+                String type = feedingTypes.get(i);
+                feedingBars = feedingBars + "feed" + i + ": {\n" +
+                        "  type: 'box',\n" +
+                        "  xMin: " + start + ",\n" +
+                        "  xMax: " + end + ",\n" +
+                        "  yScaleID: 'y2',\n" +
+                        "  yMin: 0,\n" +
+                        "  yMax: 12,\n" +
+                        "  backgroundColor: 'rgba(0,0,255,0.25)',\n" +
+                        "  borderColor: 'rgb(0,0,255)',\n" +
+                        "  borderWidth: 1,\n" +
+                        "  drawTime: 'beforeDatasetsDraw',\n" +
+                        "  label: {\n" +
+                        "    display: true,\n" +
+                        "    content: '" + type + "',\n" +
+                        "    position: 'center',\n" +
+                        "    color: 'rgb(0,0,255)',\n" +
+                        "    font: { size: 11, weight: 'bold' }\n" +
+                        "  }\n" +
+                        " },\n";
+            }
+        }
+        return feedingBars;
+    }
+
+    // Display warning alert message box
+    public String buildWarningHTML(List<Double> glucoseData) {
+        double latestGlucose = glucoseData.get(glucoseData.size() - 1);
+        WarningSystem warningSystem = new WarningSystem(lower, upper);
+
+        return AlertRenderer.buildAlertHTML(warningSystem, latestGlucose);
+    }
+
 
     public String generateHTML() {
         String timeArray = timeData.toString();
         String rawArray = rawData.toString();
         String smoothArray = smoothData.toString();
+        String warningHTML = buildWarningHTML(rawData);
 
         return "<!DOCTYPE html>\n" +
                 "<html>\n" +
             // Header
                 "<head>\n" +
+                AlertRenderer.alertCSS +
                 "  <title>Glucose Chart</title>\n" +
                 "  <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n" +
                 "  <script src=\"https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3\"></script>\n" +
@@ -58,7 +183,8 @@ public class GlucoseChart {
 
             // Body
                 "<body>\n" +
-                "  <h2>Glucose Levels OOP Branch</h2>\n" +
+                warningHTML +
+                "  <h2>Glucose Levels</h2>\n" +
                 "  <canvas id='glucoseChart' width='800' height='400'></canvas>\n" +
                 "  <script>\n" +
                 "    const labels = " + timeArray + ";\n" +
@@ -87,7 +213,19 @@ public class GlucoseChart {
             // Define Axes
                 "          y: {position: 'left',  min: 0, max: 90, title: {display: true, text: 'Skin Glucose (µM)'} },\n" +
                 "          y2: { position: 'right', min: 0, max: 12, title: {display: true, text: 'Blood Glucose (mM)'} },\n" +
-                "          x: { type: 'linear', min: 11.50, max: 14, title: { display: true, text: 'Time (hours)'}, ticks:{stepSize: 0.1} }\n" +
+                "          x: { type: 'linear', min: 11.0, max: 14.0,\n" +
+                "            title: { display: true, text: 'Time (hours)' },\n" +
+                "            ticks: {\n" +
+                "              stepSize: (0.5 / 6),\n" +
+                "              callback: function(value) {\n" +
+                "                if (Math.abs(value % 0.5) < 1e-6) {\n" +
+                "                  return value.toFixed(1);\n" +
+                "                }\n" +
+                "                return '';\n" +
+                "              }\n" +
+                "            },\n" +
+                "            grid: { drawTicks: true }\n" +
+                "          }\n" +
                 "        },\n" +
                 "        plugins: {\n" +
                 "          annotation: {\n" +
@@ -98,6 +236,7 @@ public class GlucoseChart {
                 "              high: { type: 'box', yScaleID: 'y2',  yMin: UPPER, yMax: 12, backgroundColor: 'rgba(216,216,216,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Blood Glucose: Above Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
             // Plot Heel Prick Sample inputs
                                this.getSamples() +
+                               this.getFeedings() +
                 "            }\n" +
                 "          }\n" +
                 "        }\n" +
