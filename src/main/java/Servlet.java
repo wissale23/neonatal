@@ -294,25 +294,7 @@ public class Servlet extends HttpServlet {
         }
 
         if ("/consultants".equals(req.getServletPath())) {
-            HttpSession session = req.getSession(true);
-
-            String lowerString = req.getParameter("lowerLimit");
-            String upperString = req.getParameter("upperLimit");
-            //move logic to consultant class
-            try {
-                if (lowerString != null && !lowerString.isEmpty()) {
-                    session.setAttribute("lowerLimit", Double.parseDouble(lowerString));
-                }
-                if (upperString != null && !upperString.isEmpty()) {
-                    session.setAttribute("upperLimit", Double.parseDouble(upperString));
-                }
-            } catch (NumberFormatException e) {
-                e.printStackTrace(); // change this later to link that displays erro rmessage
-
-            }
-
-            resp.sendRedirect(req.getContextPath() + "/consultants");
-            return;
+            users.get(2).doPost(session,req,resp);
         }
             
         
