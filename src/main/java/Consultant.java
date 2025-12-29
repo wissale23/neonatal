@@ -3,22 +3,8 @@ import java.util.List;
 
 public class Consultant extends Adult implements Pageable {
 
-
-    private double lower;
-    private double upper;
-
-    public Consultant(double lower, double upper) {
-        this.lower = lower;
-        this.upper = upper;
-    }
-
-
-    public double getLower(){
-        return this.lower;
-    }
-
-    public double getUpper(){
-        return this.upper;
+    public Consultant(String name, int id, String endpoint) {
+        super(name, id, endpoint);
     }
 
 
