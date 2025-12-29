@@ -216,7 +216,7 @@ public class Servlet extends HttpServlet {
                 
         if ("/consultants".equals(path)) {
 
-            users.get(2).doGet(req,resp,lower,upper,glucoseValues,times,feedStarts,feedDurations,feedTypes,comments)
+            users.get(2).doGet(req,resp,lower,upper,glucoseValues,times,feedStarts,feedDurations,feedTypes,comments);
 
         } else if ("/nurses".equals(path)) {
             // Load data from files
