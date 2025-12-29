@@ -40,8 +40,7 @@ public class Servlet extends HttpServlet {
         passwords.put("nurse1", "nursepass");
         roles.put("nurse1", "nurse");
 
-        passwords.put("consult1", "consultpass");
-        roles.put("consult1", "consultant");
+              
 
         passwords.put("parent1", "parentpass");
         roles.put("parent1", "parent");
@@ -54,6 +53,12 @@ public class Servlet extends HttpServlet {
         Researcher research1 = new Researcher("research1", 1, "/researchers");
         research1.addPatient(baby1);
         users.add(research1);
+        
+        passwords.put("consult1", "consultpass");
+        roles.put("consult1", "consultant");  
+        Consultant consult1 = new Consultant("consult1",4,"/consultants");
+        consult1.addPatient(baby1);
+        users.add(consult1);      
     }
 
     @Override
@@ -126,16 +131,25 @@ public class Servlet extends HttpServlet {
         }
 
 
-        double lower = defaultLower; //move to nurse/consultant class
+        double lower = defaultLower; 
         double upper = defaultUpper;
         double gluc = defaultGlucose;
         double time_ = defaultTime;
+        double feedStart = defaultFeedStart;
+        double feedDur = defaultFeedDuration;
+        String feedType = defaultFeedType;
+        String commentt = defaultComment;        
+        
 
         if (session != null) {
             Object low = session.getAttribute("lowerLimit");
             Object upp = session.getAttribute("upperLimit");
             Object gl = session.getAttribute("glucoseInp");
             Object tm = session.getAttribute("timeInp");
+            Object fs = session.getAttribute("startInp");
+            Object fd = session.getAttribute("durInp");
+            Object ft = session.getAttribute("typeInp");
+            Object com = session.getAttribute("commInp");
 
             if (low != null){
                 lower = (double) low;
@@ -150,37 +164,59 @@ public class Servlet extends HttpServlet {
             if (tm != null) {
                 time_ = (double) tm;
             }
+            if (fs != null) {
+                feedStart = (double) fs;
+            }
+            if (fd != null) {
+                feedDur = (double) fd;
+            }
+            if (ft != null) {
+                feedType = (String) ft;
+            }
+            if (com != null){
+                commentt = (String) com;    
+            }        
+                
 
         }
 
-        List<Double> times = new ArrayList<>(); //move to nurse class
+        List<Double> times = new ArrayList<>(); 
         List<Double> glucoseValues = new ArrayList<>();
+        List<Double> feedStarts = new ArrayList<>(); 
+        List<Double> feedDurations = new ArrayList<>();
+        List<String> feedTypes = new ArrayList<>();
+        List<String> comments = new ArrayList<>();
+    
 
         if (session != null) {
             Object t = session.getAttribute("timeList");
             Object g = session.getAttribute("glucoseList");
+            Object fs = session.getAttribute("startList");
+            Object fd = session.getAttribute("durationList");
+            Object ft = session.getAttribute("typeList");
+            Object com = session.getAttribute("commentsList");    
 
-            if (t instanceof List && g instanceof List) {
-                times = (List<Double>) t;
+            if (t instanceof List && g instanceof List && fs instanceof List && fd instanceof List && ft instanceof List && com instanceof List) {
+                times = (List<Double>) t; //casting current lists to the ones used for classes 
                 glucoseValues = (List<Double>) g;
+                feedStarts = (List<Double>) fs;
+                feedDurations = (List<Double>) fd;
+                feedTypes = (List<String>) ft;
+                comments = (List<String>)com;    
+
             }
         }
 
         req.setAttribute("timeList", times);
-        req.setAttribute("glucoseList", glucoseValues);        
-
+        req.setAttribute("glucoseList", glucoseValues);  
+        req.setAttribute("startList", feedStarts); 
+        req.setAttribute("durationList", feedDurations);
+        req.setAttribute("typeList", feedTypes);
+        req.setAttribute("commentsList",comments);  
+                
         if ("/consultants".equals(path)) {
 
-            // Load data from files
-
-            List<Double> timeData = loadDataFromResource(TIME_FILE);
-            List<Double> rawData = loadDataFromResource(RAW_FILE);
-            List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
-
-            // Consultants only view the file data, no user input
-
-            ConsultantServlet consult = new ConsultantServlet(lower, upper);
-            resp.getWriter().write(consult.consultPage(timeData,rawData,smoothData,glucoseValues,times, req.getContextPath()));
+            users.get(2).doGet(req,resp,lower,upper,glucoseValues,times,feedStarts,feedDurations,feedTypes,comments)
 
         } else if ("/nurses".equals(path)) {
             // Load data from files
