@@ -226,7 +226,6 @@ public class Servlet extends HttpServlet {
 
             // Nurses can add their own raw values
             rawData.addAll(userRawValues);
-    
 
             NurseServlet nurseServ = new NurseServlet(gluc,time_,feedStart,feedDur,feedType);
             //GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, lower, upper);
