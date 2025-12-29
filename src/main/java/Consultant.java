@@ -7,7 +7,7 @@ public class Consultant extends Adult implements Pageable {
     private double lower;
     private double upper;
 
-    public ConsultantServlet(double lower, double upper) {
+    public Consultant(double lower, double upper) {
         this.lower = lower;
         this.upper = upper;
     }
