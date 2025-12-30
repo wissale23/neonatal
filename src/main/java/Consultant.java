@@ -1,5 +1,12 @@
-import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
+
+
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 
 public class Consultant extends Adult implements Pageable {
 
