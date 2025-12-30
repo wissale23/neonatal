@@ -8,7 +8,7 @@ public class Consultant extends Adult implements Pageable {
     }
 
 
-    public String rangeLayout(String pathString){
+    public String rangeLayout(String pathString,double lower,double upper){
         return "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;" 
                 + "padding: 20px;"
@@ -34,26 +34,29 @@ public class Consultant extends Adult implements Pageable {
                 + "</div>";
     }    
 
-    public String consultPage(HttpSession session, List<Double>  timeArrayString, List<Double>  rawArrayString, List<Double>  smoothDataString, List<Double> sampleValues, List<Double> sampleTimes, List<Double> feedStarts, List<Double> feedDurations, List<String> feedTypes,List<String> comments, String pathString,double lower,double upper){
-
-        GlucoseChart glucoseChart = new GlucoseChart(timeArrayString, rawArrayString, smoothDataString,lower, upper,sampleValues,sampleTimes,feedStarts,feedDurations,feedTypes,comments);
+    public String consultPage(GlucoseChart glucoseChart,String pathString,double lower,double upper){
 
         return glucoseChart.generateHTML()
-                + this.rangeLayout(pathString)
+                + this.rangeLayout(pathString,lower,upper)
                 + glucoseChart.commentsInpLayout()
                 + "</body></html>";
 
     }
 
-    public void doGet(HttpServletRequest req, HttpServletResponse resp,double lower,double upper,List<Double> glucoseValues, List<Double> times,List<Double> feedStarts,List<Double> feedDurations,List<String> feedTypes,List<String> comments) throws IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         // Load data from files
+        HttpSession session = req.getSession(false);
 
         List<Double> timeData = loadDataFromResource(TIME_FILE);
         List<Double> rawData = loadDataFromResource(RAW_FILE);
         List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
-
+        
+        GlucoseChart glucoseChart = new GlucoseChart(session, req,timeData, rawData, smoothData,feedTypes);
+        double lower = glucoseChart.getLimInp().get(0);
+        double upper = glucoseChart.getLimInp().get(1);
+        
             // Consultants only view the file data, no user input
-        resp.getWriter().write(consultPage(session, timeData,rawData,smoothData,glucoseValues,times,feedStarts,feedDurations,feedTypes,comments, req.getContextPath(), lower, upper));
+        resp.getWriter().write(consultPage(glucoseChart, req.getContextPath(), lower, upper));
     }
 
     public void doPost(HttpSession session, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
