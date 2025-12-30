@@ -84,7 +84,30 @@ public class Nurse extends Adult implements Pageable {
     }
 
 
-    
+    public String nurseCommentBox(String pathString) {
+        return "<div style='background-color: #fedae6; "
+                + "border: 2px solid black;"
+                + "padding: 20px;"
+                + "border-radius: 10px;"
+                + "width: 300px;"
+                + "margin: 20px ;"
+                + "text-align: center;'>"
+            
+                + "<form method='POST' action='" + pathString + "/nurses'>"
+                + "<div>"
+            
+                + "<textarea name='commInp' "
+                + "placeholder='Add a comment...' "
+                + "style='width:100%; height:120px; "
+                + "padding:8px; box-sizing:border-box; resize:vertical;'></textarea>"
+                + "<br/><br/>"
+            
+                + "<button type='submit' style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add comment</button>"
+        
+                + "</div>"
+                + "</form>"
+                + "</div>";
+    }
 
 
     public String nursePage(GlucoseChart glucoseChart, String pathString,double glucoseValue, double time,double feedStart, double feedDuration, String feedType) {
@@ -93,7 +116,7 @@ public class Nurse extends Adult implements Pageable {
                + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>" 
                + this.glucoseInputLayout(pathString, glucoseValue, time) 
                + this.feedingInputLayout(pathString, feedStart, feedDuration, feedType)
-               + glucoseChart.commentBox(pathString)
+               + this.nurseCommentBox(pathString)
                + "</div>"
                + glucoseChart.commentsInpLayout()
             
