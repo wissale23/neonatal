@@ -133,10 +133,11 @@ public class Servlet extends HttpServlet {
         if ("/consultants".equals(path)) {
 
             users.get(2).doGet(req,resp);
+            return;    
 
         } else if ("/nurses".equals(path)) {
             users.get(3).doGet(req,resp);
-
+            return;    
 
                 
         } else if("/researchers".equals(path)){
