@@ -40,12 +40,40 @@ public class Consultant extends Adult implements Pageable {
                 + "</div>"
                 + "</form>"
                 + "</div>";
-    }    
+    
+    }  
+    public String consultCommentBox(String pathString) {
+        return "<div style='background-color: #fedae6; "
+                + "border: 2px solid black;"
+                + "padding: 20px;"
+                + "border-radius: 10px;"
+                + "width: 300px;"
+                + "margin: 20px ;"
+                + "text-align: center;'>"
+            
+                + "<form method='POST' action='" + pathString + "/consultants'>"
+                + "<div>"
+            
+                + "<textarea name='commInp' "
+                + "placeholder='Add a comment...' "
+                + "style='width:100%; height:120px; "
+                + "padding:8px; box-sizing:border-box; resize:vertical;'></textarea>"
+                + "<br/><br/>"
+            
+                + "<button type='submit' style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add comment</button>"
+        
+                + "</div>"
+                + "</form>"
+                + "</div>";
+    }
 
     public String consultPage(GlucoseChart glucoseChart,String pathString,double lower,double upper){
 
         return glucoseChart.generateHTML()
+               + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>" 
                 + this.rangeLayout(pathString,lower,upper)
+                + this.consultCommentBox(pathString)
+               + "</div>"
                 + glucoseChart.commentsInpLayout()
                 + "</body></html>";
 
