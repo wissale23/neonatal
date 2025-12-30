@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @WebServlet(
-        urlPatterns = {"/", "/login", "/logout", "/consultants", "/nurses", "/researchers", "/parents"},
+        urlPatterns = {"/", "/login", "/logout", "/consultants", "/nurses", "/researchers", "/parents", "/admin"},
         loadOnStartup = 1
 )
 public class Servlet extends HttpServlet {
@@ -16,8 +16,12 @@ public class Servlet extends HttpServlet {
     private final List<Double> userSmoothValues = new ArrayList<>();
 
     // Demo "hospital accounts" for MVP (pre-provisioned externally)
-    private final Map<String, String> passwords = new HashMap<>();   // username -> password
-    private final Map<String, String> roles = new HashMap<>();       // username -> role
+
+    // private final Map<String, String> passwords = new HashMap<>();   // username -> password
+    // private final Map<String, String> roles = new HashMap<>();       // username -> role
+    private AuthManager auth;
+    private LoginPageView loginView;
+
 
     // Resource file paths
     private final String TIME_FILE = "/t_glu.txt";
@@ -34,102 +38,89 @@ public class Servlet extends HttpServlet {
     private final String defaultFeedType = "";
     private final String defaultComment = "Add a comment";    
 
+    //@Override
+    // public void init() {
+        // Demo accounts (replace with real hospital identity system later)
+    //    passwords.put("nurse1", "nursepass");
+    //    roles.put("nurse1", "nurse");
+
+    //    passwords.put("consult1", "consultpass");
+    //    roles.put("consult1", "consultant");
+
+    //    passwords.put("parent1", "parentpass");
+            //    roles.put("parent1", "parent");
+
+    //    passwords.put("research1", "researchpass");
+    //    roles.put("research1", "researcher");
+    //}
+
     @Override
     public void init() {
-        // Demo accounts (replace with real hospital identity system later)
-        passwords.put("nurse1", "nursepass");
-        roles.put("nurse1", "nurse");
+        auth = new AuthManager();
+        loginView = new LoginPageView();
 
-        passwords.put("consult1", "consultpass");
-        roles.put("consult1", "consultant");
-
-        passwords.put("parent1", "parentpass");
-        roles.put("parent1", "parent");
-
-        passwords.put("research1", "researchpass");
-        roles.put("research1", "researcher");
+        auth.addUser("nurse1", "nursepass", "nurse");
+        auth.addUser("consult1", "consultpass", "consultant");
+        auth.addUser("parent1", "parentpass", "parent");
+        auth.addUser("research1", "researchpass", "researcher");
+        auth.addUser("admin1", "adminpass", "admin");
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) 
-        throws ServletException, IOException {
-        String path = req.getServletPath();
-        if ("/".equals(path)) {
-            resp.setContentType("text/html");
-            resp.getWriter().write(
-                    "<h1>Neonatal App</h1>" +
-                            "<p>Choose your role:</p>" +
-                            "<a href=\"" + req.getContextPath() + "/login?role=nurse\">Nurse</a><br/>" +
-                            "<a href=\"" + req.getContextPath() + "/login?role=consultant\">Consultant</a><br/>" +
-                            "<a href=\"" + req.getContextPath() + "/login?role=parent\">Parent</a><br/>" +
-                            "<a href=\"" + req.getContextPath() + "/login?role=researcher\">Researcher</a><br/>"
-            );
-            return;
-        }
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
 
-        if ("/login".equals(path)) {
-            String roleParam = req.getParameter("role");
+        String path = req.getServletPath();
+
+        // 1) "/" and "/login" now show the SAME login page (no role selection anymore)
+        if ("/".equals(path) || "/login".equals(path)) {
             String error = req.getParameter("error");
             String msg = "";
-            if ("user_not_found".equals(error)) msg = "<p style='color:red'>User does not exist. Please contact admin to create an account.</p>";
-            else if ("wrong_password".equals(error)) msg = "<p style='color:red'>Incorrect password.</p>";
-            else if ("role_mismatch".equals(error)) msg = "<p style='color:red'>Please choose the correct user role.</p>";
-            if (roleParam == null) roleParam = "";
+
+            if ("user_not_found".equals(error)) {
+                msg = LoginPageView.errorBox("User does not exist. Please contact admin to create an account.");
+            } else if ("wrong_password".equals(error)) {
+                msg = LoginPageView.errorBox("Incorrect password.");
+            } else if ("missing_credentials".equals(error)) {
+                msg = LoginPageView.errorBox("Please enter both username and password.");
+            } else if ("login_required".equals(error)) {
+                msg = LoginPageView.errorBox("Please sign in to continue.");
+            }
 
             resp.setContentType("text/html");
-            resp.getWriter().write(
-                    "<h1>Login</h1>" + msg +
-                            "<form method=\"POST\" action=\"" + req.getContextPath() + "/login\">" +
-                            "<input type=\"hidden\" name=\"role\" value=\"" + roleParam + "\"/>" +
-                            "Username: <input name=\"username\"/><br/>" +
-                            "Password: <input name=\"password\" type=\"password\"/><br/>" +
-                            "<button type=\"submit\">Sign in</button>" +
-                            "</form>" +
-                            "<p><a href=\"" + req.getContextPath() + "/\">Back</a></p>"
-            );
+            resp.getWriter().write(loginView.render(req.getContextPath(), msg));
             return;
         }
 
+        // 2) Logout stays, but redirect to login (or "/" also works since "/" is login now)
         if ("/logout".equals(path)) {
-            HttpSession ss = req.getSession(false);
-            if (ss != null) ss.invalidate();
-            resp.sendRedirect(req.getContextPath() + "/");
+            auth.logout(req);
+            resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
+
         resp.setContentType("text/html");
 
-        // Require login + correct role before allowing access to role-specific endpoints
+        // 3) Enforce login + correct role for role-specific endpoints
+        if ("/nurses".equals(path) || "/consultants".equals(path) || "/parents".equals(path) || "/researchers".equals(path) || "/admin".equals(path)) {
+            String redirect = auth.redirectIfNotAllowed(path, req);
+            if (redirect != null) {
+                resp.sendRedirect(req.getContextPath() + redirect);
+                return;
+            }
+        }
+
+        // From here down: your existing logic, unchanged
         HttpSession session = req.getSession(false);
-        String role = (session == null) ? null : (String) session.getAttribute("role");
 
-        if ("/nurses".equals(path) && !"nurse".equals(role)) {
-            resp.sendRedirect(req.getContextPath() + "/login?role=nurse");
-            return;
-        }
-        if ("/consultants".equals(path) && !"consultant".equals(role)) {
-            resp.sendRedirect(req.getContextPath() + "/login?role=consultant");
-            return;
-        }
-        if ("/parents".equals(path) && !"parent".equals(role)) {
-            resp.sendRedirect(req.getContextPath() + "/login?role=parent");
-            return;
-        }
-        if ("/researchers".equals(path) && !"researcher".equals(role)) {
-            resp.sendRedirect(req.getContextPath() + "/login?role=researcher");
-            return;
-        }
-
-
-      
-        double lower = defaultLower; 
+        double lower = defaultLower;
         double upper = defaultUpper;
         double gluc = defaultGlucose;
         double time_ = defaultTime;
         double feedStart = defaultFeedStart;
         double feedDur = defaultFeedDuration;
         String feedType = defaultFeedType;
-        String commentt = defaultComment;        
-        
+        String commentt = defaultComment;
 
         if (session != null) {
             Object low = session.getAttribute("lowerLimit");
@@ -141,14 +132,14 @@ public class Servlet extends HttpServlet {
             Object ft = session.getAttribute("typeInp");
             Object com = session.getAttribute("commInp");
 
-            if (low != null){
+            if (low != null) {
                 lower = (double) low;
             }
             if (upp != null) {
                 upper = (double) upp;
             }
 
-            if (gl != null){
+            if (gl != null) {
                 gluc = (double) gl;
             }
             if (tm != null) {
@@ -163,20 +154,17 @@ public class Servlet extends HttpServlet {
             if (ft != null) {
                 feedType = (String) ft;
             }
-            if (com != null){
-                commentt = (String) com;    
-            }        
-                
-
+            if (com != null) {
+                commentt = (String) com;
+            }
         }
 
-        List<Double> times = new ArrayList<>(); 
+        List<Double> times = new ArrayList<>();
         List<Double> glucoseValues = new ArrayList<>();
-        List<Double> feedStarts = new ArrayList<>(); 
+        List<Double> feedStarts = new ArrayList<>();
         List<Double> feedDurations = new ArrayList<>();
         List<String> feedTypes = new ArrayList<>();
         List<String> comments = new ArrayList<>();
-    
 
         if (session != null) {
             Object t = session.getAttribute("timeList");
@@ -184,57 +172,53 @@ public class Servlet extends HttpServlet {
             Object fs = session.getAttribute("startList");
             Object fd = session.getAttribute("durationList");
             Object ft = session.getAttribute("typeList");
-            Object com = session.getAttribute("commentsList");    
+            Object com = session.getAttribute("commentsList");
 
             if (t instanceof List && g instanceof List && fs instanceof List && fd instanceof List && ft instanceof List && com instanceof List) {
-                times = (List<Double>) t; //casting current lists to the ones used for classes 
+                times = (List<Double>) t;
                 glucoseValues = (List<Double>) g;
                 feedStarts = (List<Double>) fs;
                 feedDurations = (List<Double>) fd;
                 feedTypes = (List<String>) ft;
-                comments = (List<String>)com;    
-
+                comments = (List<String>) com;
             }
         }
 
         req.setAttribute("timeList", times);
-        req.setAttribute("glucoseList", glucoseValues);  
-        req.setAttribute("startList", feedStarts); 
+        req.setAttribute("glucoseList", glucoseValues);
+        req.setAttribute("startList", feedStarts);
         req.setAttribute("durationList", feedDurations);
         req.setAttribute("typeList", feedTypes);
-        req.setAttribute("commentsList",comments);    
-        
+        req.setAttribute("commentsList", comments);
 
         if ("/consultants".equals(path)) {
 
-            // Load data from files
-
             List<Double> timeData = loadDataFromResource(TIME_FILE);
             List<Double> rawData = loadDataFromResource(RAW_FILE);
             List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
 
-            // Consultants only view the file data, no user input
-            ConsultantServlet consult = new ConsultantServlet(lower,upper);        
-
-            resp.getWriter().write(consult.consultPage(session, timeData,rawData,smoothData,glucoseValues,times,feedStarts,feedDurations,feedTypes,comments, req.getContextPath()));
+            ConsultantServlet consult = new ConsultantServlet(lower, upper);
+            resp.getWriter().write(
+                    consult.consultPage(session, timeData, rawData, smoothData, glucoseValues, times,
+                            feedStarts, feedDurations, feedTypes, comments, req.getContextPath())
+            );
 
         } else if ("/nurses".equals(path)) {
-            // Load data from files
+
             List<Double> timeData = loadDataFromResource(TIME_FILE);
             List<Double> rawData = loadDataFromResource(RAW_FILE);
             List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
 
-            // Nurses can add their own raw values
             rawData.addAll(userRawValues);
 
-            NurseServlet nurseServ = new NurseServlet(gluc,time_,feedStart,feedDur,feedType);
-            //GlucoseChart chart = new GlucoseChart(timeData, rawData, smoothData, lower, upper);
-            resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData,lower,upper,glucoseValues,times,feedStarts,feedDurations,feedTypes,comments,req.getContextPath()));
+            NurseServlet nurseServ = new NurseServlet(gluc, time_, feedStart, feedDur, feedType);
+            resp.getWriter().write(
+                    nurseServ.nursePage(timeData, rawData, smoothData, lower, upper, glucoseValues, times,
+                            feedStarts, feedDurations, feedTypes, comments, req.getContextPath())
+            );
 
+        } else if ("/researchers".equals(path)) {
 
-
-                
-        } else if("/researchers".equals(path)){
             resp.setContentType("text/html");
             resp.getWriter().write(
                     "<h1>Researcher Portal</h1>" +
@@ -244,8 +228,8 @@ public class Servlet extends HttpServlet {
                             "</form>" +
                             "<p><a href=\"" + req.getContextPath() + "/logout\">Logout</a></p>"
             );
-                
-        } else if("/parents".equals(path)){
+
+        } else if ("/parents".equals(path)) {
 
             List<Double> timeData = loadDataFromResource(TIME_FILE);
             List<Double> rawData = loadDataFromResource(RAW_FILE);
@@ -253,52 +237,136 @@ public class Servlet extends HttpServlet {
 
             ParentChart chart = new ParentChart(timeData, rawData, smoothData, 2.6, 10.0);
             resp.getWriter().write(chart.generateHTML());
+
+
+        } else if ("/admin".equals(path)) {
+            String status = req.getParameter("status");
+            String error = req.getParameter("error");
+            String msg = "";
+
+            if ("created".equals(status)) {
+                msg = LoginPageView.okBox("Account created successfully.");
+            } else if ("username_taken".equals(error)) {
+                msg = LoginPageView.errorBox("That username is already taken.");
+            } else if ("invalid_role".equals(error)) {
+                msg = LoginPageView.errorBox("Invalid role selected.");
+            } else if ("missing_fields".equals(error)) {
+                msg = LoginPageView.errorBox("Please fill in all fields.");
+            }
+
+            resp.setContentType("text/html");
+            resp.getWriter().write(loginView.renderAdminPage(req.getContextPath(), msg));
         }
+
     }
 
+    //    @Override
+//    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        if ("/login".equals(req.getServletPath())) {
+//            String chosenRole = req.getParameter("role");
+//            String username = req.getParameter("username");
+//            String password = req.getParameter("password");
+//
+//            if (username == null) username = "";
+//            if (password == null) password = "";
+//            username = username.trim();
+//
+//            // 1) user not found
+//            if (!passwords.containsKey(username)) {
+//                resp.sendRedirect(req.getContextPath() + "/login?role=" + chosenRole + "&error=user_not_found");
+//                return;
+//            }
+//
+//            // 2) wrong password
+//            if (!passwords.get(username).equals(password)) {
+//                resp.sendRedirect(req.getContextPath() + "/login?role=" + chosenRole + "&error=wrong_password");
+//                return;
+//            }
+//
+//            // 3) role mismatch (picked Nurse but used consultant account, etc.)
+//            String actualRole = roles.get(username);
+//            if (chosenRole == null) chosenRole = "";
+//            if (!chosenRole.equals(actualRole)) {
+//                resp.sendRedirect(req.getContextPath() + "/login?role=" + chosenRole + "&error=role_mismatch");
+//                return;
+//            }
+//
+//            // success
+//            HttpSession session = req.getSession(true);
+//            session.setAttribute("role", actualRole);
+//            session.setAttribute("username", username);
+//
+//            String target;
+//            if ("nurse".equals(actualRole)) target = "/nurses";
+//            else if ("consultant".equals(actualRole)) target = "/consultants";
+//            else if ("parent".equals(actualRole)) target = "/parents";
+//            else target = "/researchers";
+//
+//            resp.sendRedirect(req.getContextPath() + target);
+//            return;
+//        }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         if ("/login".equals(req.getServletPath())) {
-            String chosenRole = req.getParameter("role");
             String username = req.getParameter("username");
             String password = req.getParameter("password");
 
-            if (username == null) username = "";
-            if (password == null) password = "";
-            username = username.trim();
+            AuthManager.AuthResult result = auth.authenticate(username, password);
 
-            // 1) user not found
-            if (!passwords.containsKey(username)) {
-                resp.sendRedirect(req.getContextPath() + "/login?role=" + chosenRole + "&error=user_not_found");
+            if (!result.isOk()) {
+                String errorParam;
+                if (result.getError() == AuthManager.Error.USER_NOT_FOUND) errorParam = "user_not_found";
+                else if (result.getError() == AuthManager.Error.WRONG_PASSWORD) errorParam = "wrong_password";
+                else errorParam = "missing_credentials";
+
+                resp.sendRedirect(req.getContextPath() + "/login?error=" + errorParam);
                 return;
             }
 
-            // 2) wrong password
-            if (!passwords.get(username).equals(password)) {
-                resp.sendRedirect(req.getContextPath() + "/login?role=" + chosenRole + "&error=wrong_password");
+            // Success: role is determined by the account (not chosen by the user)
+            String cleanUsername = (username == null) ? "" : username.trim();
+            String role = result.getRole();
+
+            auth.startSession(req, cleanUsername, role);
+
+            // Redirect to role home
+            resp.sendRedirect(req.getContextPath() + auth.homeForRole(role));
+            return;
+        }
+
+        if ("/admin".equals(req.getServletPath())) {
+            String role = auth.currentRole(req);
+
+            // must be logged in
+            if (role == null) {
+                resp.sendRedirect(req.getContextPath() + "/login?error=login_required");
                 return;
             }
 
-            // 3) role mismatch (picked Nurse but used consultant account, etc.)
-            String actualRole = roles.get(username);
-            if (chosenRole == null) chosenRole = "";
-            if (!chosenRole.equals(actualRole)) {
-                resp.sendRedirect(req.getContextPath() + "/login?role=" + chosenRole + "&error=role_mismatch");
+            // must be admin
+            if (!"admin".equals(role)) {
+                resp.sendRedirect(req.getContextPath() + auth.homeForRole(role));
                 return;
             }
 
-            // success
-            HttpSession session = req.getSession(true);
-            session.setAttribute("role", actualRole);
-            session.setAttribute("username", username);
+            String newUsername = req.getParameter("newUsername");
+            String newPassword = req.getParameter("newPassword");
+            String newRole = req.getParameter("newRole");
 
-            String target;
-            if ("nurse".equals(actualRole)) target = "/nurses";
-            else if ("consultant".equals(actualRole)) target = "/consultants";
-            else if ("parent".equals(actualRole)) target = "/parents";
-            else target = "/researchers";
+            AuthManager.CreateResult cr = auth.createUser(newUsername, newPassword, newRole);
 
-            resp.sendRedirect(req.getContextPath() + target);
+            if (!cr.isOk()) {
+                String err;
+                if (cr.getError() == AuthManager.CreateError.USERNAME_TAKEN) err = "username_taken";
+                else if (cr.getError() == AuthManager.CreateError.INVALID_ROLE) err = "invalid_role";
+                else err = "missing_fields";
+
+                resp.sendRedirect(req.getContextPath() + "/admin?error=" + err);
+                return;
+            }
+
+            resp.sendRedirect(req.getContextPath() + "/admin?status=created");
             return;
         }
 
