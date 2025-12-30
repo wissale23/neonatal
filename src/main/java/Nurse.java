@@ -147,7 +147,7 @@ public class Nurse extends Adult implements Pageable {
         resp.getWriter().write(nursePage(glucoseChart, req.getContextPath(), glucoseValue,time,feedStart,feedDuration,feedType));
     }
 
-    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
         HttpSession session = req.getSession(true);
 
         String glucoseString = req.getParameter("glucoseInp");
