@@ -1,6 +1,9 @@
 import java.util.List;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 
 
 public class GlucoseChart {
@@ -8,15 +11,14 @@ public class GlucoseChart {
     private final List<Double> timeData;
     private final List<Double> rawData;
     private final List<Double> smoothData;
+    private double lower, upper;
+    private List<Double> sampleValues, sampleTimes;
+    private List<Double> feedingStarts, feedingDurations;
+    private List<String> feedingTypes, comments;
+
 
     private final double defaultLower = 2.6;
     private final double defaultUpper = 10.0;
-    private final double defaultGlucose = 0.0;
-    private final double defaultTime = 0.0;
-    private final double defaultFeedStart = 0.0;
-    private final double defaultFeedDuration = 0.0;
-    private final String defaultFeedType = "";
-    private final String defaultComment = "Add a comment";    
     private HttpSession session;
     private HttpServletRequest req;
 
@@ -28,8 +30,8 @@ public class GlucoseChart {
         this.timeData = timeData;
         this.rawData = rawData;
         this.smoothData = smoothData;
-        this.lower = getLimInp().get(0)
-        this.upper = getLimInp().get(1)
+        this.lower = getLimInp().get(0);
+        this.upper = getLimInp().get(1);
         this.sampleValues = getGlucInp().get(0);
         this.sampleTimes = getGlucInp().get(1);
         this.feedingStarts = getFeedInp().get(0);
@@ -253,7 +255,7 @@ public class GlucoseChart {
                 "</html>\n";
     }
 
-    public double getLimInp(){
+    public List<Double> getLimInp(){
 
         double upper = defaultUpper;
         double lower = defaultLower; 
