@@ -29,7 +29,7 @@ public class Nurse extends Adult implements Pageable {
                 + "border: 2px solid black;"
                 + "padding: 20px;"
                 + "border-radius: 10px;"
-                + "width: 300px;"
+                + "width: 400px;"
                 + "margin: 20px ;"
                 + "text-align: center;'>"
 
@@ -56,7 +56,7 @@ public class Nurse extends Adult implements Pageable {
                 + "border: 2px solid black;"
                 + "padding: 20px;"
                 + "border-radius: 10px;"
-                + "width: 300px;"
+                + "width: 400px;"
                 + "margin: 20px ;"
                 + "text-align: center;'>"
 
@@ -89,7 +89,7 @@ public class Nurse extends Adult implements Pageable {
                 + "border: 2px solid black;"
                 + "padding: 20px;"
                 + "border-radius: 10px;"
-                + "width: 300px;"
+                + "width: 400px;"
                 + "margin: 20px ;"
                 + "text-align: center;'>"
             
@@ -113,7 +113,7 @@ public class Nurse extends Adult implements Pageable {
     public String nursePage(GlucoseChart glucoseChart, String pathString,double glucoseValue, double time,double feedStart, double feedDuration, String feedType,List<String> comments) {
 
         return glucoseChart.generateHTML() 
-               + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;align-items:flex-start;'>" 
+               + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px; align-items:flex-start;'>"
                + this.glucoseInputLayout(pathString, glucoseValue, time) 
                + this.feedingInputLayout(pathString, feedStart, feedDuration, feedType)
                + this.nurseCommentBox(pathString)
