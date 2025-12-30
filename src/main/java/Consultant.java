@@ -18,7 +18,7 @@ public class Consultant extends Adult implements Pageable {
 
     public String rangeLayout(String pathString,double lower,double upper){
         return "<div style='background-color: #fedae6; "
-                + "border: 2px solid black;" 
+                + "border: 2px solid black;"
                 + "padding: 20px;"
                 + "border-radius: 10px;"
                 + "width: 300px;"
@@ -40,8 +40,8 @@ public class Consultant extends Adult implements Pageable {
                 + "</div>"
                 + "</form>"
                 + "</div>";
-    
-    }  
+
+    }
     public String consultCommentBox(String pathString) {
         return "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;"
@@ -50,31 +50,31 @@ public class Consultant extends Adult implements Pageable {
                 + "width: 300px;"
                 + "margin: 20px ;"
                 + "text-align: center;'>"
-            
+
                 + "<form method='POST' action='" + pathString + "/consultants'>"
                 + "<div>"
-            
+
                 + "<textarea name='commInp' "
                 + "placeholder='Add a comment...' "
                 + "style='width:100%; height:120px; "
                 + "padding:8px; box-sizing:border-box; resize:vertical;'></textarea>"
                 + "<br/><br/>"
-            
+
                 + "<button type='submit' style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add comment</button>"
-        
+
                 + "</div>"
                 + "</form>"
                 + "</div>";
     }
 
-    public String consultPage(GlucoseChart glucoseChart,String pathString,double lower,double upper){
+    public String consultPage(GlucoseChart glucoseChart,String pathString,double lower,double upper,List<String> comments){
 
         return glucoseChart.generateHTML()
-               + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>" 
+                + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>"
                 + this.rangeLayout(pathString,lower,upper)
                 + this.consultCommentBox(pathString)
-               + "</div>"
-                + glucoseChart.commentsInpLayout()
+                + "</div>"
+                + glucoseChart.commentsInpLayout(comments)
                 + "</body></html>";
 
     }
@@ -86,13 +86,15 @@ public class Consultant extends Adult implements Pageable {
         List<Double> timeData = getPatients().get(0).getTimeData();
         List<Double> rawData = getPatients().get(0).getRawData();
         List<Double> smoothData = getPatients().get(0).getSmoothData();
-        
+
         GlucoseChart glucoseChart = new GlucoseChart(session, req,timeData, rawData, smoothData);
         double lower = glucoseChart.getLimInp().get(0);
         double upper = glucoseChart.getLimInp().get(1);
-        
-            // Consultants only view the file data, no user input
-        resp.getWriter().write(consultPage(glucoseChart, req.getContextPath(), lower, upper));
+        List<String> comments = GlucoseChart.getComments(session);
+
+
+        // Consultants only view the file data, no user input
+        resp.getWriter().write(consultPage(glucoseChart, req.getContextPath(), lower, upper,comments));
     }
 
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -102,7 +104,7 @@ public class Consultant extends Adult implements Pageable {
         //UPPER AND LOWER LIMITS
         String lowerString = req.getParameter("lowerLimit");
         String upperString = req.getParameter("upperLimit");
-                
+
         try {
             if (lowerString != null && !lowerString.isEmpty()) {
                 session.setAttribute("lowerLimit", Double.parseDouble(lowerString));
@@ -111,23 +113,20 @@ public class Consultant extends Adult implements Pageable {
                 session.setAttribute("upperLimit", Double.parseDouble(upperString));
             }
         } catch (NumberFormatException e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
 
         }
-        
+
         // COMMENTS HANDLING
-        String commentString = req.getParameter("commInp"); 
-        if (commentString != null && !commentString.isEmpty()) {
-            String consultUsername = (String) session.getAttribute("username");
-            if (consultUsername == null) consultUsername = "Unknown Consultant";
-    
-            GlucoseChart.addComment(session, consultUsername, commentString);
-        }
-    
+        String consultUsername = (String) session.getAttribute("username");
+        if (consultUsername == null) consultUsername = "Unknown Consultant";
+
+        GlucoseChart.addComment(session, consultUsername, commentString);
+
         resp.sendRedirect(req.getContextPath() + "/consultants");
     }
-          
-}        
+
+}  
 
 
 
