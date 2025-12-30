@@ -22,11 +22,11 @@ public class WarningSystem {
 
     public String getWarningMessage(double glucoseLevel) {
         if (isAboveRange(glucoseLevel)){
-            return ("WARNING: Glucose level is above the safe range.");
+            return ("WARNING: Blood glucose level is above the safe range.");
         }
         else if (isBelowRange(glucoseLevel)){
-            return ("WARNING: Glucose level below the safe range.");
+            return ("WARNING: Blood glucose level below the safe range.");
         }
-        return ("Glucose level is within the safe range.");
+        return ("Blood glucose level is within the safe range.");
     }
 }
