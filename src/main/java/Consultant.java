@@ -22,7 +22,7 @@ public class Consultant extends Adult implements Pageable {
                 + "padding: 20px;"
                 + "border-radius: 10px;"
                 + "width: 300px;"
-                + "margin: 20px auto;"
+                + "margin: 20px;"
                 + "text-align: center;'>"
 
                 + "<h3 style='color: black;'>Blood Glucose Safety Range (mM)</h3>"
@@ -70,7 +70,7 @@ public class Consultant extends Adult implements Pageable {
     public String consultPage(GlucoseChart glucoseChart,String pathString,double lower,double upper,List<String> comments){
 
         return glucoseChart.generateHTML()
-                + "<div style='display:flex; justify-content:center; gap:10px; margin-top:20px;'>"
+                + "<div style='display:flex; justify-content:center; gap:10px; margin-top:20px; align-items:flex-start;'>"
                 + this.rangeLayout(pathString,lower,upper)
                 + this.consultCommentBox(pathString)
                 + "</div>"
