@@ -128,7 +128,32 @@ public class GlucoseChart {
                 "<option disabled selected>See all comments</option>"+
                  getComments()+
                 "</select>";
-    }    
+    } 
+
+    public String commentBox(String pathString) {
+        return "<div style='background-color: #fedae6; "
+                + "border: 2px solid black;"
+                + "padding: 20px;"
+                + "border-radius: 10px;"
+                + "width: 300px;"
+                + "margin: 20px ;"
+                + "text-align: center;'>"
+            
+                + "<form method='POST' action='" + pathString + "/nurses'>"
+                + "<div>"
+            
+                + "<textarea name='commInp' "
+                + "placeholder='Add a comment...' "
+                + "style='width:100%; height:120px; "
+                + "padding:8px; box-sizing:border-box; resize:vertical;'></textarea>"
+                + "<br/><br/>"
+            
+                + "<button type='submit' style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add comment</button>"
+        
+                + "</div>"
+                + "</form>"
+                + "</div>";
+    }
 
 
     // Plot Feeding Times, Feeding Durations, and Feeding Descriptions
