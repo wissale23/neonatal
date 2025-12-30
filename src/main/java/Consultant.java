@@ -47,11 +47,11 @@ public class Consultant extends Adult implements Pageable {
         // Load data from files
         HttpSession session = req.getSession(false);
 
-        List<Double> timeData = loadDataFromResource(TIME_FILE);
-        List<Double> rawData = loadDataFromResource(RAW_FILE);
-        List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
+        List<Double> timeData = getPatients().get(0).getTimeData();
+        List<Double> rawData = getPatients().get(0).getRawData();
+        List<Double> smoothData = getPatients().get(0).getSmoothData();
         
-        GlucoseChart glucoseChart = new GlucoseChart(session, req,timeData, rawData, smoothData,feedTypes);
+        GlucoseChart glucoseChart = new GlucoseChart(session, req,timeData, rawData, smoothData);
         double lower = glucoseChart.getLimInp().get(0);
         double upper = glucoseChart.getLimInp().get(1);
         
@@ -59,8 +59,10 @@ public class Consultant extends Adult implements Pageable {
         resp.getWriter().write(consultPage(glucoseChart, req.getContextPath(), lower, upper));
     }
 
-    public void doPost(HttpSession session, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        HttpSession session = req.getSession(true);
+
         String lowerString = req.getParameter("lowerLimit");
         String upperString = req.getParameter("upperLimit");
                 
