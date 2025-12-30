@@ -67,7 +67,7 @@ public class Consultant extends Adult implements Pageable {
         resp.getWriter().write(consultPage(glucoseChart, req.getContextPath(), lower, upper));
     }
 
-    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         HttpSession session = req.getSession(true);
 
