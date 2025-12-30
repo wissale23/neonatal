@@ -200,11 +200,13 @@ public class Servlet extends HttpServlet {
 
         if ("/consultants".equals(req.getServletPath())) {
             users.get(2).doPost(req,resp);
+            return;    
         }
             
         
         if ("/nurses".equals(req.getServletPath())) {
             users.get(3).doPost(req,resp);
+            return;    
         }
 
         
