@@ -37,7 +37,7 @@ public class GlucoseChart {
         this.feedingStarts = getFeedInp().get(0);
         this.feedingDurations = getFeedInp().get(1);
         this.feedingTypes = getFeedTypeInp();
-        this.comments = getComInp();
+        //this.comments = getComInp();
         
     }
 
@@ -61,74 +61,60 @@ public class GlucoseChart {
         }
         return sampleTriangles;
     }
-    //concatenating comments
-    public String getComments() {
-        String commentsString = "";
-    
-        if (comments != null) {
-            for (int i = 0; i < comments.size(); i++) {
-                commentsString +=
-                    "<option value='" + i + "'>" +
-                    "Comment " + (i + 1) +
-                    "</option>";
-            }
-        }
-    
-        return commentsString;
-    }
+
     //adding new comment to select whenever there is a new one
 
-    public String getCommentsStorage() {
+    public static void addComment(HttpSession session, String username, String commentText) {
 
-        DateTimeFormatter formatter =  DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-    
-        String commentsStore = "[";
-    
-        if (comments != null) {
-            for (int i = 0; i < comments.size(); i++) {
-    
-                String time = LocalDateTime.now().format(formatter);
-    
-                String commentWithTime = time + "\n" + comments.get(i);
-    
-                commentsStore += "\"" +
-                        commentWithTime
-                            .replace("\\", "\\\\")  // backslashes woudl end the string so we have to remove them
-                            .replace("\"", "\\\"")  // quotes will also end the string so wwe have to remove them
-                            .replace("\n", "\\n")  
-                        + "\"";
-    
-                if (i < comments.size() - 1) {
-                    commentsStore += ",";
-                }
-            }
-        }
-    
-        commentsStore += "]";
-        return commentsStore;
+        if (commentText == null || commentText.isEmpty()) return;
+        List<String> comments = getComments(session);
+        String time = LocalDateTime.now().format(
+            DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+        comments.add(time + "\n" + username + ": " + commentText);
     }
 
 
 
-    public String commentsInpLayout(){
-        return "<script>\n" +
-                "    const comments = " + getCommentsStorage() + ";\n" +
-                "\n" +
-                "    function showComment(index) {\n" +
-                "      document.getElementById('commentCanvas').innerText = comments[index];\n" +
-                "    }\n"+    
-                "</script>\n" +
-                "<div id='commentCanvas' " +
-                "style='margin-top:15px; padding:10px; " +
-                "border:2px solid black; width:400px; min-height:60px; max-height:150px; overflow-y:auto;'>" +
-                "Select a comment to view it" +
-                "</div>"+
-            
-                "<select onchange='showComment(this.value)'>"+
-                "<option disabled selected>See all comments</option>"+
-                 getComments()+
-                "</select>";
-    } 
+    public String commentsInpLayout(List<String> comments) {
+
+        String options = "";
+        for (int i = 0; i < comments.size(); i++) {
+            options += "<option value='" + i + "'>Comment " + (i + 1) + "</option>";
+        }
+    
+        String commentsJS = "[";
+        for (int i = 0; i < comments.size(); i++) {
+            commentsJS += "\"" +
+                comments.get(i)
+                    .replace("\\", "\\\\")
+                    .replace("\"", "\\\"")
+                    .replace("\n", "\\n")
+                + "\"";
+    
+            if (i < comments.size() - 1) {
+                commentsJS += ",";
+            }
+        }
+        commentsJS += "]";
+    
+        return "<script>" +
+            "const comments = " + commentsJS + ";" +
+            "function showComment(index) {" +
+            " if (index < 0) return;" +
+            " document.getElementById('commentCanvas').innerText = comments[index];" +
+            "}" +
+            "</script>" +
+    
+            "<div id='commentCanvas' style='" +
+            "margin-top:15px; padding:10px; border:2px solid black;" +
+            "width:400px; min-height:60px; max-height:150px; overflow-y:auto;'>" +
+            "Select a comment to view it</div>" +
+    
+            "<select onchange='showComment(Number(this.value))'>" +
+            "<option value='-1' selected>See all comments</option>" +
+            options +
+            "</select>";
+    }
 
 
 
@@ -351,8 +337,10 @@ public class GlucoseChart {
         req.setAttribute("typeList", feedTypes);
         return feedTypes;
 
-    }    
+    }  
 
+}    
+/*
      public List<String> getComInp(){
         
         List<String> comments = new ArrayList<>();
@@ -371,6 +359,6 @@ public class GlucoseChart {
 
     }    
 
-    
+*/
                 
-}
+
