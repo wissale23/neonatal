@@ -237,7 +237,6 @@ public class Nurse extends Adult implements Pageable {
         result.add(time);
         return result;
 
-
     }   
 
     public List<Double> getFeedValue(HttpSession session) {
@@ -262,20 +261,14 @@ public class Nurse extends Adult implements Pageable {
         return result;
     }
 
-
     public String getFeedStr(HttpSession session) {
         String feedType = defaultFeedType;
-    
         if (session != null) {
             List<String> typeList = (List<String>) session.getAttribute("typeList");
             if (typeList != null && !typeList.isEmpty()) {
                 feedType = typeList.get(typeList.size() - 1);
             }
         }
-    
         return feedType;
     }
-
-
-    
 }
