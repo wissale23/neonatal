@@ -71,6 +71,7 @@ public class Consultant extends Adult implements Pageable {
 
         HttpSession session = req.getSession(true);
 
+        //UPPER AND LOWER LIMITS
         String lowerString = req.getParameter("lowerLimit");
         String upperString = req.getParameter("upperLimit");
                 
@@ -82,12 +83,26 @@ public class Consultant extends Adult implements Pageable {
                 session.setAttribute("upperLimit", Double.parseDouble(upperString));
             }
         } catch (NumberFormatException e) {
-            e.printStackTrace(); // change this later to link that displays error message
+            e.printStackTrace(); 
 
+        }
+        
+        // COMMENTS HANDLING
+        String commentString = req.getParameter("commInp");
+        if (commentString != null && !commentString.isEmpty()) {
+            List<String> comments = (List<String>) session.getAttribute("commentsList");
+            if (comments == null) {
+                comments = new ArrayList<>();
+                session.setAttribute("commentsList", comments);
+            }
+    
+            String consultUsername = (String) session.getAttribute("username");
+            if (consultUsername == null) consultUsername = "Unknown Nurse";
+    
+            comments.add(consultUsername + ": " + commentString);
         }
 
         resp.sendRedirect(req.getContextPath() + "/consultants");
-        return;    
     }
           
 }        
