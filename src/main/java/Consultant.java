@@ -70,7 +70,7 @@ public class Consultant extends Adult implements Pageable {
     public String consultPage(GlucoseChart glucoseChart,String pathString,double lower,double upper,List<String> comments){
 
         return glucoseChart.generateHTML()
-                + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>"
+                + "<div style='display:flex; justify-content:center; gap:10px; margin-top:20px;'>"
                 + this.rangeLayout(pathString,lower,upper)
                 + this.consultCommentBox(pathString)
                 + "</div>"
