@@ -224,69 +224,67 @@ public class Nurse extends Adult implements Pageable {
     }
       
 
-    public List<Double> getGlucValue(HttpSession session){
-        
+    
+    public List<Double> getGlucValue(HttpSession session) {
         double glucose = defaultGlucose;
         double time = defaultTime;
+    
         if (session != null) {
+            List<Double> glucoseList = (List<Double>) session.getAttribute("glucoseList");
+            List<Double> timeList = (List<Double>) session.getAttribute("timeList");
+    
+            if (glucoseList != null && !glucoseList.isEmpty()) {
+                glucose = glucoseList.get(glucoseList.size() - 1); // last entered value
+            }
+            if (timeList != null && !timeList.isEmpty()) {
+                time = timeList.get(timeList.size() - 1);
+            }
+        }
+    
+        List<Double> result = new ArrayList<>();
+        result.add(glucose);
+        result.add(time);
+        return result;
 
-            Object gl = session.getAttribute("glucoseInp");
-            Object tm = session.getAttribute("timeInp");
-        
-            if (gl != null){
-                glucose = (double) gl;
-            }
-            if (tm != null) {
-                time = (double) tm;
-            }
-        }   
-        List<Double>  result = new ArrayList<>();
-        result.add(glucose); 
-        result.add(time);         
-    
-        return result;      
-    
+
     }   
 
-    public List<Double> getFeedValue(HttpSession session){
+    public List<Double> getFeedValue(HttpSession session) {
         double feedStart = defaultFeedStart;
         double feedDur = defaultFeedDuration;
-        if (session != null) {
-        
-            Object fs = session.getAttribute("startInp");
-            Object fd = session.getAttribute("durInp");
-                
-            if (fs != null) {
-                feedStart = (double) fs;
-            }
-            if (fd != null) {
-                feedDur = (double) fd;
-            }
-        }           
-        List<Double>  result = new ArrayList<>();
-        result.add(feedStart); 
-        result.add(feedDur);         
     
-        return result; 
-        
+        if (session != null) {
+            List<Double> startList = (List<Double>) session.getAttribute("startList");
+            List<Double> durationList = (List<Double>) session.getAttribute("durationList");
+    
+            if (startList != null && !startList.isEmpty()) {
+                feedStart = startList.get(startList.size() - 1);
+            }
+            if (durationList != null && !durationList.isEmpty()) {
+                feedDur = durationList.get(durationList.size() - 1);
+            }
+        }
+    
+        List<Double> result = new ArrayList<>();
+        result.add(feedStart);
+        result.add(feedDur);
+        return result;
     }
 
-    public String getFeedStr(HttpSession session){
-        
+
+    public String getFeedStr(HttpSession session) {
         String feedType = defaultFeedType;
-        if (session != null) {
-        
-            Object ft = session.getAttribute("typeInp");
-
-            if (ft != null) {
-                feedType = (String) ft;
-            }
-            
-        }                 
     
-        return feedType; 
-        
+        if (session != null) {
+            List<String> typeList = (List<String>) session.getAttribute("typeList");
+            if (typeList != null && !typeList.isEmpty()) {
+                feedType = typeList.get(typeList.size() - 1);
+            }
+        }
+    
+        return feedType;
     }
+
 
     
 }
