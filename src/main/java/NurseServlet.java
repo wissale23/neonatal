@@ -2,15 +2,11 @@ import java.util.List;
 
 public class NurseServlet {
 
-
     private double bloodGlucose;
     private double time;
     private double feedingStart;
     private double feedingDuration;
     private String feedingType;
-
-
-
 
     public NurseServlet(double bloodGlucose, double time, double feedingStart, double feedingDuration,String feedingType) {
         this.bloodGlucose = bloodGlucose;
