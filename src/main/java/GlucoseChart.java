@@ -37,7 +37,6 @@ public class GlucoseChart {
         this.feedingStarts = getFeedInp().get(0);
         this.feedingDurations = getFeedInp().get(1);
         this.feedingTypes = getFeedTypeInp();
-        //this.comments = getComInp();
         
     }
 
@@ -82,9 +81,9 @@ public class GlucoseChart {
             options += "<option value='" + i + "'>Comment " + (i + 1) + "</option>";
         }
     
-        String commentsJS = "[";
+        String commentsStrings = "[";
         for (int i = 0; i < comments.size(); i++) {
-            commentsJS += "\"" +
+            commentsStrings += "\"" +
                 comments.get(i)
                     .replace("\\", "\\\\")
                     .replace("\"", "\\\"")
@@ -92,13 +91,13 @@ public class GlucoseChart {
                 + "\"";
     
             if (i < comments.size() - 1) {
-                commentsJS += ",";
+                commentsStrings += ",";
             }
         }
-        commentsJS += "]";
+        commentsStrings += "]";
     
         return "<script>" +
-            "const comments = " + commentsJS + ";" +
+            "const comments = " + commentsStrings + ";" +
             "function showComment(index) {" +
             " if (index < 0) return;" +
             " document.getElementById('commentCanvas').innerText = comments[index];" +
