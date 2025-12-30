@@ -213,7 +213,7 @@ public class Nurse extends Adult implements Pageable {
                 e.printStackTrace();
             }
         }
-    }
+    
 
     
     public List<Double> getGlucValue(HttpSession session) {
@@ -259,7 +259,7 @@ public class Nurse extends Adult implements Pageable {
         result.add(feedStart);
         result.add(feedDur);
         return result;
-    }
+     }
 
     public String getFeedStr(HttpSession session) {
         String feedType = defaultFeedType;
