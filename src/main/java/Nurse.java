@@ -232,7 +232,7 @@ public class Nurse extends Adult implements Pageable {
             List<Double> timeList = (List<Double>) session.getAttribute("timeList");
     
             if (glucoseList != null && !glucoseList.isEmpty()) {
-                glucose = glucoseList.get(glucoseList.size() - 1); // last entered value
+                glucose = glucoseList.get(glucoseList.size() - 1); 
             }
             if (timeList != null && !timeList.isEmpty()) {
                 time = timeList.get(timeList.size() - 1);
