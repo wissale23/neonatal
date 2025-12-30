@@ -118,6 +118,7 @@ public class Consultant extends Adult implements Pageable {
         }
 
         // COMMENTS HANDLING
+        String commentString = req.getParameter("commInp");
         String consultUsername = (String) session.getAttribute("username");
         if (consultUsername == null) consultUsername = "Unknown Consultant";
 
