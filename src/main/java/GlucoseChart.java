@@ -61,6 +61,16 @@ public class GlucoseChart {
         return sampleTriangles;
     }
 
+    public static List<String> getComments(HttpSession session) {
+        List<String> comments = (List<String>) session.getAttribute("commentsList");
+        if (comments == null) {
+            comments = new ArrayList<>();
+            session.setAttribute("commentsList", comments);
+        }
+        return comments;
+    }
+
+
     //adding new comment to select whenever there is a new one
 
     public static void addComment(HttpSession session, String username, String commentText) {
