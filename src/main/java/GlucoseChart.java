@@ -263,29 +263,13 @@ public class GlucoseChart {
             Object low = session.getAttribute("lowerLimit");
             Object upp = session.getAttribute("upperLimit");
     
-            if (low != null) {
-                if (low instanceof Double) {
-                    lower = (Double) low;
-                } else if (low instanceof String) {
-                    try {
-                        lower = Double.parseDouble((String) low);
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace(); 
-                    }
-                }
+            if (low != null){
+                lower = (double) low;
             }
-    
             if (upp != null) {
-                if (upp instanceof Double) {
-                    upper = (Double) upp;
-                } else if (upp instanceof String) {
-                    try {
-                        upper = Double.parseDouble((String) upp);
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-                    }
-                }
+                upper = (double) upp;
             }
+            
         }
     
         List<Double> result = new ArrayList<>();
