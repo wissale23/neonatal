@@ -83,30 +83,6 @@ public class Nurse extends Adult implements Pageable {
 
     }
 
-    public String commentBox(String pathString) {
-        return "<div style='background-color: #fedae6; "
-                + "border: 2px solid black;"
-                + "padding: 20px;"
-                + "border-radius: 10px;"
-                + "width: 300px;"
-                + "margin: 20px ;"
-                + "text-align: center;'>"
-            
-                + "<form method='POST' action='" + pathString + "/nurses'>"
-                + "<div>"
-            
-                + "<textarea name='commInp' "
-                + "placeholder='Add a comment...' "
-                + "style='width:100%; height:120px; "
-                + "padding:8px; box-sizing:border-box; resize:vertical;'></textarea>"
-                + "<br/><br/>"
-            
-                + "<button type='submit' style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add comment</button>"
-        
-                + "</div>"
-                + "</form>"
-                + "</div>";
-    }
 
     
 
@@ -117,7 +93,7 @@ public class Nurse extends Adult implements Pageable {
                + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>" 
                + this.glucoseInputLayout(pathString, glucoseValue, time) 
                + this.feedingInputLayout(pathString, feedStart, feedDuration, feedType)
-               + this.commentBox(pathString)
+               + glucoseChart.commentBox(pathString)
                + "</div>"
                + glucoseChart.commentsInpLayout()
             
@@ -149,77 +125,77 @@ public class Nurse extends Adult implements Pageable {
 
     
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-    HttpSession session = req.getSession(true);
-
-    try {
-        //GLUCOSE INPUT 
-        String glucoseString = req.getParameter("glucoseInp");
-        String timeString = req.getParameter("timeInp");
-
-        if (glucoseString != null && !glucoseString.isEmpty() &&
-            timeString != null && !timeString.isEmpty()) {
-
-            List<Double> times = (List<Double>) session.getAttribute("timeList");
-            List<Double> glucoseValues = (List<Double>) session.getAttribute("glucoseList");
-            if (times == null) {
-                times = new ArrayList<>();
-                glucoseValues = new ArrayList<>();
-                session.setAttribute("timeList", times);
-                session.setAttribute("glucoseList", glucoseValues);
+        HttpSession session = req.getSession(true);
+    
+        try {
+            //GLUCOSE INPUT 
+            String glucoseString = req.getParameter("glucoseInp");
+            String timeString = req.getParameter("timeInp");
+    
+            if (glucoseString != null && !glucoseString.isEmpty() &&
+                timeString != null && !timeString.isEmpty()) {
+    
+                List<Double> times = (List<Double>) session.getAttribute("timeList");
+                List<Double> glucoseValues = (List<Double>) session.getAttribute("glucoseList");
+                if (times == null) {
+                    times = new ArrayList<>();
+                    glucoseValues = new ArrayList<>();
+                    session.setAttribute("timeList", times);
+                    session.setAttribute("glucoseList", glucoseValues);
+                }
+    
+                times.add(Double.parseDouble(timeString));
+                glucoseValues.add(Double.parseDouble(glucoseString));
             }
-
-            times.add(Double.parseDouble(timeString));
-            glucoseValues.add(Double.parseDouble(glucoseString));
-        }
-
-        // FEEDING INPUT 
-        String startString = req.getParameter("startInp");
-        String durString = req.getParameter("durInp");
-        String typeString = req.getParameter("typeInp");
-
-        if ((startString != null && !startString.isEmpty()) ||
-            (durString != null && !durString.isEmpty()) ||
-            (typeString != null && !typeString.isEmpty())) {
-
-            List<Double> feedStarts = (List<Double>) session.getAttribute("startList");
-            List<Double> feedDurations = (List<Double>) session.getAttribute("durationList");
-            List<String> feedTypes = (List<String>) session.getAttribute("typeList");
-            if (feedStarts == null) {
-                feedStarts = new ArrayList<>();
-                feedDurations = new ArrayList<>();
-                feedTypes = new ArrayList<>();
-                session.setAttribute("startList", feedStarts);
-                session.setAttribute("durationList", feedDurations);
-                session.setAttribute("typeList", feedTypes);
+    
+            // FEEDING INPUT 
+            String startString = req.getParameter("startInp");
+            String durString = req.getParameter("durInp");
+            String typeString = req.getParameter("typeInp");
+    
+            if ((startString != null && !startString.isEmpty()) ||
+                (durString != null && !durString.isEmpty()) ||
+                (typeString != null && !typeString.isEmpty())) {
+    
+                List<Double> feedStarts = (List<Double>) session.getAttribute("startList");
+                List<Double> feedDurations = (List<Double>) session.getAttribute("durationList");
+                List<String> feedTypes = (List<String>) session.getAttribute("typeList");
+                if (feedStarts == null) {
+                    feedStarts = new ArrayList<>();
+                    feedDurations = new ArrayList<>();
+                    feedTypes = new ArrayList<>();
+                    session.setAttribute("startList", feedStarts);
+                    session.setAttribute("durationList", feedDurations);
+                    session.setAttribute("typeList", feedTypes);
+                }
+    
+                if (startString != null && !startString.isEmpty()) feedStarts.add(Double.parseDouble(startString));
+                if (durString != null && !durString.isEmpty()) feedDurations.add(Double.parseDouble(durString));
+                if (typeString != null && !typeString.isEmpty()) feedTypes.add(typeString);
             }
-
-            if (startString != null && !startString.isEmpty()) feedStarts.add(Double.parseDouble(startString));
-            if (durString != null && !durString.isEmpty()) feedDurations.add(Double.parseDouble(durString));
-            if (typeString != null && !typeString.isEmpty()) feedTypes.add(typeString);
-        }
-
-        // COMMENTS 
-        String commentString = req.getParameter("commInp");
-        if (commentString != null && !commentString.isEmpty()) {
-            List<String> comments = (List<String>) session.getAttribute("commentsList");
-            if (comments == null) {
-                comments = new ArrayList<>();
-                session.setAttribute("commentsList", comments);
+    
+            // COMMENTS 
+            String commentString = req.getParameter("commInp");
+            if (commentString != null && !commentString.isEmpty()) {
+                List<String> comments = (List<String>) session.getAttribute("commentsList");
+                if (comments == null) {
+                    comments = new ArrayList<>();
+                    session.setAttribute("commentsList", comments);
+                }
+    
+                String nurseUsername = (String) session.getAttribute("username");
+                if (nurseUsername == null) nurseUsername = "Unknown Nurse";
+    
+                comments.add(nurseUsername + ": " + commentString);
             }
-
-            String nurseUsername = (String) session.getAttribute("username");
-            if (nurseUsername == null) nurseUsername = "Unknown Nurse";
-
-            comments.add(nurseUsername + ": " + commentString);
+    
+            // REDIRECT 
+            resp.sendRedirect(req.getContextPath() + "/nurses");
+    
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        // REDIRECT 
-        resp.sendRedirect(req.getContextPath() + "/nurses");
-
-    } catch (Exception e) {
-        e.printStackTrace();
     }
-}
 
 
     
