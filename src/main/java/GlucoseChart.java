@@ -255,26 +255,45 @@ public class GlucoseChart {
                 "</html>\n";
     }
 
-    public List<Double> getLimInp(){
-
+    public List<Double> getLimInp() {
         double upper = defaultUpper;
-        double lower = defaultLower; 
+        double lower = defaultLower;
+    
         if (session != null) {
             Object low = session.getAttribute("lowerLimit");
             Object upp = session.getAttribute("upperLimit");
     
-            if (low != null){
-                lower = (double) low;
+            if (low != null) {
+                if (low instanceof Double) {
+                    lower = (Double) low;
+                } else if (low instanceof String) {
+                    try {
+                        lower = Double.parseDouble((String) low);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace(); 
+                    }
+                }
             }
+    
             if (upp != null) {
-                upper = (double) upp;
+                if (upp instanceof Double) {
+                    upper = (Double) upp;
+                } else if (upp instanceof String) {
+                    try {
+                        upper = Double.parseDouble((String) upp);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
+    
         List<Double> result = new ArrayList<>();
-        result.add(lower); 
-        result.add(upper); 
-        return result;   
+        result.add(lower);
+        result.add(upper);
+        return result;
     }
+
     
     public List<List<Double>> getGlucInp() {
 
