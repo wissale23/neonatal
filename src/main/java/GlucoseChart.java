@@ -8,32 +8,37 @@ public class GlucoseChart {
     private final List<Double> timeData;
     private final List<Double> rawData;
     private final List<Double> smoothData;
-    private final double lower;
-    private final double upper;
-    private List<Double> sampleTimes;
-    private List<Double> sampleValues;
-    private List<Double> feedingStarts;
-    private List<Double> feedingDurations;
-    private List<String> feedingTypes;
-    private List<String> comments;
+
+    private final double defaultLower = 2.6;
+    private final double defaultUpper = 10.0;
+    private final double defaultGlucose = 0.0;
+    private final double defaultTime = 0.0;
+    private final double defaultFeedStart = 0.0;
+    private final double defaultFeedDuration = 0.0;
+    private final String defaultFeedType = "";
+    private final String defaultComment = "Add a comment";    
+    private HttpSession session;
+    private HttpServletRequest req;
 
 
     // Instantiate Data and Inputs
-    public GlucoseChart(List<Double> timeData, List<Double> rawData, List<Double> smoothData,
-                        double lower, double upper,List<Double> sampleValues,List<Double> sampleTimes,
-                        List<Double> feedingStarts, List<Double> feedingDurations, List<String> feedingTypes,List<String> comments) {
+    public GlucoseChart(HttpSession session, HttpServletRequest req,List<Double> timeData, List<Double> rawData, List<Double> smoothData) {
+        this.session = session;
+        this.req = req;
         this.timeData = timeData;
         this.rawData = rawData;
         this.smoothData = smoothData;
-        this.lower = lower;
-        this.upper = upper;
-        this.sampleValues = sampleValues;
-        this.sampleTimes = sampleTimes;
-        this.feedingStarts = feedingStarts;
-        this.feedingDurations = feedingDurations;
-        this.feedingTypes = feedingTypes;
-        this.comments = comments;
+        this.lower = getLimInp().get(0)
+        this.upper = getLimInp().get(1)
+        this.sampleValues = getGlucInp().get(0);
+        this.sampleTimes = getGlucInp().get(1);
+        this.feedingStarts = getFeedInp().get(0);
+        this.feedingDurations = getFeedInp().get(1);
+        this.feedingTypes = getFeedTypeInp();
+        this.comments = getComInp();
+        
     }
+
 
     // Plot Heel Prick Sample Inputs
     public String getSamples(){
@@ -158,6 +163,7 @@ public class GlucoseChart {
 
     // Display warning alert message box
     public String buildWarningHTML(List<Double> glucoseData) {
+        
         double latestGlucose = glucoseData.get(glucoseData.size() - 1);
         WarningSystem warningSystem = new WarningSystem(lower, upper);
 
@@ -246,4 +252,118 @@ public class GlucoseChart {
                 "</body>\n" +
                 "</html>\n";
     }
+
+    public double getLimInp(){
+
+        double upper = defaultUpper;
+        double lower = defaultLower; 
+        if (session != null) {
+            Object low = session.getAttribute("lowerLimit");
+            Object upp = session.getAttribute("upperLimit");
+    
+            if (low != null){
+                lower = (double) low;
+            }
+            if (upp != null) {
+                upper = (double) upp;
+            }
+        }
+        List<Double> result = new ArrayList<>();
+        result.add(lower); 
+        result.add(upper); 
+        return result;   
+    }
+    
+    public List<List<Double>> getGlucInp() {
+
+        List<Double> times = new ArrayList<>();
+        List<Double> glucoseValues = new ArrayList<>();
+    
+        if (session != null) {
+            Object t = session.getAttribute("timeList");
+            Object g = session.getAttribute("glucoseList");
+    
+            if (t instanceof List<?>) {
+                times = (List<Double>) t;
+            }
+            if (g instanceof List<?>) {
+                glucoseValues = (List<Double>) g;
+            }
+        }
+    
+        req.setAttribute("timeList", times);
+        req.setAttribute("glucoseList", glucoseValues);
+    
+        List<List<Double>> result = new ArrayList<>();
+        result.add(glucoseValues); 
+        result.add(times);         
+    
+        return result;
+    }
+
+    public List<List<Double>> getFeedInp(){
+        
+        List<Double> feedStarts = new ArrayList<>(); 
+        List<Double> feedDurations = new ArrayList<>();
+        
+        if (session != null) {
+            Object fs = session.getAttribute("startList");
+            Object fd = session.getAttribute("durationList");
+           
+
+            if (fs instanceof List<?>) {
+                feedStarts = (List<Double>) fs;
+            }
+            if (fd instanceof List<?>){
+                feedDurations = (List<Double>) fd;     
+            }
+        }
+        req.setAttribute("startList", feedStarts); 
+        req.setAttribute("durationList", feedDurations);
+        
+        List<List<Double>> result = new ArrayList<>();
+        result.add(feedStarts); 
+        result.add(feedDurations);         
+    
+        return result;
+    }
+
+    public List<String> getFeedTypeInp(){
+        
+        List<String> feedTypes = new ArrayList<>();
+    
+
+        if (session != null) {
+
+            Object ft = session.getAttribute("typeList");
+
+            if (ft instanceof List<?>) {
+                feedTypes = (List<String>) ft;
+            }
+        }
+        req.setAttribute("typeList", feedTypes);
+        return feedTypes;
+
+    }    
+
+     public List<String> getComInp(){
+        
+        List<String> comments = new ArrayList<>();
+    
+
+        if (session != null) {
+
+            Object com = session.getAttribute("commentsList");    
+
+            if (com instanceof List<?>) {
+                comments = (List<String>) com;
+            }
+        }
+        req.setAttribute("commentsList",comments);    
+        return comments;
+
+    }    
+
+    
+                
 }
