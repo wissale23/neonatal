@@ -147,82 +147,80 @@ public class Nurse extends Adult implements Pageable {
         resp.getWriter().write(nursePage(glucoseChart, req.getContextPath(), glucoseValue,time,feedStart,feedDuration,feedType));
     }
 
-    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
-        HttpSession session = req.getSession(true);
+    
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    HttpSession session = req.getSession(true);
 
+    try {
+        //GLUCOSE INPUT 
         String glucoseString = req.getParameter("glucoseInp");
         String timeString = req.getParameter("timeInp");
-        String startString = req.getParameter("startInp");
-        String durString = req.getParameter("durInp");
-        String typeString = req.getParameter("typeInp");
-        String commentString = req.getParameter("commInp");    
-                
-        List<Double> times = (List<Double>) session.getAttribute("timeList");
-        List<Double> glucoseValues = (List<Double>) session.getAttribute("glucoseList");
-        List<Double> feedStarts = (List<Double>) session.getAttribute("startList");
-        List<Double> feedDurations = (List<Double>) session.getAttribute("durationList");
-        List<String> feedTypes = (List<String>) session.getAttribute("typeList");
-        List<String> comments = (List<String>) session.getAttribute("commentsList");
 
-                
-        if (times == null) {
-            times = new ArrayList<>();
-            glucoseValues = new ArrayList<>();
-            session.setAttribute("timeList", times);
-            session.setAttribute("glucoseList", glucoseValues);
-        }
-
-        try {
-            if (glucoseString != null && !glucoseString.isEmpty() &&
+        if (glucoseString != null && !glucoseString.isEmpty() &&
             timeString != null && !timeString.isEmpty()) {
+
+            List<Double> times = (List<Double>) session.getAttribute("timeList");
+            List<Double> glucoseValues = (List<Double>) session.getAttribute("glucoseList");
+            if (times == null) {
+                times = new ArrayList<>();
+                glucoseValues = new ArrayList<>();
+                session.setAttribute("timeList", times);
+                session.setAttribute("glucoseList", glucoseValues);
+            }
 
             times.add(Double.parseDouble(timeString));
             glucoseValues.add(Double.parseDouble(glucoseString));
+        }
+
+        // FEEDING INPUT 
+        String startString = req.getParameter("startInp");
+        String durString = req.getParameter("durInp");
+        String typeString = req.getParameter("typeInp");
+
+        if ((startString != null && !startString.isEmpty()) ||
+            (durString != null && !durString.isEmpty()) ||
+            (typeString != null && !typeString.isEmpty())) {
+
+            List<Double> feedStarts = (List<Double>) session.getAttribute("startList");
+            List<Double> feedDurations = (List<Double>) session.getAttribute("durationList");
+            List<String> feedTypes = (List<String>) session.getAttribute("typeList");
+            if (feedStarts == null) {
+                feedStarts = new ArrayList<>();
+                feedDurations = new ArrayList<>();
+                feedTypes = new ArrayList<>();
+                session.setAttribute("startList", feedStarts);
+                session.setAttribute("durationList", feedDurations);
+                session.setAttribute("typeList", feedTypes);
             }
-        } catch (NumberFormatException e) {
-            e.printStackTrace(); // later again
+
+            if (startString != null && !startString.isEmpty()) feedStarts.add(Double.parseDouble(startString));
+            if (durString != null && !durString.isEmpty()) feedDurations.add(Double.parseDouble(durString));
+            if (typeString != null && !typeString.isEmpty()) feedTypes.add(typeString);
         }
 
-        if (feedStarts == null) {
-            feedStarts = new ArrayList<>();
-            feedDurations = new ArrayList<>();
-            feedTypes = new ArrayList<>();
-            session.setAttribute("startList", feedStarts);
-            session.setAttribute("durationList", feedDurations);
-            session.setAttribute("typeList", feedTypes);
-        }
-
-        try {
-            if (startString != null && !startString.isEmpty() &&
-                durString != null && !durString.isEmpty() && 
-                typeString != null && !typeString.isEmpty()) {
-
-                feedStarts.add(Double.parseDouble(startString));
-                feedDurations.add(Double.parseDouble(durString));
-                feedTypes.add(typeString);
-            }
-        } catch (NumberFormatException e) {
-            e.printStackTrace(); // later again
-        }
-                        
-           
-        if (comments == null) {
-            comments = new ArrayList<>();
-            session.setAttribute("commentsList", comments);
-        }
-
-            
+        // COMMENTS 
+        String commentString = req.getParameter("commInp");
         if (commentString != null && !commentString.isEmpty()) {
-            String nurseUsername = (String) session.getAttribute("username");    
+            List<String> comments = (List<String>) session.getAttribute("commentsList");
+            if (comments == null) {
+                comments = new ArrayList<>();
+                session.setAttribute("commentsList", comments);
+            }
+
+            String nurseUsername = (String) session.getAttribute("username");
+            if (nurseUsername == null) nurseUsername = "Unknown Nurse";
 
             comments.add(nurseUsername + ": " + commentString);
         }
-         
 
+        // REDIRECT 
         resp.sendRedirect(req.getContextPath() + "/nurses");
-        return;
+
+    } catch (Exception e) {
+        e.printStackTrace();
     }
-      
+}
+
 
     
     public List<Double> getGlucValue(HttpSession session) {
