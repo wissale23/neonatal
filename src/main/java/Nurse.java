@@ -110,7 +110,7 @@ public class Nurse extends Adult implements Pageable {
     }
 
 
-    public String nursePage(GlucoseChart glucoseChart, String pathString,double glucoseValue, double time,double feedStart, double feedDuration, String feedType) {
+    public String nursePage(GlucoseChart glucoseChart, String pathString,double glucoseValue, double time,double feedStart, double feedDuration, String feedType,List<String> comments) {
 
         return glucoseChart.generateHTML() 
                + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>" 
@@ -118,7 +118,7 @@ public class Nurse extends Adult implements Pageable {
                + this.feedingInputLayout(pathString, feedStart, feedDuration, feedType)
                + this.nurseCommentBox(pathString)
                + "</div>"
-               + glucoseChart.commentsInpLayout()
+               + glucoseChart.commentsInpLayout(comments)
             
                + "</body></html>";
 
@@ -142,8 +142,9 @@ public class Nurse extends Adult implements Pageable {
         double feedStart = getFeedValue(session).get(0);
         double feedDuration = getFeedValue(session).get(1);
         String feedType = getFeedStr(session);
-        
-        resp.getWriter().write(nursePage(glucoseChart, req.getContextPath(), glucoseValue,time,feedStart,feedDuration,feedType));
+        List<String> comments = GlucoseChart.getComments(session);
+
+        resp.getWriter().write(nursePage(glucoseChart, req.getContextPath(), glucoseValue,time,feedStart,feedDuration,feedType,comments));
     }
 
     
@@ -199,27 +200,20 @@ public class Nurse extends Adult implements Pageable {
     
             // COMMENTS 
             String commentString = req.getParameter("commInp");
-            if (commentString != null && !commentString.isEmpty()) {
-                List<String> comments = (List<String>) session.getAttribute("commentsList");
-                if (comments == null) {
-                    comments = new ArrayList<>();
-                    session.setAttribute("commentsList", comments);
-                }
+            String consultUsername = (String) session.getAttribute("username");
+            if (consultUsername == null) consultUsername = "Unknown Consultant";
     
-                String nurseUsername = (String) session.getAttribute("username");
-                if (nurseUsername == null) nurseUsername = "Unknown Nurse";
+            GlucoseChart.addComment(session, consultUsername, commentString);
     
-                comments.add(nurseUsername + ": " + commentString);
-            }
-    
-            // REDIRECT 
+        
+                // REDIRECT 
             resp.sendRedirect(req.getContextPath() + "/nurses");
-    
-        } catch (Exception e) {
-            e.printStackTrace();
+        
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
-
 
     
     public List<Double> getGlucValue(HttpSession session) {
