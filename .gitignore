@@ -41,3 +41,7 @@ bin/
 
 ### Mac OS ###
 .DS_Store.idea/gradle.xml
+
+# macOS + IntelliJ
+.DS_Store
+.idea/

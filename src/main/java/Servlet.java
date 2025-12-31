@@ -15,13 +15,9 @@ public class Servlet extends HttpServlet {
     private final List<Double> userRawValues = new ArrayList<>();
     private final List<Double> userSmoothValues = new ArrayList<>();
 
-    // Demo "hospital accounts" for MVP (pre-provisioned externally)
-
-    // private final Map<String, String> passwords = new HashMap<>();   // username -> password
-    // private final Map<String, String> roles = new HashMap<>();       // username -> role
+    // Auth and login
     private AuthManager auth;
     private LoginPageView loginView;
-
 
     // Resource file paths
     private final String TIME_FILE = "/t_glu.txt";
@@ -36,23 +32,7 @@ public class Servlet extends HttpServlet {
     private final double defaultFeedStart = 0.0;
     private final double defaultFeedDuration = 0.0;
     private final String defaultFeedType = "";
-    private final String defaultComment = "Add a comment";    
-
-    //@Override
-    // public void init() {
-        // Demo accounts (replace with real hospital identity system later)
-    //    passwords.put("nurse1", "nursepass");
-    //    roles.put("nurse1", "nurse");
-
-    //    passwords.put("consult1", "consultpass");
-    //    roles.put("consult1", "consultant");
-
-    //    passwords.put("parent1", "parentpass");
-            //    roles.put("parent1", "parent");
-
-    //    passwords.put("research1", "researchpass");
-    //    roles.put("research1", "researcher");
-    //}
+    private final String defaultComment = "Add a comment";
 
     @Override
     public void init() {
@@ -72,7 +52,7 @@ public class Servlet extends HttpServlet {
 
         String path = req.getServletPath();
 
-        // 1) "/" and "/login" now show the SAME login page (no role selection anymore)
+        // Login page
         if ("/".equals(path) || "/login".equals(path)) {
             String error = req.getParameter("error");
             String msg = "";
@@ -92,7 +72,7 @@ public class Servlet extends HttpServlet {
             return;
         }
 
-        // 2) Logout stays, but redirect to login (or "/" also works since "/" is login now)
+        // Logout
         if ("/logout".equals(path)) {
             auth.logout(req);
             resp.sendRedirect(req.getContextPath() + "/login");
@@ -101,7 +81,7 @@ public class Servlet extends HttpServlet {
 
         resp.setContentType("text/html");
 
-        // 3) Enforce login + correct role for role-specific endpoints
+        // Protect role pages
         if ("/nurses".equals(path) || "/consultants".equals(path) || "/parents".equals(path) || "/researchers".equals(path) || "/admin".equals(path)) {
             String redirect = auth.redirectIfNotAllowed(path, req);
             if (redirect != null) {
@@ -110,7 +90,6 @@ public class Servlet extends HttpServlet {
             }
         }
 
-        // From here down: your existing logic, unchanged
         HttpSession session = req.getSession(false);
 
         double lower = defaultLower;
@@ -198,10 +177,7 @@ public class Servlet extends HttpServlet {
             List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
 
             ConsultantServlet consult = new ConsultantServlet(lower, upper);
-            resp.getWriter().write(
-                    consult.consultPage(session, timeData, rawData, smoothData, glucoseValues, times,
-                            feedStarts, feedDurations, feedTypes, comments, req.getContextPath())
-            );
+            resp.getWriter().write(consult.consultPage(session, timeData, rawData, smoothData, glucoseValues, times, feedStarts, feedDurations, feedTypes, comments, req.getContextPath()));
 
         } else if ("/nurses".equals(path)) {
 
@@ -212,13 +188,9 @@ public class Servlet extends HttpServlet {
             rawData.addAll(userRawValues);
 
             NurseServlet nurseServ = new NurseServlet(gluc, time_, feedStart, feedDur, feedType);
-            resp.getWriter().write(
-                    nurseServ.nursePage(timeData, rawData, smoothData, lower, upper, glucoseValues, times,
-                            feedStarts, feedDurations, feedTypes, comments, req.getContextPath())
-            );
+            resp.getWriter().write(nurseServ.nursePage(timeData, rawData, smoothData, lower, upper, glucoseValues, times, feedStarts, feedDurations, feedTypes, comments, req.getContextPath()));
 
         } else if ("/researchers".equals(path)) {
-
             resp.setContentType("text/html");
             resp.getWriter().write(
                     "<h1>Researcher Portal</h1>" +
@@ -237,7 +209,6 @@ public class Servlet extends HttpServlet {
 
             ParentChart chart = new ParentChart(timeData, rawData, smoothData, 2.6, 10.0);
             resp.getWriter().write(chart.generateHTML());
-
 
         } else if ("/admin".equals(path)) {
             String status = req.getParameter("status");
@@ -260,51 +231,6 @@ public class Servlet extends HttpServlet {
 
     }
 
-    //    @Override
-//    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        if ("/login".equals(req.getServletPath())) {
-//            String chosenRole = req.getParameter("role");
-//            String username = req.getParameter("username");
-//            String password = req.getParameter("password");
-//
-//            if (username == null) username = "";
-//            if (password == null) password = "";
-//            username = username.trim();
-//
-//            // 1) user not found
-//            if (!passwords.containsKey(username)) {
-//                resp.sendRedirect(req.getContextPath() + "/login?role=" + chosenRole + "&error=user_not_found");
-//                return;
-//            }
-//
-//            // 2) wrong password
-//            if (!passwords.get(username).equals(password)) {
-//                resp.sendRedirect(req.getContextPath() + "/login?role=" + chosenRole + "&error=wrong_password");
-//                return;
-//            }
-//
-//            // 3) role mismatch (picked Nurse but used consultant account, etc.)
-//            String actualRole = roles.get(username);
-//            if (chosenRole == null) chosenRole = "";
-//            if (!chosenRole.equals(actualRole)) {
-//                resp.sendRedirect(req.getContextPath() + "/login?role=" + chosenRole + "&error=role_mismatch");
-//                return;
-//            }
-//
-//            // success
-//            HttpSession session = req.getSession(true);
-//            session.setAttribute("role", actualRole);
-//            session.setAttribute("username", username);
-//
-//            String target;
-//            if ("nurse".equals(actualRole)) target = "/nurses";
-//            else if ("consultant".equals(actualRole)) target = "/consultants";
-//            else if ("parent".equals(actualRole)) target = "/parents";
-//            else target = "/researchers";
-//
-//            resp.sendRedirect(req.getContextPath() + target);
-//            return;
-//        }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -324,13 +250,11 @@ public class Servlet extends HttpServlet {
                 return;
             }
 
-            // Success: role is determined by the account (not chosen by the user)
+            // Role comes from the account
             String cleanUsername = (username == null) ? "" : username.trim();
             String role = result.getRole();
 
             auth.startSession(req, cleanUsername, role);
-
-            // Redirect to role home
             resp.sendRedirect(req.getContextPath() + auth.homeForRole(role));
             return;
         }
@@ -371,6 +295,7 @@ public class Servlet extends HttpServlet {
         }
 
         if ("/researchers".equals(req.getServletPath())) {
+
             HttpSession s = req.getSession(false);
             String role = (s == null) ? null : (String) s.getAttribute("role");
             if (!"researcher".equals(role)) {
@@ -380,16 +305,13 @@ public class Servlet extends HttpServlet {
 
             String action = req.getParameter("action");
             if ("download".equals(action)) {
-                // Load all data files
                 List<Double> timeData = loadDataFromResource(TIME_FILE);
                 List<Double> rawData = loadDataFromResource(RAW_FILE);
                 List<Double> smoothData = loadDataFromResource(SMOOTH_FILE);
 
-                // Set headers for file download
                 resp.setContentType("text/csv");
                 resp.setHeader("Content-Disposition", "attachment; filename=\"glucose_data.csv\"");
 
-                // Write CSV content
                 PrintWriter writer = resp.getWriter();
                 writer.println("Time,Raw_Glucose_uM,Smoothed_Glucose_uM");
 
@@ -401,167 +323,141 @@ public class Servlet extends HttpServlet {
                     writer.println(time + "," + raw + "," + smooth);
                 }
                 writer.flush();
-                return;
-            }
-        }
-
-        if ("/consultants".equals(req.getServletPath())) {
-            HttpSession session = req.getSession(true);
-        
-            String lowerString = req.getParameter("lowerLimit");
-            String upperString = req.getParameter("upperLimit");
-                
-            try {
-                if (lowerString != null && !lowerString.isEmpty()) {
-                    session.setAttribute("lowerLimit", Double.parseDouble(lowerString));
-                }
-                if (upperString != null && !upperString.isEmpty()) {
-                    session.setAttribute("upperLimit", Double.parseDouble(upperString));
-                }
-            } catch (NumberFormatException e) {
-               e.printStackTrace(); // change this later to link that displays error message
-
+                writer.close();
             }
 
-            resp.sendRedirect(req.getContextPath() + "/consultants");
-            return;    
-        }
-            
-        
-        if ("/nurses".equals(req.getServletPath())) {
-            HttpSession session = req.getSession(true);
-
-            String glucoseString = req.getParameter("glucoseInp");
-            String timeString = req.getParameter("timeInp");
-            String startString = req.getParameter("startInp");
-            String durString = req.getParameter("durInp");
-            String typeString = req.getParameter("typeInp");
-            String commentString = req.getParameter("commInp");    
-                
-            List<Double> times = (List<Double>) session.getAttribute("timeList");
-            List<Double> glucoseValues = (List<Double>) session.getAttribute("glucoseList");
-            List<Double> feedStarts = (List<Double>) session.getAttribute("startList");
-            List<Double> feedDurations = (List<Double>) session.getAttribute("durationList");
-            List<String> feedTypes = (List<String>) session.getAttribute("typeList");
-            List<String> comments = (List<String>) session.getAttribute("commentsList");
-
-                
-            if (times == null) {
-                times = new ArrayList<>();
-                glucoseValues = new ArrayList<>();
-                session.setAttribute("timeList", times);
-                session.setAttribute("glucoseList", glucoseValues);
-            }
-
-            try {
-                if (glucoseString != null && !glucoseString.isEmpty() &&
-                        timeString != null && !timeString.isEmpty()) {
-
-                    times.add(Double.parseDouble(timeString));
-                    glucoseValues.add(Double.parseDouble(glucoseString));
-                }
-            } catch (NumberFormatException e) {
-                e.printStackTrace(); // later again
-            }
-
-            if (feedStarts == null) {
-                feedStarts = new ArrayList<>();
-                feedDurations = new ArrayList<>();
-                feedTypes = new ArrayList<>();
-                session.setAttribute("startList", feedStarts);
-                session.setAttribute("durationList", feedDurations);
-                session.setAttribute("typeList", feedTypes);
-            }
-
-            try {
-                if (startString != null && !startString.isEmpty() &&
-                    durString != null && !durString.isEmpty() && 
-                    typeString != null && !typeString.isEmpty()) {
-
-                    feedStarts.add(Double.parseDouble(startString));
-                    feedDurations.add(Double.parseDouble(durString));
-                    feedTypes.add(typeString);
-                }
-            } catch (NumberFormatException e) {
-                e.printStackTrace(); // later again
-            }
-                        
-           
-           if (comments == null) {
-                comments = new ArrayList<>();
-                session.setAttribute("commentsList", comments);
-            }
-
-            
-            if (commentString != null && !commentString.isEmpty()) {
-                String nurseUsername = (String) session.getAttribute("username");    
-
-                comments.add(nurseUsername + ": " + commentString);
-            }
-         
-
-            resp.sendRedirect(req.getContextPath() + "/nurses");
             return;
         }
 
-        
-        
+        HttpSession session = req.getSession(false);
 
-        // Basic session-based access control for POST requests (nurses only)
-        if (!"/nurses".equals(req.getServletPath())) {
-           resp.sendError(405);
-           return;
+        if (session == null) {
+            resp.sendRedirect(req.getContextPath() + "/login?error=login_required");
+            return;
         }
 
-        HttpSession s = req.getSession(false);
-        String role = (s == null) ? null : (String) s.getAttribute("role");
-        if (!"nurse".equals(role) && !"consultant".equals(role)) {
+        String role = (String) session.getAttribute("role");
+        if (!"nurse".equals(role)) {
             resp.sendError(403);
             return;
         }
 
-        // Read user-submitted blood glucose value
-        String reqBody = req.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-        try {
-            double raw = Double.parseDouble(reqBody);
-            userRawValues.add(raw);
-            resp.getWriter().write("Value submitted: " + raw);
-        } catch (NumberFormatException e) {
-            resp.sendError(400, "Invalid number");
+        String lowerString = req.getParameter("lowerLimit");
+        String upperString = req.getParameter("upperLimit");
+        String glucString = req.getParameter("glucoseInp");
+        String timeString = req.getParameter("timeInp");
+        String startString = req.getParameter("startInp");
+        String durString = req.getParameter("durInp");
+        String typeString = req.getParameter("typeInp");
+        String commentString = req.getParameter("commInp");
+
+        if (lowerString != null && !lowerString.isEmpty()) {
+            session.setAttribute("lowerLimit", Double.parseDouble(lowerString));
+        }
+        if (upperString != null && !upperString.isEmpty()) {
+            session.setAttribute("upperLimit", Double.parseDouble(upperString));
         }
 
+        if (glucString != null && !glucString.isEmpty()) {
+            session.setAttribute("glucoseInp", Double.parseDouble(glucString));
+        }
+        if (timeString != null && !timeString.isEmpty()) {
+            session.setAttribute("timeInp", Double.parseDouble(timeString));
+        }
+        if (startString != null && !startString.isEmpty()) {
+            session.setAttribute("startInp", Double.parseDouble(startString));
+        }
+        if (durString != null && !durString.isEmpty()) {
+            session.setAttribute("durInp", Double.parseDouble(durString));
+        }
+        if (typeString != null && !typeString.isEmpty()) {
+            session.setAttribute("typeInp", typeString);
+        }
+        if (commentString != null && !commentString.isEmpty()) {
+            session.setAttribute("commInp", commentString);
+        }
 
-            
+        List<Double> times = (List<Double>) session.getAttribute("timeList");
+        List<Double> glucoseValues = (List<Double>) session.getAttribute("glucoseList");
+        List<Double> feedStarts = (List<Double>) session.getAttribute("startList");
+        List<Double> feedDurations = (List<Double>) session.getAttribute("durationList");
+        List<String> feedTypes = (List<String>) session.getAttribute("typeList");
+        List<String> comments = (List<String>) session.getAttribute("commentsList");
 
-   
+        if (times == null) {
+            times = new ArrayList<>();
+            session.setAttribute("timeList", times);
+        }
+        if (glucoseValues == null) {
+            glucoseValues = new ArrayList<>();
+            session.setAttribute("glucoseList", glucoseValues);
+        }
+        if (feedStarts == null) {
+            feedStarts = new ArrayList<>();
+            session.setAttribute("startList", feedStarts);
+        }
+        if (feedDurations == null) {
+            feedDurations = new ArrayList<>();
+            session.setAttribute("durationList", feedDurations);
+        }
+        if (feedTypes == null) {
+            feedTypes = new ArrayList<>();
+            session.setAttribute("typeList", feedTypes);
+        }
+
+        if (glucString != null && !glucString.isEmpty() && timeString != null && !timeString.isEmpty()) {
+            try {
+                glucoseValues.add(Double.parseDouble(glucString));
+                times.add(Double.parseDouble(timeString));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (startString != null && !startString.isEmpty() &&
+                durString != null && !durString.isEmpty() &&
+                typeString != null && !typeString.isEmpty()) {
+
+            try {
+                feedStarts.add(Double.parseDouble(startString));
+                feedDurations.add(Double.parseDouble(durString));
+                feedTypes.add(typeString);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (comments == null) {
+            comments = new ArrayList<>();
+            session.setAttribute("commentsList", comments);
+        }
+
+        if (commentString != null && !commentString.isEmpty()) {
+            String nurseUsername = (String) session.getAttribute("username");
+            comments.add(nurseUsername + ": " + commentString);
+        }
+
+        resp.sendRedirect(req.getContextPath() + "/nurses");
     }
 
-        
-
-    // Helper method to read doubles from resources in the WAR
-    private List<Double> loadDataFromResource(String resourcePath) {
-        List<Double> result = new ArrayList<>();
-        try (InputStream is = getClass().getResourceAsStream(resourcePath);
-             BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
-
-            if (is == null) {
-                throw new FileNotFoundException("Resource not found: " + resourcePath);
-            }
-
+    private List<Double> loadDataFromResource(String filename) {
+        List<Double> data = new ArrayList<>();
+        try (InputStream input = getClass().getResourceAsStream(filename);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(input))) {
             String line;
-            while ((line = br.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 line = line.trim();
                 if (!line.isEmpty()) {
                     try {
-                            result.add(Double.parseDouble(line));
-                        } catch (NumberFormatException ignored) {
-                            // skip headers or labels
-                        }
+                        data.add(Double.parseDouble(line));
+                    } catch (NumberFormatException ignored) {
+                        // skip headers or labels
+                    }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return result;
+        return data;
     }
 }

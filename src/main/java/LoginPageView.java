@@ -55,7 +55,6 @@ public class LoginPageView {
                 "<select name='newRole' required>" +
                 "<option value='nurse'>Nurse</option>" +
                 "<option value='consultant'>Consultant</option>" +
-                "<option value='parent'>Parent</option>" +
                 "<option value='researcher'>Researcher</option>" +
                 "<option value='admin'>Admin</option>" +
                 "</select></div>" +

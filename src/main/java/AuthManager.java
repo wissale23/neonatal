@@ -137,8 +137,7 @@ public class AuthManager {
     }
 
     private boolean isValidRole(String role) {
-        return "admin".equals(role) || "nurse".equals(role) || "consultant".equals(role)
-                || "parent".equals(role) || "researcher".equals(role);
+        return "admin".equals(role) || "nurse".equals(role) || "consultant".equals(role) || "researcher".equals(role);
     }
 
     private String normalizeRole(String role) {
