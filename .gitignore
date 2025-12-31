@@ -40,10 +40,9 @@ bin/
 .vscode/
 
 ### Mac OS ###
-.DS_Store.idea/gradle.xml
-
-# macOS + IntelliJ
 .DS_Store
+
+# IntelliJ
 .idea/
 .idea/misc.xml
 .idea/gradle.xml
