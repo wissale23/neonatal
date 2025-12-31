@@ -3,22 +3,15 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Single place for:
- * - accounts (in-memory demo provisioning)
- * - username/password authentication
- * - session setup (role + username)
- * - role-based home redirects
- * - access checks for role endpoints
- * - ADMIN: create new accounts
- */
 public class AuthManager {
+
+    // Handles login + session role checks, using an in-memory store for demo accounts
 
     public enum Error { MISSING_CREDENTIALS, USER_NOT_FOUND, WRONG_PASSWORD }
 
     public static class AuthResult {
         private final boolean ok;
-        private final String role;   // "nurse", "consultant", "parent", "researcher", "admin"
+        private final String role;   // nurse / consultant / parent / researcher / admin
         private final Error error;
 
         private AuthResult(boolean ok, String role, Error error) {
@@ -35,7 +28,6 @@ public class AuthManager {
         public Error getError() { return error; }
     }
 
-    // ===== ADMIN account creation result types =====
     public enum CreateError { MISSING_FIELDS, USERNAME_TAKEN, INVALID_ROLE }
 
     public static class CreateResult {
@@ -53,18 +45,18 @@ public class AuthManager {
         public boolean isOk() { return ok; }
         public CreateError getError() { return error; }
     }
-    // ==============================================
 
     private static class Account {
         final String password;
         final String role;
+
         Account(String password, String role) {
             this.password = password;
             this.role = role;
         }
     }
 
-    private final Map<String, Account> accounts = new HashMap<>();
+    private final Map<String, Account> accounts = new HashMap<>(); // in-memory "accounts DB"
 
     public void addUser(String username, String password, String role) {
         if (username == null) throw new IllegalArgumentException("username null");
@@ -90,7 +82,7 @@ public class AuthManager {
     public void startSession(HttpServletRequest req, String username, String role) {
         HttpSession session = req.getSession(true);
         session.setAttribute("username", username);
-        session.setAttribute("role", normalizeRole(role));
+        session.setAttribute("role", normalizeRole(role)); // normalise so comparisons work reliably
     }
 
     public void logout(HttpServletRequest req) {
@@ -107,7 +99,7 @@ public class AuthManager {
 
     public String homeForRole(String role) {
         String r = normalizeRole(role);
-        if ("admin".equals(r)) return "/admin";              // ✅ admin home
+        if ("admin".equals(r)) return "/admin";
         if ("nurse".equals(r)) return "/nurses";
         if ("consultant".equals(r)) return "/consultants";
         if ("parent".equals(r)) return "/parents";
@@ -115,20 +107,13 @@ public class AuthManager {
         return "/login?error=login_required";
     }
 
-    /**
-     * Returns a relative redirect path (starting with "/") if access is not allowed, else null.
-     * Use ONLY for role pages (/nurses, /consultants, /parents, /researchers, /admin).
-     */
+    // Returns where the user should be redirected if they try to access the wrong page
     public String redirectIfNotAllowed(String servletPath, HttpServletRequest req) {
         String role = currentRole(req);
 
-        // Not logged in => must login
-        if (role == null) {
-            return "/login?error=login_required";
-        }
+        if (role == null) return "/login?error=login_required";
 
-        // Logged in but wrong page => send them to THEIR home
-        if ("/admin".equals(servletPath) && !"admin".equals(role)) return homeForRole(role); // ✅ protect admin
+        if ("/admin".equals(servletPath) && !"admin".equals(role)) return homeForRole(role);
         if ("/nurses".equals(servletPath) && !"nurse".equals(role)) return homeForRole(role);
         if ("/consultants".equals(servletPath) && !"consultant".equals(role)) return homeForRole(role);
         if ("/parents".equals(servletPath) && !"parent".equals(role)) return homeForRole(role);
@@ -137,7 +122,7 @@ public class AuthManager {
         return null;
     }
 
-    // ===== ADMIN: create a new account =====
+    // Admin creates new accounts here (still in-memory)
     public CreateResult createUser(String username, String password, String role) {
         String u = (username == null) ? "" : username.trim();
         String p = (password == null) ? "" : password;
@@ -152,11 +137,9 @@ public class AuthManager {
     }
 
     private boolean isValidRole(String role) {
-        // admin exists, but you can choose not to expose it in the admin UI
         return "admin".equals(role) || "nurse".equals(role) || "consultant".equals(role)
                 || "parent".equals(role) || "researcher".equals(role);
     }
-    // ======================================
 
     private String normalizeRole(String role) {
         return (role == null) ? "" : role.trim().toLowerCase();

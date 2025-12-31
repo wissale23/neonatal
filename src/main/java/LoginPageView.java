@@ -1,5 +1,7 @@
 public class LoginPageView {
 
+    // Builds the HTML for login + admin pages so Servlet.java stays cleaner
+
     public String render(String contextPath, String messageHtml) {
         String msg = (messageHtml == null) ? "" : messageHtml;
 
@@ -25,7 +27,6 @@ public class LoginPageView {
                 "</form></div></body></html>";
     }
 
-    // NEW: Admin page (create accounts)
     public String renderAdminPage(String contextPath, String messageHtml) {
         String msg = (messageHtml == null) ? "" : messageHtml;
 
@@ -70,13 +71,13 @@ public class LoginPageView {
         return "<div class='err'>" + escape(text) + "</div>";
     }
 
-    // NEW: success message box
     public static String okBox(String text) {
         if (text == null || text.trim().isEmpty()) return "";
         return "<div class='ok'>" + escape(text) + "</div>";
     }
 
     private static String escape(String s) {
+        // Escape to avoid HTML injection in messages
         return s.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")
                 .replace("\"","&quot;").replace("'","&#39;");
     }
