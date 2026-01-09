@@ -24,7 +24,9 @@ public class Servlet extends HttpServlet {
     @Override
     public void init() {
         // Adding babies
-        Baby baby1 = new Baby("baby1",2,"/t_glu.txt","/glu_uM_unsmoothed1.txt","/glu_uM_smoothed1.txt");
+        Baby baby1 = new Baby("baby1",2,"/t_glu1.txt","/glu_uM_unsmoothed1.txt","/glu_uM_smoothed1.txt");
+        Baby baby2 = new Baby("baby2",56,"/t_glu2.txt","/glu_uM_unsmoothed2.txt","/glu_uM_smoothed2.txt");
+
 
         // Demo accounts (replace with real hospital identity system later)
 
