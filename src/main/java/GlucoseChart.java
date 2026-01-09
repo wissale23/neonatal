@@ -255,34 +255,25 @@ public class GlucoseChart {
 
 
     public List<Double> getLimInp() {
-        double lower = defaultLower;
-        double upper = defaultUpper;
-
-        // 1️⃣ Try session first
+        double lower, upper;
+    
+        // Always load latest from DB
+        double[] dbLimits = loadLimitsFromDB();
+        lower = dbLimits[0];
+        upper = dbLimits[1];
+    
+        // Optional: store in session for faster access
         if (session != null) {
-            Object low = session.getAttribute("lowerLimit");
-            Object upp = session.getAttribute("upperLimit");
-
-            if (low instanceof Double && upp instanceof Double) {
-                lower = (double) low;
-                upper = (double) upp;
-            } else {
-                // 2️⃣ Fallback to database
-                double[] dbLimits = loadLimitsFromDB();
-                lower = dbLimits[0];
-                upper = dbLimits[1];
-
-                // 3️⃣ Store back into session for reuse
-                session.setAttribute("lowerLimit", lower);
-                session.setAttribute("upperLimit", upper);
-            }
+            session.setAttribute("lowerLimit", lower);
+            session.setAttribute("upperLimit", upper);
         }
-
+    
         List<Double> result = new ArrayList<>();
         result.add(lower);
         result.add(upper);
         return result;
     }
+
 
 
 
