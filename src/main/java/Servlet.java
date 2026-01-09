@@ -19,18 +19,12 @@ public class Servlet extends HttpServlet {
     private final Map<String, String> passwords = new HashMap<>();   // username -> password
     private final Map<String, String> roles = new HashMap<>();       // username -> role
 
-    // Resource file paths
-    private final String TIME_FILE = "/t_glu.txt";
-    private final String RAW_FILE = "/glu_uM_unsmoothed.txt";
-    private final String SMOOTH_FILE = "/glu_uM_smoothed.txt";
-
-
     private ArrayList<Adult> users = new ArrayList<Adult>();
 
     @Override
     public void init() {
         // Adding babies
-        Baby baby1 = new Baby("baby1",2,TIME_FILE,RAW_FILE,SMOOTH_FILE);
+        Baby baby1 = new Baby("baby1",2,"/t_glu.txt","/glu_uM_unsmoothed1.txt","/glu_uM_smoothed1.txt");
 
         // Demo accounts (replace with real hospital identity system later)
 
