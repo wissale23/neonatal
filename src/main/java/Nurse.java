@@ -10,16 +10,15 @@ import javax.servlet.ServletException;
 
 
 public class Nurse extends Adult implements Pageable {
-    
+
     private final double defaultGlucose = 0.0;
     private final double defaultTime = 0.0;
     private final double defaultFeedStart = 0.0;
     private final double defaultFeedDuration = 0.0;
     private final String defaultFeedType = "";
-    private final String defaultComment = "Add a comment";  
+    private final String defaultComment = "Add a comment";
 
-    
-    public Nurse (String name, int id, String endpoint) {
+    public Nurse(String name, int id, String endpoint) {
         super(name, id, endpoint);
     }
 
@@ -184,86 +183,82 @@ public class Nurse extends Adult implements Pageable {
     }
 
 
-        public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-            HttpSession session = req.getSession();
-            Baby baby = BabyPatientList.getBaby((int) session.getAttribute("babyId"));
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        HttpSession session = req.getSession();
+        Baby baby = BabyPatientList.getBaby((int) session.getAttribute("babyId"));
 
-            if (req.getParameter("glucoseInp") != null)
-                baby.addSample(
-                        Double.parseDouble(req.getParameter("timeInp")),
-                        Double.parseDouble(req.getParameter("glucoseInp"))
-                );
+        if (req.getParameter("glucoseInp") != null)
+            baby.addSample(
+                    Double.parseDouble(req.getParameter("timeInp")),
+                    Double.parseDouble(req.getParameter("glucoseInp"))
+            );
 
-            if (req.getParameter("startInp") != null)
-                baby.addFeeding(
-                        Double.parseDouble(req.getParameter("startInp")),
-                        Double.parseDouble(req.getParameter("durInp")),
-                        req.getParameter("typeInp")
-                );
+        if (req.getParameter("startInp") != null)
+            baby.addFeeding(
+                    Double.parseDouble(req.getParameter("startInp")),
+                    Double.parseDouble(req.getParameter("durInp")),
+                    req.getParameter("typeInp")
+            );
 
-            if (req.getParameter("commInp") != null)
-                baby.addComment(
-                        (String) session.getAttribute("username"),
-                        req.getParameter("commInp")
-                );
+        if (req.getParameter("commInp") != null)
+            baby.addComment(
+                    (String) session.getAttribute("username"),
+                    req.getParameter("commInp")
+            );
 
-            resp.sendRedirect(req.getContextPath() + "/nurses");
-        }
+        resp.sendRedirect(req.getContextPath() + "/nurses");
+    }
 
-
+    // Get last glucose value from session
     public List<Double> getGlucValue(HttpSession session) {
         double glucose = defaultGlucose;
         double time = defaultTime;
-    
+
         if (session != null) {
             List<Double> glucoseList = (List<Double>) session.getAttribute("glucoseList");
             List<Double> timeList = (List<Double>) session.getAttribute("timeList");
-    
-            if (glucoseList != null && !glucoseList.isEmpty()) {
-                glucose = glucoseList.get(glucoseList.size() - 1); 
-            }
-            if (timeList != null && !timeList.isEmpty()) {
+
+            if (glucoseList != null && !glucoseList.isEmpty())
+                glucose = glucoseList.get(glucoseList.size() - 1);
+            if (timeList != null && !timeList.isEmpty())
                 time = timeList.get(timeList.size() - 1);
-            }
         }
-    
+
         List<Double> result = new ArrayList<>();
         result.add(glucose);
         result.add(time);
         return result;
+    }
 
-    }   
-
+    // Get last feeding values from session
     public List<Double> getFeedValue(HttpSession session) {
-        double feedStart = defaultFeedStart;
-        double feedDur = defaultFeedDuration;
-    
+        double start = defaultFeedStart;
+        double dur = defaultFeedDuration;
+
         if (session != null) {
             List<Double> startList = (List<Double>) session.getAttribute("startList");
-            List<Double> durationList = (List<Double>) session.getAttribute("durationList");
-    
-            if (startList != null && !startList.isEmpty()) {
-                feedStart = startList.get(startList.size() - 1);
-            }
-            if (durationList != null && !durationList.isEmpty()) {
-                feedDur = durationList.get(durationList.size() - 1);
-            }
-        }
-    
-        List<Double> result = new ArrayList<>();
-        result.add(feedStart);
-        result.add(feedDur);
-        return result;
-     }
+            List<Double> durList = (List<Double>) session.getAttribute("durationList");
 
+            if (startList != null && !startList.isEmpty())
+                start = startList.get(startList.size() - 1);
+            if (durList != null && !durList.isEmpty())
+                dur = durList.get(durList.size() - 1);
+        }
+
+        List<Double> result = new ArrayList<>();
+        result.add(start);
+        result.add(dur);
+        return result;
+    }
+
+    // Get last feed type
     public String getFeedStr(HttpSession session) {
-        String feedType = defaultFeedType;
+        String type = defaultFeedType;
         if (session != null) {
             List<String> typeList = (List<String>) session.getAttribute("typeList");
-            if (typeList != null && !typeList.isEmpty()) {
-                feedType = typeList.get(typeList.size() - 1);
-            }
+            if (typeList != null && !typeList.isEmpty())
+                type = typeList.get(typeList.size() - 1);
         }
-        return feedType;
+        return type;
     }
 }

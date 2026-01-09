@@ -223,124 +223,48 @@ public class GlucoseChart {
     }
 
 
-    public List<Double> getLimInp() {
-        double lower, upper;
-    
-        // Always load latest from DB
-        double[] dbLimits = loadLimitsFromDB();
-        lower = dbLimits[0];
-        upper = dbLimits[1];
-    
-        // Optional: store in session for faster access
-        if (session != null) {
-            session.setAttribute("lowerLimit", lower);
-            session.setAttribute("upperLimit", upper);
-        }
-    
-        List<Double> result = new ArrayList<>();
-        result.add(lower);
-        result.add(upper);
-        return result;
-    }
+//    public List<Double> getLimInp() {
+//        double lower, upper;
+//
+//        // Always load latest from DB
+//        double[] dbLimits = loadLimitsFromDB();
+//        lower = dbLimits[0];
+//        upper = dbLimits[1];
+//
+//        // Optional: store in session for faster access
+//        if (session != null) {
+//            session.setAttribute("lowerLimit", lower);
+//            session.setAttribute("upperLimit", upper);
+//        }
+//
+//        List<Double> result = new ArrayList<>();
+//        result.add(lower);
+//        result.add(upper);
+//        return result;
+//    }
 
-
-
-
-    public List<List<Double>> getGlucInp() {
-
-        List<Double> times = new ArrayList<>();
-        List<Double> glucoseValues = new ArrayList<>();
-    
-        if (session != null) {
-            Object t = session.getAttribute("timeList");
-            Object g = session.getAttribute("glucoseList");
-    
-            if (t instanceof List<?>) {
-                times = (List<Double>) t;
-            }
-            if (g instanceof List<?>) {
-                glucoseValues = (List<Double>) g;
-            }
-        }
-    
-        req.setAttribute("timeList", times);
-        req.setAttribute("glucoseList", glucoseValues);
-    
-        List<List<Double>> result = new ArrayList<>();
-        result.add(glucoseValues); 
-        result.add(times);         
-    
-        return result;
-    }
-
-    public List<List<Double>> getFeedInp(){
-        
-        List<Double> feedStarts = new ArrayList<>(); 
-        List<Double> feedDurations = new ArrayList<>();
-        
-        if (session != null) {
-            Object fs = session.getAttribute("startList");
-            Object fd = session.getAttribute("durationList");
-           
-
-            if (fs instanceof List<?>) {
-                feedStarts = (List<Double>) fs;
-            }
-            if (fd instanceof List<?>){
-                feedDurations = (List<Double>) fd;     
-            }
-        }
-        req.setAttribute("startList", feedStarts); 
-        req.setAttribute("durationList", feedDurations);
-        
-        List<List<Double>> result = new ArrayList<>();
-        result.add(feedStarts); 
-        result.add(feedDurations);         
-    
-        return result;
-    }
-
-    public List<String> getFeedTypeInp(){
-        
-        List<String> feedTypes = new ArrayList<>();
-    
-
-        if (session != null) {
-
-            Object ft = session.getAttribute("typeList");
-
-            if (ft instanceof List<?>) {
-                feedTypes = (List<String>) ft;
-            }
-        }
-        req.setAttribute("typeList", feedTypes);
-        return feedTypes;
-
-    }
-    private double[] loadLimitsFromDB() {
-        double[] limits = { defaultLower, defaultUpper };
-
-        String sql = "SELECT lower_limit, upper_limit FROM limits ORDER BY id DESC LIMIT 1";
-
-        try (Connection conn = DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/yourdb",
-                "youruser",
-                "yourpassword");
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            if (rs.next()) {
-                limits[0] = rs.getDouble("lower_limit");
-                limits[1] = rs.getDouble("upper_limit");
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return limits;
-    }
-
-
-}    
+//    private double[] loadLimitsFromDB() {
+//        double[] limits = { defaultLower, defaultUpper };
+//
+//        String sql = "SELECT lower_limit, upper_limit FROM limits ORDER BY id DESC LIMIT 1";
+//
+//        try (Connection conn = DriverManager.getConnection(
+//                "jdbc:postgresql://localhost:5432/yourdb",
+//                "youruser",
+//                "yourpassword");
+//             PreparedStatement ps = conn.prepareStatement(sql);
+//             ResultSet rs = ps.executeQuery()) {
+//
+//            if (rs.next()) {
+//                limits[0] = rs.getDouble("lower_limit");
+//                limits[1] = rs.getDouble("upper_limit");
+//            }
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return limits;
+//    }
+}
 
