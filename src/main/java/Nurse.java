@@ -22,7 +22,27 @@ public class Nurse extends Adult implements Pageable {
     public Nurse (String name, int id, String endpoint) {
         super(name, id, endpoint);
     }
-    
+
+    private String babyDropdown(int selectedId, String contextPath) {
+        // Get all babies from your BabyStore or database
+        List<Baby> babies = BabyPatientList.getAll();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("<form method='get' action='").append(contextPath).append("/nurse'>");
+        sb.append("Select Baby: <select name='babyId' onchange='this.form.submit()'>");
+
+        for (Baby b : babies) {
+            sb.append("<option value='").append(b.getId()).append("'");
+            if (b.getId() == selectedId) {
+                sb.append(" selected");
+            }
+            sb.append(">").append(b.getName()).append("</option>");
+        }
+
+        sb.append("</select>");
+        sb.append("</form><br>");
+        return sb.toString();
+    }
 
     public String glucoseInputLayout(String pathString,double glucoseValue, double time){
         return "<div style='background-color: #fedae6; "
@@ -113,33 +133,44 @@ public class Nurse extends Adult implements Pageable {
     }
 
 
-    public String nursePage(GlucoseChart glucoseChart, String pathString,double glucoseValue, double time,double feedStart, double feedDuration, String feedType,List<String> comments) {
+    public String nursePage(GlucoseChart glucoseChart, HttpServletRequest req, int babyId,
+                            double glucoseValue, double time,
+                            double feedStart, double feedDuration, String feedType,
+                            List<String> comments) {
 
-        return glucoseChart.generateHTML() 
-               + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px; align-items:flex-start;'>"
-               + this.glucoseInputLayout(pathString, glucoseValue, time) 
-               + this.feedingInputLayout(pathString, feedStart, feedDuration, feedType)
-               + this.nurseCommentBox(pathString)
-               + "</div>"
-               + glucoseChart.commentsInpLayout(comments)
-            
-               + "</body></html>";
-
+        return "<html><head><title>Nurse Dashboard</title></head><body>"
+                + "<h1>Nurse Dashboard</h1>"
+                + babyDropdown(babyId, req.getContextPath())
+                + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px; align-items:flex-start;'>"
+                + glucoseInputLayout(req.getContextPath(), glucoseValue, time)
+                + feedingInputLayout(req.getContextPath(), feedStart, feedDuration, feedType)
+                + nurseCommentBox(req.getContextPath())
+                + "</div>"
+                + glucoseChart.generateHTML()
+                + glucoseChart.commentsInpLayout(comments)
+                + "</body></html>";
     }
 
-    
-        
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        // Load data from files
-        HttpSession session = req.getSession(false);
+        HttpSession session = req.getSession();
 
-        List<Double> timeData = getPatients().get(0).getTimeData();
-        List<Double> rawData = getPatients().get(0).getRawData();
-        List<Double> smoothData = getPatients().get(0).getSmoothData();
-        
-        GlucoseChart glucoseChart = new GlucoseChart(session, req,timeData, rawData, smoothData);
+        // Get babyId from dropdown or session, default to first baby
+        int babyId = 1;
+        if (req.getParameter("babyId") != null) {
+            babyId = Integer.parseInt(req.getParameter("babyId"));
+        } else if (session.getAttribute("babyId") != null) {
+            babyId = (int) session.getAttribute("babyId");
+        }
+        session.setAttribute("babyId", babyId);
 
+        // Get selected baby
+        Baby baby = BabyPatientList.getBaby(babyId);
+
+        // Create chart for selected baby
+        GlucoseChart glucoseChart = new GlucoseChart(baby);
+
+        // Get latest values for input forms
         double glucoseValue = getGlucValue(session).get(0);
         double time = getGlucValue(session).get(1);
         double feedStart = getFeedValue(session).get(0);
@@ -147,78 +178,39 @@ public class Nurse extends Adult implements Pageable {
         String feedType = getFeedStr(session);
         List<String> comments = GlucoseChart.getComments(session);
 
-        resp.getWriter().write(nursePage(glucoseChart, req.getContextPath(), glucoseValue,time,feedStart,feedDuration,feedType,comments));
+        resp.setContentType("text/html");
+        resp.getWriter().write(nursePage(glucoseChart, req, babyId,
+                glucoseValue, time, feedStart, feedDuration, feedType, comments));
     }
 
-    
-    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        HttpSession session = req.getSession(true);
-    
-        try {
-            //GLUCOSE INPUT 
-            String glucoseString = req.getParameter("glucoseInp");
-            String timeString = req.getParameter("timeInp");
-    
-            if (glucoseString != null && !glucoseString.isEmpty() &&
-                timeString != null && !timeString.isEmpty()) {
-    
-                List<Double> times = (List<Double>) session.getAttribute("timeList");
-                List<Double> glucoseValues = (List<Double>) session.getAttribute("glucoseList");
-                if (times == null) {
-                    times = new ArrayList<>();
-                    glucoseValues = new ArrayList<>();
-                    session.setAttribute("timeList", times);
-                    session.setAttribute("glucoseList", glucoseValues);
-                }
-    
-                times.add(Double.parseDouble(timeString));
-                glucoseValues.add(Double.parseDouble(glucoseString));
-            }
-    
-            // FEEDING INPUT 
-            String startString = req.getParameter("startInp");
-            String durString = req.getParameter("durInp");
-            String typeString = req.getParameter("typeInp");
-    
-            if ((startString != null && !startString.isEmpty()) ||
-                (durString != null && !durString.isEmpty()) ||
-                (typeString != null && !typeString.isEmpty())) {
-    
-                List<Double> feedStarts = (List<Double>) session.getAttribute("startList");
-                List<Double> feedDurations = (List<Double>) session.getAttribute("durationList");
-                List<String> feedTypes = (List<String>) session.getAttribute("typeList");
-                if (feedStarts == null) {
-                    feedStarts = new ArrayList<>();
-                    feedDurations = new ArrayList<>();
-                    feedTypes = new ArrayList<>();
-                    session.setAttribute("startList", feedStarts);
-                    session.setAttribute("durationList", feedDurations);
-                    session.setAttribute("typeList", feedTypes);
-                }
-    
-                if (startString != null && !startString.isEmpty()) feedStarts.add(Double.parseDouble(startString));
-                if (durString != null && !durString.isEmpty()) feedDurations.add(Double.parseDouble(durString));
-                if (typeString != null && !typeString.isEmpty()) feedTypes.add(typeString);
-            }
-    
-            // COMMENTS 
-            String commentString = req.getParameter("commInp");
-            String consultUsername = (String) session.getAttribute("username");
-            if (consultUsername == null) consultUsername = "Unknown Consultant";
-    
-            GlucoseChart.addComment(session, consultUsername, commentString);
-    
-        
-                // REDIRECT 
-            resp.sendRedirect(req.getContextPath() + "/nurses");
-        
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    
 
-    
+        public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+            HttpSession session = req.getSession();
+            Baby baby = BabyPatientList.getBaby((int) session.getAttribute("babyId"));
+
+            if (req.getParameter("glucoseInp") != null)
+                baby.addSample(
+                        Double.parseDouble(req.getParameter("timeInp")),
+                        Double.parseDouble(req.getParameter("glucoseInp"))
+                );
+
+            if (req.getParameter("startInp") != null)
+                baby.addFeeding(
+                        Double.parseDouble(req.getParameter("startInp")),
+                        Double.parseDouble(req.getParameter("durInp")),
+                        req.getParameter("typeInp")
+                );
+
+            if (req.getParameter("commInp") != null)
+                baby.addComment(
+                        (String) session.getAttribute("username"),
+                        req.getParameter("commInp")
+                );
+
+            resp.sendRedirect(req.getContextPath() + "/nurses");
+        }
+
+
     public List<Double> getGlucValue(HttpSession session) {
         double glucose = defaultGlucose;
         double time = defaultTime;
