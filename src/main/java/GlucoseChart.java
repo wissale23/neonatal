@@ -1,3 +1,4 @@
+import java.sql.*;
 import java.util.List;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -253,29 +254,37 @@ public class GlucoseChart {
     }
 
     public List<Double> getLimInp() {
-        double upper = defaultUpper;
         double lower = defaultLower;
-    
+        double upper = defaultUpper;
+
+        // 1️⃣ Try session first
         if (session != null) {
             Object low = session.getAttribute("lowerLimit");
             Object upp = session.getAttribute("upperLimit");
-    
-            if (low != null){
+
+            if (low instanceof Double && upp instanceof Double) {
                 lower = (double) low;
-            }
-            if (upp != null) {
                 upper = (double) upp;
+            } else {
+                // 2️⃣ Fallback to database
+                double[] dbLimits = loadLimitsFromDB();
+                lower = dbLimits[0];
+                upper = dbLimits[1];
+
+                // 3️⃣ Store back into session for reuse
+                session.setAttribute("lowerLimit", lower);
+                session.setAttribute("upperLimit", upper);
             }
-            
         }
-    
+
         List<Double> result = new ArrayList<>();
         result.add(lower);
         result.add(upper);
         return result;
     }
 
-    
+
+
     public List<List<Double>> getGlucInp() {
 
         List<Double> times = new ArrayList<>();
@@ -346,28 +355,31 @@ public class GlucoseChart {
         req.setAttribute("typeList", feedTypes);
         return feedTypes;
 
-    }  
+    }
+    private double[] loadLimitsFromDB() {
+        double[] limits = { defaultLower, defaultUpper };
+
+        String sql = "SELECT lower_limit, upper_limit FROM limits ORDER BY id DESC LIMIT 1";
+
+        try (Connection conn = DriverManager.getConnection(
+                "jdbc:postgresql://localhost:5432/yourdb",
+                "youruser",
+                "yourpassword");
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                limits[0] = rs.getDouble("lower_limit");
+                limits[1] = rs.getDouble("upper_limit");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return limits;
+    }
+
 
 }    
-/*
-     public List<String> getComInp(){
-        
-        List<String> comments = new ArrayList<>();
-    
-
-        if (session != null) {
-
-            Object com = session.getAttribute("commentsList");    
-
-            if (com instanceof List<?>) {
-                comments = (List<String>) com;
-            }
-        }
-        req.setAttribute("commentsList",comments);    
-        return comments;
-
-    }    
-
-*/
-                
 
