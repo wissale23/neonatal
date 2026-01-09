@@ -8,56 +8,27 @@ import java.util.ArrayList;
 
 
 public class GlucoseChart {
-
-    private final List<Double> timeData;
-    private final List<Double> rawData;
-    private final List<Double> smoothData;
-    private double lower, upper;
-    private List<Double> sampleValues, sampleTimes;
-    private List<Double> feedingStarts, feedingDurations;
-    private List<String> feedingTypes, comments;
-
-
-    private final double defaultLower = 2.6;
-    private final double defaultUpper = 10.0;
-    private HttpSession session;
-    private HttpServletRequest req;
-
+    private final Baby baby;
 
     // Instantiate Data and Inputs
-    public GlucoseChart(HttpSession session, HttpServletRequest req,List<Double> timeData, List<Double> rawData, List<Double> smoothData) {
-        this.session = session;
-        this.req = req;
-        this.timeData = timeData;
-        this.rawData = rawData;
-        this.smoothData = smoothData;
-        this.lower = getLimInp().get(0);
-        this.upper = getLimInp().get(1);
-        this.sampleValues = getGlucInp().get(0);
-        this.sampleTimes = getGlucInp().get(1);
-        this.feedingStarts = getFeedInp().get(0);
-        this.feedingDurations = getFeedInp().get(1);
-        this.feedingTypes = getFeedTypeInp();
-        
+    public GlucoseChart(Baby baby) {
+        this.baby = baby;
     }
-
 
     // Plot Heel Prick Sample Inputs
     public String getSamples(){
         String sampleTriangles = "";
-        if (sampleTimes != null && sampleValues != null) {
-            for (int i = 0; i < sampleTimes.size(); i++) {
-                sampleTriangles = sampleTriangles + "sample" + i + ": {\n" +
-                        "  type: 'point',\n" +
-                        "  xValue: " + sampleTimes.get(i) + ",\n" +
-                        "  yValue: " + sampleValues.get(i) + ",\n" +
-                        "  yScaleID: 'y2',\n" +
-                        "  radius: 6,\n" +
-                        "  pointStyle: 'triangle',\n" +
-                        "  backgroundColor: 'rgb(220,0,0)',\n" +
-                        "  borderColor: 'rgb(220,0,0)'\n" +
-                        "},\n";
-            }
+        for (int i = 0; i < baby.getSampleTimes().size(); i++) {
+            sampleTriangles += "sample" + i + ": {\n" +
+                    "  type: 'point',\n" +
+                    "  xValue: " + baby.getSampleTimes().get(i) + ",\n" +
+                    "  yValue: " + baby.getSampleValues().get(i) + ",\n" +
+                    "  yScaleID: 'y2',\n" +
+                    "  radius: 6,\n" +
+                    "  pointStyle: 'triangle',\n" +
+                    "  backgroundColor: 'rgb(220,0,0)',\n" +
+                    "  borderColor: 'rgb(220,0,0)'\n" +
+                    "},\n";
         }
         return sampleTriangles;
     }
@@ -128,35 +99,33 @@ public class GlucoseChart {
 
 
 
-
     // Plot Feeding Times, Feeding Durations, and Feeding Descriptions
     public String getFeedings(){
         String feedingBars = "";
-        if (feedingStarts != null && feedingDurations != null && feedingTypes != null) {
-            for (int i = 0; i < feedingStarts.size(); i++) {
-                double start = feedingStarts.get(i);
-                double end = start + feedingDurations.get(i);
-                String type = feedingTypes.get(i);
-                feedingBars = feedingBars + "feed" + i + ": {\n" +
-                        "  type: 'box',\n" +
-                        "  xMin: " + start + ",\n" +
-                        "  xMax: " + end + ",\n" +
-                        "  yScaleID: 'y2',\n" +
-                        "  yMin: 0,\n" +
-                        "  yMax: 12,\n" +
-                        "  backgroundColor: 'rgba(0,0,255,0.25)',\n" +
-                        "  borderColor: 'rgb(0,0,255)',\n" +
-                        "  borderWidth: 1,\n" +
-                        "  drawTime: 'beforeDatasetsDraw',\n" +
-                        "  label: {\n" +
-                        "    display: true,\n" +
-                        "    content: '" + type + "',\n" +
-                        "    position: 'center',\n" +
-                        "    color: 'rgb(0,0,255)',\n" +
-                        "    font: { size: 11, weight: 'bold' }\n" +
-                        "  }\n" +
-                        " },\n";
-            }
+        for (int i = 0; i < baby.getFeedStarts().size(); i++) {
+            double start = baby.getFeedStarts().get(i);
+            double end = start + baby.getFeedDurations().get(i);
+            String type = baby.getFeedTypes().get(i);
+
+            feedingBars += "feed" + i + ": {\n" +
+                    "  type: 'box',\n" +
+                    "  xMin: " + start + ",\n" +
+                    "  xMax: " + end + ",\n" +
+                    "  yScaleID: 'y2',\n" +
+                    "  yMin: 0,\n" +
+                    "  yMax: 12,\n" +
+                    "  backgroundColor: 'rgba(0,0,255,0.25)',\n" +
+                    "  borderColor: 'rgb(0,0,255)',\n" +
+                    "  borderWidth: 1,\n" +
+                    "  drawTime: 'beforeDatasetsDraw',\n" +
+                    "  label: {\n" +
+                    "    display: true,\n" +
+                    "    content: '" + type + "',\n" +
+                    "    position: 'center',\n" +
+                    "    color: 'rgb(0,0,255)',\n" +
+                    "    font: { size: 11, weight: 'bold' }\n" +
+                    "  }\n" +
+                    " },\n";
         }
         return feedingBars;
     }
@@ -165,17 +134,17 @@ public class GlucoseChart {
     public String buildWarningHTML(List<Double> glucoseData) {
         
         double latestGlucose = glucoseData.get(glucoseData.size() - 1);
-        WarningSystem warningSystem = new WarningSystem(lower, upper);
+        WarningSystem warningSystem = new WarningSystem(baby.getLowerRange(), baby.getUpperRange());
 
         return AlertRenderer.buildAlertHTML(warningSystem, latestGlucose);
     }
 
 
     public String generateHTML() {
-        String timeArray = timeData.toString();
-        String rawArray = rawData.toString();
-        String smoothArray = smoothData.toString();
-        String warningHTML = buildWarningHTML(rawData);
+        String timeArray = baby.getTimeData().toString();
+        String rawArray = baby.getRawData().toString();
+        String smoothArray = baby.getSmoothData().toString();
+        String warningHTML = buildWarningHTML(baby.getRawData());
 
         return "<!DOCTYPE html>\n" +
                 "<html>\n" +
@@ -196,8 +165,8 @@ public class GlucoseChart {
                 "    const labels = " + timeArray + ";\n" +
                 "    const rawData = " + rawArray + ";\n" +
                 "    const smoothData = " + smoothArray + ";\n" +
-                "    const LOWER = " + lower + ";\n" +
-                "    const UPPER = " + upper+ ";\n" +
+                "    const LOWER = " + baby.getLowerRange() + ";\n" +
+                "    const UPPER = " + baby.getUpperRange() + ";\n" +
                 "\n" +
             // Plot Chart
                 "    Chart.register(window['chartjs-plugin-annotation']);\n" +
@@ -241,8 +210,8 @@ public class GlucoseChart {
                 "              normal: { type: 'box', yScaleID: 'y2', yMin: LOWER, yMax: UPPER, backgroundColor: 'rgba(144,238,144,0.35)', drawTime: 'beforeDatasetsDraw', label: { content: 'Blood Glucose: Normal Range', display: true, color: '#1b5e20', font: { size: 12 } } },\n" +
                 "              high: { type: 'box', yScaleID: 'y2',  yMin: UPPER, yMax: 12, backgroundColor: 'rgba(216,216,216,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Blood Glucose: Above Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
             // Plot Heel Prick Sample inputs
-                               this.getSamples() +
-                               this.getFeedings() +
+                               getSamples() +
+                               getFeedings() +
                 "            }\n" +
                 "          }\n" +
                 "        }\n" +
