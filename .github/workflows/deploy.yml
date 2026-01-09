@@ -5,6 +5,7 @@ on:
     branches:
       - main  # Trigger on push to the main branch. Change this as needed.
       - OOP
+      - Database
 jobs:
   deploy:
     runs-on: ubuntu-latest
