@@ -9,6 +9,8 @@ public class Baby extends Person{
     private List<Double> timeData;
     private List<Double> rawData;
     private List<Double> smoothData;
+    private final List<Double> sampleTimes = new ArrayList<>();
+    private final List<Double> sampleValues = new ArrayList<>();
 
     public Baby(String name, int id, String timePath, String rawPath, String smoothPath) {
         super(name, id);
