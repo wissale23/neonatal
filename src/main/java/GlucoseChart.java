@@ -253,6 +253,7 @@ public class GlucoseChart {
                 "</html>\n";
     }
 
+
     public List<Double> getLimInp() {
         double lower = defaultLower;
         double upper = defaultUpper;
