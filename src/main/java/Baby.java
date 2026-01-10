@@ -94,6 +94,11 @@ public class Baby extends Person{
         this.lowerRange = lower;
         this.upperRange = upper;
     }
+    public void removeLastSample() {
+        if (!sampleTimes.isEmpty()) sampleTimes.remove(sampleTimes.size() - 1);
+        if (!sampleValues.isEmpty()) sampleValues.remove(sampleValues.size() - 1);
+    }
+
 
 
     public void addComment(String username, String commentText) {
