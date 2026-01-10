@@ -29,50 +29,53 @@ public class Nurse extends Adult implements Pageable {
     
         StringBuilder sb = new StringBuilder();
     
-        // Design of Dropdown container
+        // Design of Dropdown
         sb.append(
                 "<div style='"
                         + "background:#e3f2fd;"
-                        + "border:4px solid #1565c0;"
-                        + "border-radius:12px;"
-                        + "padding:20px;"
+                        + "border:3px solid #1565c0;"
+                        + "border-radius:10px;"
+                        + "padding:15px 25px;"
                         + "margin:20px auto;"
-                        + "width:420px;"
+                        + "width:380px;"
+                        + "max-width:90%;"
                         + "text-align:center;"
-                        + "font-size:18px;"
+                        + "font-size:16px;"
                         + "font-weight:bold;"
-                        + "color:#0d47a1;'>"
+                        + "color:#0d47a1;"
+                        + "box-shadow: 0 4px 8px rgba(0,0,0,0.1);"
+                        + "transition: all 0.2s ease-in-out;'>"
         );
-    
-        // Form
+
+// Form
         sb.append("<form method='get' action='")
-          .append(contextPath)
-          .append("/nurses'>");
-    
-        sb.append("<label style='margin-right:10px;'>SELECT BABY:</label>");
-    
-        // Dropdown
+                .append(contextPath)
+                .append("/nurses'>");
+        sb.append("<label style='margin-right:8px; font-size:16px;'>SELECT BABY:</label>");
         sb.append(
                 "<select name='babyId' "
                         + "onchange='this.form.submit()' "
                         + "style='"
-                        + "font-size:20px;"
-                        + "padding:8px 14px;"
-                        + "border:3px solid #1565c0;"
-                        + "border-radius:8px;"
+                        + "font-size:16px;"
+                        + "padding:6px 12px;"
+                        + "border:2px solid #1565c0;"
+                        + "border-radius:6px;"
                         + "background:#ffffff;"
-                        + "color:#0d47a1;'>"
+                        + "color:#0d47a1;"
+                        + "cursor:pointer;"
+                        + "transition: all 0.2s ease-in-out;'>"
         );
-    
-        // Options
-        for (Baby b : babies) {
-            sb.append("<option value='").append(b.getId()).append("'");
-            if (b.getId() == selectedId) {
-                sb.append(" selected");
-            }
-            sb.append(">").append(b.getName()).append("</option>");
+
+
+        for (Baby b : BabyPatientList.getAll()) {
+            sb.append("<option value='")
+                    .append(b.getId()).append("'")
+                    .append(b.getId() == selectedId ? " selected" : "")
+                    .append(">")
+                    .append(b.getName())
+                    .append("</option>");
         }
-    
+
         sb.append("</select>");
         sb.append("</form>");
         sb.append("</div>");
@@ -179,14 +182,15 @@ public class Nurse extends Adult implements Pageable {
                 + "<html><head>"
                 + "<title>Nurse Dashboard</title>"
                 + "</head><body>"
-                + babyDropdown(babyId, req.getContextPath())
                 + "<h1 style='text-align:center;'>Nurse Dashboard</h1>"
+                + babyDropdown(babyId, req.getContextPath())
+                + "</div>"
+                + glucoseChart.generateHTML()
                 + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>"
                 + glucoseInputLayout(req.getContextPath(), glucoseValue, time)
                 + feedingInputLayout(req.getContextPath(), feedStart, feedDuration, feedType)
                 + nurseCommentBox(req.getContextPath())
                 + "</div>"
-                + glucoseChart.generateHTML()
                 + glucoseChart.commentsInpLayout(comments)
                 + "</body></html>";
     }
