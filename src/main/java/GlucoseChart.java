@@ -1,6 +1,9 @@
 import java.util.List;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 
 
 public class GlucoseChart {
@@ -8,32 +11,35 @@ public class GlucoseChart {
     private final List<Double> timeData;
     private final List<Double> rawData;
     private final List<Double> smoothData;
-    private final double lower;
-    private final double upper;
-    private List<Double> sampleTimes;
-    private List<Double> sampleValues;
-    private List<Double> feedingStarts;
-    private List<Double> feedingDurations;
-    private List<String> feedingTypes;
-    private List<String> comments;
+    private double lower, upper;
+    private List<Double> sampleValues, sampleTimes;
+    private List<Double> feedingStarts, feedingDurations;
+    private List<String> feedingTypes, comments;
+
+
+    private final double defaultLower = 2.6;
+    private final double defaultUpper = 10.0;
+    private HttpSession session;
+    private HttpServletRequest req;
 
 
     // Instantiate Data and Inputs
-    public GlucoseChart(List<Double> timeData, List<Double> rawData, List<Double> smoothData,
-                        double lower, double upper,List<Double> sampleValues,List<Double> sampleTimes,
-                        List<Double> feedingStarts, List<Double> feedingDurations, List<String> feedingTypes,List<String> comments) {
+    public GlucoseChart(HttpSession session, HttpServletRequest req,List<Double> timeData, List<Double> rawData, List<Double> smoothData) {
+        this.session = session;
+        this.req = req;
         this.timeData = timeData;
         this.rawData = rawData;
         this.smoothData = smoothData;
-        this.lower = lower;
-        this.upper = upper;
-        this.sampleValues = sampleValues;
-        this.sampleTimes = sampleTimes;
-        this.feedingStarts = feedingStarts;
-        this.feedingDurations = feedingDurations;
-        this.feedingTypes = feedingTypes;
-        this.comments = comments;
+        this.lower = getLimInp().get(0);
+        this.upper = getLimInp().get(1);
+        this.sampleValues = getGlucInp().get(0);
+        this.sampleTimes = getGlucInp().get(1);
+        this.feedingStarts = getFeedInp().get(0);
+        this.feedingDurations = getFeedInp().get(1);
+        this.feedingTypes = getFeedTypeInp();
+        
     }
+
 
     // Plot Heel Prick Sample Inputs
     public String getSamples(){
@@ -54,74 +60,72 @@ public class GlucoseChart {
         }
         return sampleTriangles;
     }
-    //concatenating comments
-    public String getComments() {
-        String commentsString = "";
-    
-        if (comments != null) {
-            for (int i = 0; i < comments.size(); i++) {
-                commentsString +=
-                    "<option value='" + i + "'>" +
-                    "Comment " + (i + 1) +
-                    "</option>";
-            }
+
+    public static List<String> getComments(HttpSession session) {
+        List<String> comments = (List<String>) session.getAttribute("commentsList");
+        if (comments == null) {
+            comments = new ArrayList<>();
+            session.setAttribute("commentsList", comments);
         }
-    
-        return commentsString;
+        return comments;
     }
+
+
     //adding new comment to select whenever there is a new one
 
-    public String getCommentsStorage() {
+    public static void addComment(HttpSession session, String username, String commentText) {
 
-        DateTimeFormatter formatter =  DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-    
-        String commentsStore = "[";
-    
-        if (comments != null) {
-            for (int i = 0; i < comments.size(); i++) {
-    
-                String time = LocalDateTime.now().format(formatter);
-    
-                String commentWithTime = time + "\n" + comments.get(i);
-    
-                commentsStore += "\"" +
-                        commentWithTime
-                            .replace("\\", "\\\\")  // backslashes woudl end the string so we have to remove them
-                            .replace("\"", "\\\"")  // quotes will also end the string so wwe have to remove them
-                            .replace("\n", "\\n")  
-                        + "\"";
-    
-                if (i < comments.size() - 1) {
-                    commentsStore += ",";
-                }
-            }
-        }
-    
-        commentsStore += "]";
-        return commentsStore;
+        if (commentText == null || commentText.isEmpty()) return;
+        List<String> comments = getComments(session);
+        String time = LocalDateTime.now().format(
+            DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+        comments.add(time + "\n" + username + ": " + commentText);
     }
 
 
 
-    public String commentsInpLayout(){
-        return "<script>\n" +
-                "    const comments = " + getCommentsStorage() + ";\n" +
-                "\n" +
-                "    function showComment(index) {\n" +
-                "      document.getElementById('commentCanvas').innerText = comments[index];\n" +
-                "    }\n"+    
-                "</script>\n" +
-                "<div id='commentCanvas' " +
-                "style='margin-top:15px; padding:10px; " +
-                "border:2px solid black; width:400px; min-height:60px; max-height:150px; overflow-y:auto;'>" +
-                "Select a comment to view it" +
-                "</div>"+
-            
-                "<select onchange='showComment(this.value)'>"+
-                "<option disabled selected>See all comments</option>"+
-                 getComments()+
-                "</select>";
-    }    
+    public String commentsInpLayout(List<String> comments) {
+
+        String options = "";
+        for (int i = 0; i < comments.size(); i++) {
+            options += "<option value='" + i + "'>Comment " + (i + 1) + "</option>";
+        }
+    
+        String commentsStrings = "[";
+        for (int i = 0; i < comments.size(); i++) {
+            commentsStrings += "\"" +
+                comments.get(i)
+                    .replace("\\", "\\\\")
+                    .replace("\"", "\\\"")
+                    .replace("\n", "\\n")
+                + "\"";
+    
+            if (i < comments.size() - 1) {
+                commentsStrings += ",";
+            }
+        }
+        commentsStrings += "]";
+    
+        return "<script>" +
+            "const comments = " + commentsStrings + ";" +
+            "function showComment(index) {" +
+            " if (index < 0) return;" +
+            " document.getElementById('commentCanvas').innerText = comments[index];" +
+            "}" +
+            "</script>" +
+    
+            "<div id='commentCanvas' style='" +
+            "margin-top:15px; padding:10px; border:2px solid black;" +
+            "width:400px; min-height:60px; max-height:150px; overflow-y:auto;'>" +
+            "Select a comment to view it</div>" +
+    
+            "<select onchange='showComment(Number(this.value))'>" +
+            "<option value='-1' selected>See all comments</option>" +
+            options +
+            "</select>";
+    }
+
+
 
 
     // Plot Feeding Times, Feeding Durations, and Feeding Descriptions
@@ -158,6 +162,7 @@ public class GlucoseChart {
 
     // Display warning alert message box
     public String buildWarningHTML(List<Double> glucoseData) {
+        
         double latestGlucose = glucoseData.get(glucoseData.size() - 1);
         WarningSystem warningSystem = new WarningSystem(lower, upper);
 
@@ -246,4 +251,123 @@ public class GlucoseChart {
                 "</body>\n" +
                 "</html>\n";
     }
-}
+
+    public List<Double> getLimInp() {
+        double upper = defaultUpper;
+        double lower = defaultLower;
+    
+        if (session != null) {
+            Object low = session.getAttribute("lowerLimit");
+            Object upp = session.getAttribute("upperLimit");
+    
+            if (low != null){
+                lower = (double) low;
+            }
+            if (upp != null) {
+                upper = (double) upp;
+            }
+            
+        }
+    
+        List<Double> result = new ArrayList<>();
+        result.add(lower);
+        result.add(upper);
+        return result;
+    }
+
+    
+    public List<List<Double>> getGlucInp() {
+
+        List<Double> times = new ArrayList<>();
+        List<Double> glucoseValues = new ArrayList<>();
+    
+        if (session != null) {
+            Object t = session.getAttribute("timeList");
+            Object g = session.getAttribute("glucoseList");
+    
+            if (t instanceof List<?>) {
+                times = (List<Double>) t;
+            }
+            if (g instanceof List<?>) {
+                glucoseValues = (List<Double>) g;
+            }
+        }
+    
+        req.setAttribute("timeList", times);
+        req.setAttribute("glucoseList", glucoseValues);
+    
+        List<List<Double>> result = new ArrayList<>();
+        result.add(glucoseValues); 
+        result.add(times);         
+    
+        return result;
+    }
+
+    public List<List<Double>> getFeedInp(){
+        
+        List<Double> feedStarts = new ArrayList<>(); 
+        List<Double> feedDurations = new ArrayList<>();
+        
+        if (session != null) {
+            Object fs = session.getAttribute("startList");
+            Object fd = session.getAttribute("durationList");
+           
+
+            if (fs instanceof List<?>) {
+                feedStarts = (List<Double>) fs;
+            }
+            if (fd instanceof List<?>){
+                feedDurations = (List<Double>) fd;     
+            }
+        }
+        req.setAttribute("startList", feedStarts); 
+        req.setAttribute("durationList", feedDurations);
+        
+        List<List<Double>> result = new ArrayList<>();
+        result.add(feedStarts); 
+        result.add(feedDurations);         
+    
+        return result;
+    }
+
+    public List<String> getFeedTypeInp(){
+        
+        List<String> feedTypes = new ArrayList<>();
+    
+
+        if (session != null) {
+
+            Object ft = session.getAttribute("typeList");
+
+            if (ft instanceof List<?>) {
+                feedTypes = (List<String>) ft;
+            }
+        }
+        req.setAttribute("typeList", feedTypes);
+        return feedTypes;
+
+    }  
+
+}    
+/*
+     public List<String> getComInp(){
+        
+        List<String> comments = new ArrayList<>();
+    
+
+        if (session != null) {
+
+            Object com = session.getAttribute("commentsList");    
+
+            if (com instanceof List<?>) {
+                comments = (List<String>) com;
+            }
+        }
+        req.setAttribute("commentsList",comments);    
+        return comments;
+
+    }    
+
+*/
+                
+
