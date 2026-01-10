@@ -222,7 +222,6 @@ public class Nurse extends Adult implements Pageable {
         resp.setContentType("text/html");
         resp.getWriter().write(nursePage(glucoseChart, req, babyId,
                 glucoseValue, time, feedStart, feedDuration, feedType, comments));
-        System.out.println("Rendering nurse page for babyId = " + babyId);
     }
 
 

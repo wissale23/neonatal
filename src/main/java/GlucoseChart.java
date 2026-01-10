@@ -147,7 +147,6 @@ public class GlucoseChart {
         String warningHTML = buildWarningHTML(baby.getRawData());
 
         return AlertRenderer.alertCSS +
-                "  <title>Glucose Chart</title>\n" +
                 "  <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n" +
                 "  <script src=\"https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3\"></script>\n" +
                 warningHTML +
