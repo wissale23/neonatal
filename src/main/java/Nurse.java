@@ -1,13 +1,9 @@
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
-
-
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
-
 
 public class Nurse extends Adult implements Pageable {
 
