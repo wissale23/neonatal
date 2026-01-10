@@ -187,7 +187,7 @@ public class Nurse extends Adult implements Pageable {
                 + feedingInputLayout(req.getContextPath(), feedStart, feedDuration, feedType)
                 + nurseCommentBox(req.getContextPath())
                 + "</div>"
-                + glucoseChart.generateHTML()
+                //+ glucoseChart.generateHTML()
                 + glucoseChart.commentsInpLayout(comments)
                 + "</body></html>";
     }
