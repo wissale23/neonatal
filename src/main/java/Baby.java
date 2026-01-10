@@ -105,4 +105,10 @@ public class Baby extends Person{
         comments.add(time + "\n" + username + ": " + commentText);
     }
 
+    public void removeLastSample() {
+        if (!sampleTimes.isEmpty()) sampleTimes.remove(sampleTimes.size() - 1);
+        if (!sampleValues.isEmpty()) sampleValues.remove(sampleValues.size() - 1);
+    }
+
+
 }
