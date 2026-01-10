@@ -146,18 +146,10 @@ public class GlucoseChart {
         String smoothArray = baby.getSmoothData().toString();
         String warningHTML = buildWarningHTML(baby.getRawData());
 
-        return "<!DOCTYPE html>\n" +
-                "<html>\n" +
-            // Header
-                "<head>\n" +
-                AlertRenderer.alertCSS +
+        return AlertRenderer.alertCSS +
                 "  <title>Glucose Chart</title>\n" +
                 "  <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n" +
                 "  <script src=\"https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3\"></script>\n" +
-                "</head>\n" +
-
-            // Body
-                "<body>\n" +
                 warningHTML +
                 "  <h2>Glucose Levels</h2>\n" +
                 "  <canvas id='glucoseChart' width='800' height='400'></canvas>\n" +
@@ -217,9 +209,7 @@ public class GlucoseChart {
                 "        }\n" +
                 "      }\n" +
                 "    });\n" +
-                "  </script>\n" +
-                "</body>\n" +
-                "</html>\n";
+                "  </script>\n";
     }
 
 
