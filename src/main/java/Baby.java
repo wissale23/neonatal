@@ -92,7 +92,12 @@ public class Baby extends Person{
         this.upperRange = upper;
     }
 
-    public void addComment(String user, String text) {
-        comments.add(user + ": " + text);
+    public static void addComment(HttpSession session, String username, String commentText) {
+
+        if (commentText == null || commentText.isEmpty()) return;
+        List<String> comments = getComments(session);
+        String time = LocalDateTime.now().format(
+            DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+        comments.add(time + "\n" + username + ": " + commentText);
     }
 }
