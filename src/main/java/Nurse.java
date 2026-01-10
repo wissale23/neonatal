@@ -22,58 +22,37 @@ public class Nurse extends Adult implements Pageable {
         super(name, id, endpoint);
     }
 
-    private String babyDropdown(int selectedId, String contextPath) {
+    private String babyDropdown(int selectedId, HttpServletRequest req) {
 
-        // Get all babies from the Baby Patient List
         List<Baby> babies = BabyPatientList.getAll();
-
+        if (babies == null || babies.isEmpty()) {
+            return "<p style='color:red; text-align:center;'>No babies available</p>";
+        }
+    
+        String action = req.getContextPath() + req.getServletPath();
         StringBuilder sb = new StringBuilder();
-
-        // Design of Dropdown
-        sb.append(
-                "<div style='"
-                        + "background:#e3f2fd;"
-                        + "border:4px solid #1565c0;"
-                        + "border-radius:12px;"
-                        + "padding:20px;"
-                        + "margin:20px auto;"
-                        + "width:420px;"
-                        + "text-align:center;"
-                        + "font-size:18px;"
-                        + "font-weight:bold;"
-                        + "color:#0d47a1;'>"
-        );
-
-        sb.append("<form method='get' action='")
-                .append(contextPath)
-                .append("/nurses'>");
-
-        sb.append("<label style='margin-right:10px;'>SELECT BABY:</label>");
-
-        sb.append(
-                "<select name='babyId' "
-                        + "onchange='this.form.submit()' "
-                        + "style='"
-                        + "font-size:20px;"
-                        + "padding:8px 14px;"
-                        + "border:3px solid #1565c0;"
-                        + "border-radius:8px;"
-                        + "background:#ffffff;"
-                        + "color:#0d47a1;'>"
-        );
-
+    
+        sb.append("<div style='max-width:420px; margin:20px auto; padding:16px; ")
+          .append("border:3px solid #1565c0; border-radius:10px; background:#e3f2fd; text-align:center;'>");
+    
+        sb.append("<form method='get' action='").append(action).append("'>");
+    
+        sb.append("<label style='margin-right:10px; font-weight:bold;'>Select baby:</label>");
+    
+        sb.append("<select name='babyId' onchange='this.form.submit()' ")
+          .append("style='font-size:18px; padding:6px 10px;'>");
+    
         for (Baby b : babies) {
             sb.append("<option value='").append(b.getId()).append("'");
             if (b.getId() == selectedId) sb.append(" selected");
             sb.append(">").append(b.getName()).append("</option>");
         }
-
-        sb.append("</select>");
-        sb.append("</form>");
-        sb.append("</div>");
-
+    
+        sb.append("</select></form></div>");
+    
         return sb.toString();
     }
+
 
     public String glucoseInputLayout(String pathString,double glucoseValue, double time){
         return "<div style='background-color: #fedae6; "
