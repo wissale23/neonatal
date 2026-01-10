@@ -94,10 +94,7 @@ public class Baby extends Person{
         this.lowerRange = lower;
         this.upperRange = upper;
     }
-    
-    public List<String> getComments() {
-        return comments;
-    }
+
 
     public void addComment(String username, String commentText) {
         if (commentText == null || commentText.isEmpty()) return;
