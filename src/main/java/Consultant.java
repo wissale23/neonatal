@@ -11,10 +11,73 @@ import javax.servlet.ServletException;
 
 public class Consultant extends Adult implements Pageable {
 
+    private final double defaultLower = 2.6;
+    private final double defaultUpper = 10;
+
     public Consultant(String name, int id, String endpoint) {
         super(name, id, endpoint);
     }
 
+    private String babyDropdown(int selectedId, String contextPath) {
+
+        // Get all babies from the Baby Patient List
+        List<Baby> babies = BabyPatientList.getAll();
+
+        StringBuilder sb = new StringBuilder();
+
+        // Design of Dropdown
+        sb.append(
+                "<div style='"
+                        + "background:#e3f2fd;"
+                        + "border:3px solid #1565c0;"
+                        + "border-radius:10px;"
+                        + "padding:15px 25px;"
+                        + "margin:20px auto;"
+                        + "width:380px;"
+                        + "max-width:90%;"
+                        + "text-align:center;"
+                        + "font-size:16px;"
+                        + "font-weight:bold;"
+                        + "color:#0d47a1;"
+                        + "box-shadow: 0 4px 8px rgba(0,0,0,0.1);"
+                        + "transition: all 0.2s ease-in-out;'>"
+        );
+
+// Form
+        sb.append("<form method='get' action='")
+                .append(contextPath)
+                .append("/consultants'>");
+        sb.append("<label style='margin-right:8px; font-size:16px;'>SELECT BABY:</label>");
+        sb.append(
+                "<select name='babyId' "
+                        + "onchange='this.form.submit()' "
+                        + "style='"
+                        + "font-size:16px;"
+                        + "padding:6px 12px;"
+                        + "border:2px solid #1565c0;"
+                        + "border-radius:6px;"
+                        + "background:#ffffff;"
+                        + "color:#0d47a1;"
+                        + "cursor:pointer;"
+                        + "transition: all 0.2s ease-in-out;'>"
+        );
+
+
+        for (Baby b : BabyPatientList.getAll()) {
+            sb.append("<option value='")
+                    .append(b.getId()).append("'")
+                    .append(b.getId() == selectedId ? " selected" : "")
+                    .append(">")
+                    .append(b.getName())
+                    .append("</option>");
+        }
+
+        sb.append("</select>");
+        sb.append("</form>");
+        sb.append("</div>");
+
+        return sb.toString();
+    }
 
     public String rangeLayout(String pathString,double lower,double upper){
         return "<div style='background-color: #fedae6; "
@@ -42,6 +105,7 @@ public class Consultant extends Adult implements Pageable {
                 + "</div>";
 
     }
+
     public String consultCommentBox(String pathString) {
         return "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;"
@@ -67,67 +131,78 @@ public class Consultant extends Adult implements Pageable {
                 + "</div>";
     }
 
-    public String consultPage(GlucoseChart glucoseChart,String pathString,double lower,double upper,List<String> comments){
-
-        return glucoseChart.generateHTML()
-                + "<div style='display:flex; justify-content:center; gap:10px; margin-top:20px; align-items:flex-start;'>"
-                + this.rangeLayout(pathString,lower,upper)
-                + this.consultCommentBox(pathString)
+    public String consultPage(GlucoseChart glucoseChart,HttpServletRequest req,double lower,double upper,List<String> comments, int babyId){
+        return "<!DOCTYPE html>"
+                + "<html><head>"
+                + "<title>Consultant Dashboard</title>"
+                + "</head><body>"
+                + "<h1 style='text-align:center;'>Consultant Dashboard</h1>"
+                + babyDropdown(babyId, req.getContextPath())
+                + "</div>"
+                + glucoseChart.generateHTML()
+                + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>"
+                + rangeLayout(req.getContextPath(), lower, upper)
+                + consultCommentBox(req.getContextPath())
                 + "</div>"
                 + glucoseChart.commentsInpLayout(comments)
                 + "</body></html>";
-
     }
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        // Load data from files
-        HttpSession session = req.getSession(false);
+        HttpSession session = req.getSession();
 
-        List<Double> timeData = getPatients().get(0).getTimeData();
-        List<Double> rawData = getPatients().get(0).getRawData();
-        List<Double> smoothData = getPatients().get(0).getSmoothData();
+        // Get babyId from dropdown or session, default to first baby
+        int babyId = 1;
+        if (req.getParameter("babyId") != null) {
+            babyId = Integer.parseInt(req.getParameter("babyId"));
+        } else if (session.getAttribute("babyId") != null) {
+            babyId = (int) session.getAttribute("babyId");
+        }
+        session.setAttribute("babyId", babyId);
 
-        GlucoseChart glucoseChart = new GlucoseChart(session, req,timeData, rawData, smoothData);
-        double lower = glucoseChart.getLimInp().get(0);
-        double upper = glucoseChart.getLimInp().get(1);
-        List<String> comments = GlucoseChart.getComments(session);
+        // Get selected baby
+        Baby baby = BabyPatientList.getBaby(babyId);
 
+        // Create chart for selected baby
+        GlucoseChart glucoseChart = new GlucoseChart(baby);
 
+        // Get latest values for input forms
+        double lower = baby.getLowerRange() != 0 ? baby.getLowerRange() : defaultLower;
+        double upper = baby.getUpperRange() != 0 ? baby.getUpperRange() : defaultUpper;
+        List<String> comments = baby.getComments();
+
+        resp.setContentType("text/html");
         // Consultants only view the file data, no user input
-        resp.getWriter().write(consultPage(glucoseChart, req.getContextPath(), lower, upper,comments));
+        resp.getWriter().write(consultPage(glucoseChart, req, lower, upper, comments, babyId));
     }
 
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        HttpSession session = req.getSession();
+        Baby baby = BabyPatientList.getBaby((int) session.getAttribute("babyId"));
 
-        HttpSession session = req.getSession(true);
-
-        //UPPER AND LOWER LIMITS
-        String lowerString = req.getParameter("lowerLimit");
-        String upperString = req.getParameter("upperLimit");
+        // Update limits
+        String lowerStr = req.getParameter("lowerLimit");
+        String upperStr = req.getParameter("upperLimit");
 
         try {
-            if (lowerString != null && !lowerString.isEmpty()) {
-                session.setAttribute("lowerLimit", Double.parseDouble(lowerString));
-            }
-            if (upperString != null && !upperString.isEmpty()) {
-                session.setAttribute("upperLimit", Double.parseDouble(upperString));
-            }
+            double lower = lowerStr != null && !lowerStr.isEmpty() ? Double.parseDouble(lowerStr) : baby.getLowerRange();
+            double upper = upperStr != null && !upperStr.isEmpty() ? Double.parseDouble(upperStr) : baby.getUpperRange();
+            baby.setRanges(lower, upper);
         } catch (NumberFormatException e) {
             e.printStackTrace();
-
         }
 
-        // COMMENTS HANDLING
-        String commentString = req.getParameter("commInp");
+        // Update comments
+        String commentStr = req.getParameter("commInp");
         String consultUsername = (String) session.getAttribute("username");
         if (consultUsername == null) consultUsername = "Unknown Consultant";
+        if (commentStr != null && !commentStr.isEmpty()) baby.addComment(consultUsername, commentStr);
 
-        GlucoseChart.addComment(session, consultUsername, commentString);
-
-        resp.sendRedirect(req.getContextPath() + "/consultants");
+        resp.sendRedirect(req.getContextPath() + "/consultants?babyId=" + baby.getId());
     }
 
-}  
+}
+
 
 
 
