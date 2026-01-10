@@ -246,7 +246,7 @@ public class Nurse extends Adult implements Pageable {
             );
 
         if (req.getParameter("commInp") != null)
-            GlucoseChart.addComment(session,
+            baby.addComment(session,
                     (String) session.getAttribute("username"),
                     req.getParameter("commInp")
             );
