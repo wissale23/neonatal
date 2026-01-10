@@ -81,7 +81,7 @@ public class Nurse extends Adult implements Pageable {
 
 
 
-    public String glucoseInputLayout(String pathString,double glucoseValue, double time){
+    public String glucoseInputLayout(String pathString, double glucoseValue, double time) {
         return "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;"
                 + "padding: 20px;"
@@ -90,23 +90,27 @@ public class Nurse extends Adult implements Pageable {
                 + "min-height:250px;"
                 + "margin: 20px ;"
                 + "text-align: center;'>"
-
-                + "<h3 style='color: black;'>Entering blood glucose values(mM)</h3>"
-
+    
+                + "<h3 style='color: black;'>Entering blood glucose values (mM)</h3>"
+    
                 + "<form method='POST' action='" + pathString + "/nurses'>"
                 + "<div>"
                 + "<span style='display:inline-block; width:110px; text-align:right; color:black;'>Sample value: </span>"
                 + "<input type='text' name='glucoseInp' step='0.001' value='" + glucoseValue + "' style='width:100px; text-align:center;'/><br/><br/>"
                 + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Time of day: </span>"
                 + "<input type='text' name='timeInp' step='0.001' value='" + time + "' style='width:100px; text-align:center;'/><br/><br/>"
-
-
-                + "<button type='submit' style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add sample</button>"
-                            
+    
+                // Buttons in a horizontal row
+                + "<div style='display:flex; justify-content:center; gap:10px;'>"
+                + "<button type='submit' name='action' value='add' "
+                + "style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add sample</button>"
+                + "<button type='submit' name='action' value='undo' "
+                + "style='background-color:#ff8c8c; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Undo last</button>"
+                + "</div>"
+    
                 + "</div>"
                 + "</form>"
                 + "</div>";
-
     }    
 
     public String feedingInputLayout (String pathString,double feedStart, double feedDuration, String feedType){
@@ -228,11 +232,18 @@ public class Nurse extends Adult implements Pageable {
         HttpSession session = req.getSession();
         Baby baby = BabyPatientList.getBaby((int) session.getAttribute("babyId"));
 
-        if (req.getParameter("glucoseInp") != null)
-            baby.addSample(
-                    Double.parseDouble(req.getParameter("timeInp")),
-                    Double.parseDouble(req.getParameter("glucoseInp"))
-            );
+        String action = req.getParameter("action"); // <-- add this line
+
+        if (req.getParameter("glucoseInp") != null) {
+            if ("undo".equals(action)) {
+                baby.removeLastSample();
+            } else {
+                baby.addSample(
+                        Double.parseDouble(req.getParameter("timeInp")),
+                        Double.parseDouble(req.getParameter("glucoseInp"))
+                );
+            }
+        }
 
         if (req.getParameter("startInp") != null)
             baby.addFeeding(
