@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import javax.servlet.http.HttpSession;
 
 
 public class Baby extends Person{
@@ -96,24 +95,16 @@ public class Baby extends Person{
         this.upperRange = upper;
     }
     
-    public  List<String> getComments(HttpSession session) {
-        List<String> comments = (List<String>) session.getAttribute("commentsList");
-        if (comments == null) {
-            comments = new ArrayList<>();
-            session.setAttribute("commentsList", comments);
-        }
+    public List<String> getComments() {
         return comments;
     }
 
-
-    //adding new comment to select whenever there is a new one
-
-    public  void addComment(HttpSession session, String username, String commentText) {
-
+    public void addComment(String username, String commentText) {
         if (commentText == null || commentText.isEmpty()) return;
-        List<String> comments = getComments(session);
+    
         String time = LocalDateTime.now().format(
-            DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+            DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")
+        );
         comments.add(time + "\n" + username + ": " + commentText);
     }
 
