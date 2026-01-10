@@ -89,13 +89,25 @@ public class Baby extends Person{
         feedDurations.add(duration);
         feedTypes.add(type);
     }
-
+ //adding new comment to select whenever there is a new one
     public void setRanges(double lower, double upper) {
         this.lowerRange = lower;
         this.upperRange = upper;
     }
+    
+    public  List<String> getComments(HttpSession session) {
+        List<String> comments = (List<String>) session.getAttribute("commentsList");
+        if (comments == null) {
+            comments = new ArrayList<>();
+            session.setAttribute("commentsList", comments);
+        }
+        return comments;
+    }
 
-    public void addComment(String username, String commentText) {
+
+    //adding new comment to select whenever there is a new one
+
+    public  void addComment(HttpSession session, String username, String commentText) {
 
         if (commentText == null || commentText.isEmpty()) return;
         List<String> comments = getComments(session);
@@ -103,4 +115,5 @@ public class Baby extends Person{
             DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
         comments.add(time + "\n" + username + ": " + commentText);
     }
+
 }
