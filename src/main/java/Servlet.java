@@ -3,7 +3,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @WebServlet(
         urlPatterns = {"/", "/login", "/logout", "/consultants", "/nurses", "/researchers", "/parents"},
