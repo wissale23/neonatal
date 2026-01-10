@@ -27,7 +27,7 @@ public class Nurse extends Adult implements Pageable {
         List<Baby> babies = BabyPatientList.getAll();
 
         StringBuilder sb = new StringBuilder();
-        sb.append("<form method='get' action='").append(contextPath).append("/nurse'>");
+        sb.append("<form method='get' action='").append(contextPath).append("/nurses'>");
         sb.append("Select Baby: <select name='babyId' onchange='this.form.submit()'>");
 
         for (Baby b : babies) {
@@ -205,8 +205,7 @@ public class Nurse extends Adult implements Pageable {
                     (String) session.getAttribute("username"),
                     req.getParameter("commInp")
             );
-
-        resp.sendRedirect(req.getContextPath() + "/nurses");
+        resp.sendRedirect(req.getContextPath() + "/nurses?babyId=" + baby.getId());
     }
 
     // Get last glucose value from session
