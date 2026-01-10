@@ -4,6 +4,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 public class Baby extends Person{
     // Original loaded data
@@ -92,7 +95,7 @@ public class Baby extends Person{
         this.upperRange = upper;
     }
 
-    public static void addComment(HttpSession session, String username, String commentText) {
+    public void addComment(String username, String commentText) {
 
         if (commentText == null || commentText.isEmpty()) return;
         List<String> comments = getComments(session);
