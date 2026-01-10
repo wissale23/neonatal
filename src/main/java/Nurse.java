@@ -113,7 +113,7 @@ public class Nurse extends Adult implements Pageable {
                 + "</div>";
     }    
 
-    public String feedingInputLayout (String pathString,double feedStart, double feedDuration, String feedType){
+    public String feedingInputLayout(String pathString, double feedStart, double feedDuration, String feedType) {
         return "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;"
                 + "padding: 20px;"
@@ -122,29 +122,34 @@ public class Nurse extends Adult implements Pageable {
                 + "min-height:250px;"
                 + "margin: 20px ;"
                 + "text-align: center;'>"
-
+    
                 + "<h3 style='color: black;'>Feeding Information</h3>"
-
+    
                 + "<form method='POST' action='" + pathString + "/nurses'>"
                 + "<div>"
-            
+                
                 + "<span style='display:inline-block; width:110px; text-align:right; color:black;'>Start of feeding: </span>"
                 + "<input type='text' name='startInp' step='0.001' value='" + feedStart + "' style='width:100px; text-align:center;'/><br/><br/>"
-            
+                
                 + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Duration of feeding: </span>"
                 + "<input type='text' name='durInp' step='0.001' value='" + feedDuration + "' style='width:100px; text-align:center;'/><br/><br/>"
-            
+                
                 + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Feeding Description: </span>"
-                + "<input type='text' name='typeInp' step='0.001' value='" + feedType+ "' style='width:100px; text-align:center;'/><br/><br/>"
-
-
-                + "<button type='submit' style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add feeding information</button>"
-                            
+                + "<input type='text' name='typeInp' step='0.001' value='" + feedType + "' style='width:100px; text-align:center;'/><br/><br/>"
+    
+                // Buttons side by side
+                + "<div style='display:flex; justify-content:center; gap:10px;'>"
+                + "<button type='submit' name='action' value='add' "
+                + "style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add feeding information</button>"
+                + "<button type='submit' name='action' value='undo' "
+                + "style='background-color:#ff8c8c; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Undo last</button>"
+                + "</div>"
+    
                 + "</div>"
                 + "</form>"
                 + "</div>";
-
     }
+
 
 
     public String nurseCommentBox(String pathString) {
@@ -232,7 +237,7 @@ public class Nurse extends Adult implements Pageable {
         HttpSession session = req.getSession();
         Baby baby = BabyPatientList.getBaby((int) session.getAttribute("babyId"));
 
-        String action = req.getParameter("action"); // <-- add this line
+        String action = req.getParameter("action"); 
 
         if (req.getParameter("glucoseInp") != null) {
             if ("undo".equals(action)) {
@@ -245,12 +250,17 @@ public class Nurse extends Adult implements Pageable {
             }
         }
 
-        if (req.getParameter("startInp") != null)
-            baby.addFeeding(
-                    Double.parseDouble(req.getParameter("startInp")),
-                    Double.parseDouble(req.getParameter("durInp")),
-                    req.getParameter("typeInp")
-            );
+        if (req.getParameter("startInp") != null) {
+            if ("undo".equals(action)) {
+                baby.removeLastFeeding(); 
+            } else {
+                baby.addFeeding(
+                        Double.parseDouble(req.getParameter("startInp")),
+                        Double.parseDouble(req.getParameter("durInp")),
+                        req.getParameter("typeInp")
+                );
+            }
+        }
 
         if (req.getParameter("commInp") != null)
             baby.addComment(
