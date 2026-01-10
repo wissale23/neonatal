@@ -220,7 +220,7 @@ public class Nurse extends Adult implements Pageable {
         double feedStart = getFeedValue(session).get(0);
         double feedDuration = getFeedValue(session).get(1);
         String feedType = getFeedStr(session);
-        List<String> comments = GlucoseChart.getComments(session);
+        List<String> comments = baby.getComments();
 
         resp.setContentType("text/html");
         resp.getWriter().write(nursePage(glucoseChart, req, babyId,
@@ -246,7 +246,7 @@ public class Nurse extends Adult implements Pageable {
             );
 
         if (req.getParameter("commInp") != null)
-            baby.addComment(session,
+            baby.addComment(
                     (String) session.getAttribute("username"),
                     req.getParameter("commInp")
             );
