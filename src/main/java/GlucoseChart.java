@@ -3,7 +3,6 @@ import java.util.List;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 
@@ -96,8 +95,6 @@ public class GlucoseChart {
             options +
             "</select>";
     }
-
-
 
     // Plot Feeding Times, Feeding Durations, and Feeding Descriptions
     public String getFeedings(){
