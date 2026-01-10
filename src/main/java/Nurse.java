@@ -246,7 +246,7 @@ public class Nurse extends Adult implements Pageable {
             );
 
         if (req.getParameter("commInp") != null)
-            baby.addComment(session,
+            baby.addComment(
                     (String) session.getAttribute("username"),
                     req.getParameter("commInp")
             );
