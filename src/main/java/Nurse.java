@@ -170,7 +170,6 @@ public class Nurse extends Adult implements Pageable {
                 + "</div>";
     }
 
-
     public String nursePage(GlucoseChart glucoseChart, HttpServletRequest req, int babyId,
                             double glucoseValue, double time,
                             double feedStart, double feedDuration, String feedType,
