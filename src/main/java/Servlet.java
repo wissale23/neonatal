@@ -23,7 +23,9 @@ public class Servlet extends HttpServlet {
     private final String TIME_FILE = "/t_glu.txt";
     private final String RAW_FILE = "/glu_uM_unsmoothed.txt";
     private final String SMOOTH_FILE = "/glu_uM_smoothed.txt";
-
+    
+    private AuthManager auth;
+    private LoginPageView loginView;
 
     private ArrayList<Adult> users = new ArrayList<Adult>();
 
@@ -57,79 +59,65 @@ public class Servlet extends HttpServlet {
         Nurse nurse1 = new Nurse("nurse1",5,"/nurses");
         nurse1.addPatient(baby1);
         users.add(nurse1); 
+            
+        auth = new AuthManager();
+        loginView = new LoginPageView();
+
+        auth.addUser("nurse1", "nursepass", "nurse");
+        auth.addUser("consult1", "consultpass", "consultant");
+        auth.addUser("parent1", "parentpass", "parent");
+        auth.addUser("research1", "researchpass", "researcher");
+        auth.addUser("admin1", "adminpass", "admin");
+            
                   
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) 
         throws ServletException, IOException {
+        
         String path = req.getServletPath();
-        if ("/".equals(path)) {
-            resp.setContentType("text/html");
-            resp.getWriter().write(
-                    "<h1>Neonatal App OOP Branch</h1>" +
-                            "<p>Choose your role:</p>" +
-                            "<a href=\"" + req.getContextPath() + "/login?role=nurse\">Nurse</a><br/>" +
-                            "<a href=\"" + req.getContextPath() + "/login?role=consultant\">Consultant</a><br/>" +
-                            "<a href=\"" + req.getContextPath() + "/login?role=parent\">Parent</a><br/>" +
-                            "<a href=\"" + req.getContextPath() + "/login?role=researcher\">Researcher</a><br/>"
-            );
-            return;
-        }
-
-        if ("/login".equals(path)) {
-            String roleParam = req.getParameter("role");
+                
+        if ("/".equals(path) || "/login".equals(path)) {
             String error = req.getParameter("error");
             String msg = "";
-            if ("user_not_found".equals(error)) msg = "<p style='color:red'>User does not exist. Please contact admin to create an account.</p>";
-            else if ("wrong_password".equals(error)) msg = "<p style='color:red'>Incorrect password.</p>";
-            else if ("role_mismatch".equals(error)) msg = "<p style='color:red'>Please choose the correct user role.</p>";
-            if (roleParam == null) roleParam = "";
+
+            if ("user_not_found".equals(error)) {
+                msg = LoginPageView.errorBox("User does not exist. Please contact admin to create an account.");
+            } else if ("wrong_password".equals(error)) {
+                msg = LoginPageView.errorBox("Incorrect password.");
+            } else if ("missing_credentials".equals(error)) {
+                msg = LoginPageView.errorBox("Please enter both username and password.");
+            } else if ("login_required".equals(error)) {
+                msg = LoginPageView.errorBox("Please sign in to continue.");
+            }
 
             resp.setContentType("text/html");
-            resp.getWriter().write(
-                    "<h1>Login OOP Branch</h1>" + msg +
-                            "<form method=\"POST\" action=\"" + req.getContextPath() + "/login\">" +
-                            "<input type=\"hidden\" name=\"role\" value=\"" + roleParam + "\"/>" +
-                            "Username: <input name=\"username\"/><br/>" +
-                            "Password: <input name=\"password\" type=\"password\"/><br/>" +
-                            "<button type=\"submit\">Sign in</button>" +
-                            "</form>" +
-                            "<p><a href=\"" + req.getContextPath() + "/\">Back</a></p>"
-            );
+            resp.getWriter().write(loginView.render(req.getContextPath(), msg));
             return;
+        }
+                
+        if ("/logout".equals(path)) {
+            auth.logout(req);
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
+        resp.setContentType("text/html");        
+
+        // Protect role pages
+        if ("/nurses".equals(path) || "/consultants".equals(path) || "/parents".equals(path) || "/researchers".equals(path) || "/admin".equals(path)) {
+            String redirect = auth.redirectIfNotAllowed(path, req);
+            if (redirect != null) {
+                resp.sendRedirect(req.getContextPath() + redirect);
+                return;
+            }
         }
 
-        if ("/logout".equals(path)) {
-            HttpSession ss = req.getSession(false);
-            if (ss != null) ss.invalidate();
-            resp.sendRedirect(req.getContextPath() + "/");
-            return;
-        }
-        resp.setContentType("text/html");
+
 
         // Require login + correct role before allowing access to role-specific endpoints
         HttpSession session = req.getSession(false);
-        String role = (session == null) ? null : (String) session.getAttribute("role");
-
-        if ("/nurses".equals(path) && !"nurse".equals(role)) {
-            resp.sendRedirect(req.getContextPath() + "/login?role=nurse");
-            return;
-        }
-        if ("/consultants".equals(path) && !"consultant".equals(role)) {
-            resp.sendRedirect(req.getContextPath() + "/login?role=consultant");
-            return;
-        }
-        if ("/parents".equals(path) && !"parent".equals(role)) {
-            resp.sendRedirect(req.getContextPath() + "/login?role=parent");
-            return;
-        }
-        if ("/researchers".equals(path) && !"researcher".equals(role)) {
-            resp.sendRedirect(req.getContextPath() + "/login?role=researcher");
-            return;
-        }
-
-
+                
         if ("/consultants".equals(path)) {
 
             users.get(2).doGet(req,resp);
@@ -145,54 +133,86 @@ public class Servlet extends HttpServlet {
                 
         } else if("/parents".equals(path)){
             users.get(0).doGet(req, resp);
+        } else if ("/admin".equals(path)) {
+            String status = req.getParameter("status");
+            String error = req.getParameter("error");
+            String msg = "";
+
+            if ("created".equals(status)) {
+                msg = LoginPageView.okBox("Account created successfully.");
+            } else if ("username_taken".equals(error)) {
+                msg = LoginPageView.errorBox("That username is already taken.");
+            } else if ("invalid_role".equals(error)) {
+                msg = LoginPageView.errorBox("Invalid role selected.");
+            } else if ("missing_fields".equals(error)) {
+                msg = LoginPageView.errorBox("Please fill in all fields.");
+            }
+
+            resp.setContentType("text/html");
+            resp.getWriter().write(loginView.renderAdminPage(req.getContextPath(), msg));
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        
         if ("/login".equals(req.getServletPath())) {
-            String chosenRole = req.getParameter("role");
             String username = req.getParameter("username");
             String password = req.getParameter("password");
 
-            if (username == null) username = "";
-            if (password == null) password = "";
-            username = username.trim();
+            AuthManager.AuthResult result = auth.authenticate(username, password);
 
-            // 1) user not found
-            if (!passwords.containsKey(username)) {
-                resp.sendRedirect(req.getContextPath() + "/login?role=" + chosenRole + "&error=user_not_found");
+            if (!result.isOk()) {
+                String errorParam;
+                if (result.getError() == AuthManager.Error.USER_NOT_FOUND) errorParam = "user_not_found";
+                else if (result.getError() == AuthManager.Error.WRONG_PASSWORD) errorParam = "wrong_password";
+                else errorParam = "missing_credentials";
+
+                resp.sendRedirect(req.getContextPath() + "/login?error=" + errorParam);
                 return;
             }
 
-            // 2) wrong password
-            if (!passwords.get(username).equals(password)) {
-                resp.sendRedirect(req.getContextPath() + "/login?role=" + chosenRole + "&error=wrong_password");
-                return;
-            }
+            // Role comes from the account
+            String cleanUsername = (username == null) ? "" : username.trim();
+            String role = result.getRole();
 
-            // 3) role mismatch (picked Nurse but used consultant account, etc.)
-            String actualRole = roles.get(username);
-            if (chosenRole == null) chosenRole = "";
-            if (!chosenRole.equals(actualRole)) {
-                resp.sendRedirect(req.getContextPath() + "/login?role=" + chosenRole + "&error=role_mismatch");
-                return;
-            }
-
-            // success
-            HttpSession session = req.getSession(true);
-            session.setAttribute("role", actualRole);
-            session.setAttribute("username", username);
-
-            String target;
-            if ("nurse".equals(actualRole)) target = "/nurses";
-            else if ("consultant".equals(actualRole)) target = "/consultants";
-            else if ("parent".equals(actualRole)) target = "/parents";
-            else target = "/researchers";
-
-            resp.sendRedirect(req.getContextPath() + target);
+            auth.startSession(req, cleanUsername, role);
+            resp.sendRedirect(req.getContextPath() + auth.homeForRole(role));
             return;
         }
+        if ("/admin".equals(req.getServletPath())) {
+            String role = auth.currentRole(req);
+
+            // must be logged in
+            if (role == null) {
+                resp.sendRedirect(req.getContextPath() + "/login?error=login_required");
+                return;
+            }
+
+            // must be admin
+            if (!"admin".equals(role)) {
+                resp.sendRedirect(req.getContextPath() + auth.homeForRole(role));
+                return;
+            }
+
+            String newUsername = req.getParameter("newUsername");
+            String newPassword = req.getParameter("newPassword");
+            String newRole = req.getParameter("newRole");
+
+            AuthManager.CreateResult cr = auth.createUser(newUsername, newPassword, newRole);
+
+            if (!cr.isOk()) {
+                String err;
+                if (cr.getError() == AuthManager.CreateError.USERNAME_TAKEN) err = "username_taken";
+                else if (cr.getError() == AuthManager.CreateError.INVALID_ROLE) err = "invalid_role";
+                else err = "missing_fields";
+
+                resp.sendRedirect(req.getContextPath() + "/admin?error=" + err);
+                return;
+            }
+            resp.sendRedirect(req.getContextPath() + "/admin?status=created");
+            return;
+        }    
 
         if ("/researchers".equals(req.getServletPath())) {
             users.get(1).doPost(req,resp);
@@ -208,65 +228,21 @@ public class Servlet extends HttpServlet {
             users.get(3).doPost(req,resp);
             return;    
         }
+            
+        HttpSession session = req.getSession(false);
 
-        
-        
-
-        // Basic session-based access control for POST requests (nurses only)
-        if (!"/nurses".equals(req.getServletPath())) {
-           resp.sendError(405);
-           return;
-        }
-
-        HttpSession s = req.getSession(false);
-        String role = (s == null) ? null : (String) s.getAttribute("role");
-        if (!"nurse".equals(role) && !"consultant".equals(role)) {
-            resp.sendError(403);
+        if (session == null) {
+            resp.sendRedirect(req.getContextPath() + "/login?error=login_required");
             return;
         }
 
-        // Read user-submitted blood glucose value
-        String reqBody = req.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-        try {
-            double raw = Double.parseDouble(reqBody);
-            userRawValues.add(raw);
-            resp.getWriter().write("Value submitted: " + raw);
-        } catch (NumberFormatException e) {
-            resp.sendError(400, "Invalid number");
-        }
+        String role = (String) session.getAttribute("role");
+        if (!"nurse".equals(role)) {
+            resp.sendError(403);
+            return;
+        }    
 
-
-            
-
-   
     }
 
         
-
-    // Helper method to read doubles from resources in the WAR
-    private List<Double> loadDataFromResource(String resourcePath) {
-        List<Double> result = new ArrayList<>();
-        try (InputStream is = getClass().getResourceAsStream(resourcePath);
-             BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
-
-            if (is == null) {
-                throw new FileNotFoundException("Resource not found: " + resourcePath);
-            }
-
-            String line;
-            while ((line = br.readLine()) != null) {
-                line = line.trim();
-                if (!line.isEmpty()) {
-                    try {
-                            result.add(Double.parseDouble(line));
-                        } catch (NumberFormatException ignored) {
-                            // skip headers or labels
-                        }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
 }
