@@ -23,23 +23,55 @@ public class Nurse extends Adult implements Pageable {
     }
 
     private String babyDropdown(int selectedId, String contextPath) {
-        // Get all babies from your BabyStore or database
+
+        // Get all babies from the Baby Patient List
         List<Baby> babies = BabyPatientList.getAll();
 
         StringBuilder sb = new StringBuilder();
-        sb.append("<form method='get' action='").append(contextPath).append("/nurses'>");
-        sb.append("Select Baby: <select name='babyId' onchange='this.form.submit()'>");
+
+        // Design of Dropdown
+        sb.append(
+                "<div style='"
+                        + "background:#e3f2fd;"
+                        + "border:4px solid #1565c0;"
+                        + "border-radius:12px;"
+                        + "padding:20px;"
+                        + "margin:20px auto;"
+                        + "width:420px;"
+                        + "text-align:center;"
+                        + "font-size:18px;"
+                        + "font-weight:bold;"
+                        + "color:#0d47a1;'>"
+        );
+
+        sb.append("<form method='get' action='")
+                .append(contextPath)
+                .append("/nurses'>");
+
+        sb.append("<label style='margin-right:10px;'>SELECT BABY:</label>");
+
+        sb.append(
+                "<select name='babyId' "
+                        + "onchange='this.form.submit()' "
+                        + "style='"
+                        + "font-size:20px;"
+                        + "padding:8px 14px;"
+                        + "border:3px solid #1565c0;"
+                        + "border-radius:8px;"
+                        + "background:#ffffff;"
+                        + "color:#0d47a1;'>"
+        );
 
         for (Baby b : babies) {
             sb.append("<option value='").append(b.getId()).append("'");
-            if (b.getId() == selectedId) {
-                sb.append(" selected");
-            }
+            if (b.getId() == selectedId) sb.append(" selected");
             sb.append(">").append(b.getName()).append("</option>");
         }
 
         sb.append("</select>");
-        sb.append("</form><br>");
+        sb.append("</form>");
+        sb.append("</div>");
+
         return sb.toString();
     }
 
@@ -137,10 +169,13 @@ public class Nurse extends Adult implements Pageable {
                             double feedStart, double feedDuration, String feedType,
                             List<String> comments) {
 
-        return "<html><head><title>Nurse Dashboard</title></head><body>"
-                + "<h1>Nurse Dashboard</h1>"
+        return "<!DOCTYPE html>"
+                + "<html><head>"
+                + "<title>Nurse Dashboard</title>"
+                + "</head><body>"
                 + babyDropdown(babyId, req.getContextPath())
-                + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px; align-items:flex-start;'>"
+                + "<h1 style='text-align:center;'>Nurse Dashboard</h1>"
+                + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>"
                 + glucoseInputLayout(req.getContextPath(), glucoseValue, time)
                 + feedingInputLayout(req.getContextPath(), feedStart, feedDuration, feedType)
                 + nurseCommentBox(req.getContextPath())
@@ -180,6 +215,7 @@ public class Nurse extends Adult implements Pageable {
         resp.setContentType("text/html");
         resp.getWriter().write(nursePage(glucoseChart, req, babyId,
                 glucoseValue, time, feedStart, feedDuration, feedType, comments));
+        System.out.println("Rendering nurse page for babyId = " + babyId);
     }
 
 
