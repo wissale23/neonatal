@@ -210,50 +210,5 @@ public class GlucoseChart {
                 "    });\n" +
                 "  </script>\n";
     }
-
-
-//    public List<Double> getLimInp() {
-//        double lower, upper;
-//
-//        // Always load latest from DB
-//        double[] dbLimits = loadLimitsFromDB();
-//        lower = dbLimits[0];
-//        upper = dbLimits[1];
-//
-//        // Optional: store in session for faster access
-//        if (session != null) {
-//            session.setAttribute("lowerLimit", lower);
-//            session.setAttribute("upperLimit", upper);
-//        }
-//
-//        List<Double> result = new ArrayList<>();
-//        result.add(lower);
-//        result.add(upper);
-//        return result;
-//    }
-
-//    private double[] loadLimitsFromDB() {
-//        double[] limits = { defaultLower, defaultUpper };
-//
-//        String sql = "SELECT lower_limit, upper_limit FROM limits ORDER BY id DESC LIMIT 1";
-//
-//        try (Connection conn = DriverManager.getConnection(
-//                "jdbc:postgresql://localhost:5432/yourdb",
-//                "youruser",
-//                "yourpassword");
-//             PreparedStatement ps = conn.prepareStatement(sql);
-//             ResultSet rs = ps.executeQuery()) {
-//
-//            if (rs.next()) {
-//                limits[0] = rs.getDouble("lower_limit");
-//                limits[1] = rs.getDouble("upper_limit");
-//            }
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return limits;
-//    }
 }
 
