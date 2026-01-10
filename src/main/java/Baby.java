@@ -109,6 +109,12 @@ public class Baby extends Person{
         if (!sampleTimes.isEmpty()) sampleTimes.remove(sampleTimes.size() - 1);
         if (!sampleValues.isEmpty()) sampleValues.remove(sampleValues.size() - 1);
     }
+    
+    public void removeLastFeeding() {
+        if (!feedStarts.isEmpty()) feedStarts.remove(feedStarts.size() - 1);
+        if (!feedDurations.isEmpty()) feedDurations.remove(feedDurations.size() - 1);
+        if (!feedTypes.isEmpty()) feedTypes.remove(feedTypes.size() - 1);
+    }
 
 
 }
