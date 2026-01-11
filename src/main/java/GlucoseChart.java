@@ -110,7 +110,7 @@ public class GlucoseChart {
                 + "padding:5px 10px; border-radius:4px;"
                 + "color:black; font-weight:bold; text-decoration:none; cursor:pointer;"
                 + "transition: background-color 0.2s;'>"
-                + "Home</a>";
+                + "Logout</a>";
     }
     
 
