@@ -231,9 +231,12 @@ public class Nurse extends Adult implements Pageable {
         GlucoseChart glucoseChart = new GlucoseChart(baby);
 
         // Get latest values for input forms
-        double glucoseValue = getGlucValue(session).get(0);
-        double hour = getGlucValue.get(1);
-        double minute = getGlucValue.get(2);
+        List<Double> glucValues = getGlucValue(session);
+
+        double glucoseValue = glucValues.get(0);
+        double hour = glucValues.get(1);
+        double minute = glucValues.get(2);
+
         double feedStart = getFeedValue(session).get(0);
         double feedDuration = getFeedValue(session).get(1);
         String feedType = getFeedStr(session);
