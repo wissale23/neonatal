@@ -1,10 +1,5 @@
 import java.sql.*;
 import java.util.List;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-
 
 public class GlucoseChart {
     private final Baby baby;
@@ -32,29 +27,7 @@ public class GlucoseChart {
         return sampleTriangles;
     }
 
-    public static List<String> getComments(HttpSession session) {
-        List<String> comments = (List<String>) session.getAttribute("commentsList");
-        if (comments == null) {
-            comments = new ArrayList<>();
-            session.setAttribute("commentsList", comments);
-        }
-        return comments;
-    }
-
-
-    //adding new comment to select whenever there is a new one
-
-    public static void addComment(HttpSession session, String username, String commentText) {
-
-        if (commentText == null || commentText.isEmpty()) return;
-        List<String> comments = getComments(session);
-        String time = LocalDateTime.now().format(
-            DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-        comments.add(time + "\n" + username + ": " + commentText);
-    }
-
-
-
+    // Display Comments Box
     public String commentsInpLayout(List<String> comments) {
 
         String options = "";
@@ -136,7 +109,9 @@ public class GlucoseChart {
         return AlertRenderer.buildAlertHTML(warningSystem, latestGlucose);
     }
 
-
+    // Display Original Glucose Chart with Continuous Monitoring of Skin Glucose Data, and estimated Blood Glucose Data
+    // Chart.js properties from https://www.chartjs.org/docs/latest/charts/line.html
+    // Reference 1 - taken from https://www.w3schools.com/js/js_graphics_chartjs.asp
     public String generateHTML() {
         String timeArray = baby.getTimeData().toString();
         String rawArray = baby.getRawData().toString();
@@ -176,7 +151,7 @@ public class GlucoseChart {
             // Define Axes
                 "          y: {position: 'left',  min: 0, max: 90, title: {display: true, text: 'Skin Glucose (µM)'} },\n" +
                 "          y2: { position: 'right', min: 0, max: 12, title: {display: true, text: 'Blood Glucose (mM)'} },\n" +
-                "          x: { type: 'linear', min: 11.0, max: 14.0,\n" +
+                "          x: { type: 'linear', min: 00.0, max: 24.0,\n" +
                 "            title: { display: true, text: 'Time (hours)' },\n" +
                 "            ticks: {\n" +
                 "              stepSize: (0.5 / 6),\n" +
