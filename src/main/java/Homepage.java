@@ -6,6 +6,7 @@ public class Homepage {
         return "<!DOCTYPE html>"
                 + "<html><head>"
                 + "<meta name='viewport' content='width=device-width, initial-scale=1'>"
+                + "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">"
                 + "<style>"
                 + "body { font-family: 'Lato', sans-serif; }"
                 + ".sidebar { height:100%; width:0; position:fixed; z-index:1; top:0; left:0;"
@@ -25,8 +26,8 @@ public class Homepage {
 
                 + "<div id='mySidebar' class='sidebar'>"
                 + "  <a href='javascript:void(0)' class='closebtn' onclick='closeSidebar()'>&times;</a>"
-                + "  <a href='/home'>Home</a>"
-                + "  <a href='/login'>Login</a>"
+                + "  <a href='/home'><i class=\"fa fa-fw fa-home\"></i>Home</a>"
+                + "  <a href='/login'><i class=\"fa fa-fw fa-user\"></i>Login</a>"
                 + "</div>"
 
                 + "<div id='main'>"
