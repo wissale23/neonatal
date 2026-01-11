@@ -164,10 +164,10 @@ public class GlucoseChart {
                 "        responsive: true,\n" +
                 "        scales: {\n" +
             // Define Axes
-                "          y: {position: 'left',  min: 0, max: 120, title: {display: true, text: 'Skin Glucose (µM)'} },\n" +
-                "          y2: { position: 'right', min: 0, max: 12, title: {display: true, text: 'Blood Glucose (mM)'} },\n" +
+                "          y: {position: 'left',  min: 0, max: 120, title: {display: true, text: 'Skin Glucose (µM)', font: { size: 16, weight: 'bold' } } },\n" +
+                "          y2: { position: 'right', min: 0, max: 12, title: {display: true, text: 'Blood Glucose (mM)', font: { size: 16, weight: 'bold' } } },\n" +
                 "          x: { type: 'linear', min: " + xMin + ", max: " + xMax + ",\n" +
-                "            title: { display: true, text: 'Time (hours)' },\n" +
+                "            title: { display: true, text: 'Time (hours)', font: { size: 16, weight: 'bold' } },\n" +
                 "            ticks: {\n" +
                 "              stepSize: (0.5 / 6),\n" +
                 "              callback: function(value) {\n" +
@@ -184,9 +184,9 @@ public class GlucoseChart {
                 "          annotation: {\n" +
                 "            annotations: {\n" +
             // Plot Acceptable Range
-                "              low: { type: 'box', yScaleID: 'y2', yMin: 0, yMax: LOWER, backgroundColor: 'rgba(216,216,216,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Blood Glucose: Below Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
-                "              normal: { type: 'box', yScaleID: 'y2', yMin: LOWER, yMax: UPPER, backgroundColor: 'rgba(144,238,144,0.35)', drawTime: 'beforeDatasetsDraw', label: { content: 'Blood Glucose: Normal Range', display: true, color: '#1b5e20', font: { size: 12 } } },\n" +
-                "              high: { type: 'box', yScaleID: 'y2',  yMin: UPPER, yMax: 12, backgroundColor: 'rgba(216,216,216,0.15)', drawTime: 'beforeDatasetsDraw', label: { content: 'Blood Glucose: Above Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
+                "              low: { type: 'box', yScaleID: 'y2', yMin: 0, yMax: LOWER, backgroundColor: 'rgba(216,216,216,0.15)', drawTime: 'afterDatasetsDraw', label: { content: 'Blood Glucose: Below Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
+                "              normal: { type: 'box', yScaleID: 'y2', yMin: LOWER, yMax: UPPER, backgroundColor: 'rgba(144,238,144,0.35)', drawTime: 'afterDatasetsDraw', label: { content: 'Blood Glucose: Normal Range', display: true, color: '#1b5e20', font: { size: 12 } } },\n" +
+                "              high: { type: 'box', yScaleID: 'y2',  yMin: UPPER, yMax: 12, backgroundColor: 'rgba(216,216,216,0.15)', drawTime: 'afterDatasetsDraw', label: { content: 'Blood Glucose: Above Safe Range', display: true, color: '#8b0000', font: { size: 11 } } },\n" +
             // Plot Heel Prick Sample inputs
                                getSamples() +
                                getFeedings() +
