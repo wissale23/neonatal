@@ -46,7 +46,7 @@ public class Homepage {
         // Reference 3 - Slideshow taken from https://www.w3schools.com/howto/howto_js_slideshow.asp
         return "<div class='slideshow-container'>"
                 + "  <div class='mySlides fade'>"
-                + "  <img src='" + contextPath + "/images/1.jpg' style='width:100%'>"
+                + "  <img src='" + contextPath + "/images/1.png' style='width:100%'>"
                 + "  </div>"
                 + "  <div class='mySlides fade'>"
                 + "    <img src='" + contextPath + "/images/2.jpg' style='width:100%'>"
