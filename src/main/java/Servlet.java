@@ -78,8 +78,9 @@ public class Servlet extends HttpServlet {
         String path = req.getServletPath();
 
         if ("/".equals(path)){
-           resp.getWriter().write("Test for Homepage endpoint");
-           return;     
+            resp.setContentType("text/html");
+            resp.getWriter().write(Homepage.generateSidebar());
+            return;
         }
                 
         if ("/login".equals(path)) {
