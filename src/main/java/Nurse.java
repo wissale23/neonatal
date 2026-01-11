@@ -8,11 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 public class Nurse extends Adult implements Pageable {
 
     private final double defaultGlucose = 0.0;
-    private final double defaultGlucHour = 0;
-    private final double defaultGlucMinute = 0;
-
-    private final double defaultFeedStart = 0.0;
-    private final double defaultFeedDuration = 0.0;
+    private final int defaultHour = 00;
+    private final int defaultMinute = 00;
+    private final int defaultFeedDuration = 00;
     private final String defaultFeedType = "";
     private final String defaultComment = "Add a comment";
 
@@ -124,7 +122,7 @@ public class Nurse extends Adult implements Pageable {
     }
 
 
-    public String feedingInputLayout(String pathString, double feedStart, double feedDuration, String feedType) {
+    public String feedingInputLayout(String pathString, double feedStartHour, double feedStartMinute, double feedDuration, String feedType) {
         return "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;"
                 + "padding: 20px;"
@@ -140,13 +138,14 @@ public class Nurse extends Adult implements Pageable {
                 + "<div>"
                 
                 + "<span style='display:inline-block; width:110px; text-align:right; color:black;'>Start of feeding: </span>"
-                + "<input type='text' name='startInp' step='0.001' value='" + feedStart + "' style='width:100px; text-align:center;'/><br/><br/>"
-                
+                + "<input type='number' name='startHour' min='0' max='23' value='" + feedStartHour + "' style='width:50px; text-align:center;'/> : "
+                + "<input type='number' name='startMinute' min='0' max='59' value='" + feedStartMinute + "' style='width:50px; text-align:center;'/><br/><br/>"
+
                 + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Duration of feeding: </span>"
-                + "<input type='text' name='durInp' step='0.001' value='" + feedDuration + "' style='width:100px; text-align:center;'/><br/><br/>"
+                + "<input type='text' name='durInp' step='0.01' value='" + feedDuration + "' style='width:100px; text-align:center;'/><br/><br/>"
                 
                 + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Feeding Description: </span>"
-                + "<input type='text' name='typeInp' step='0.001' value='" + feedType + "' style='width:100px; text-align:center;'/><br/><br/>"
+                + "<input type='text' name='typeInp' step='0.01' value='" + feedType + "' style='width:100px; text-align:center;'/><br/><br/>"
     
                 // Buttons side by side
                 + "<div style='display:flex; justify-content:center; gap:10px;'>"
@@ -191,7 +190,7 @@ public class Nurse extends Adult implements Pageable {
 
     public String nursePage(GlucoseChart glucoseChart, HttpServletRequest req, int babyId,
                             double glucoseValue, double hour, double minute,
-                            double feedStart, double feedDuration, String feedType,
+                            double feedStartHour, double feedStartMinute, double feedDuration, String feedType,
                             List<String> comments) {
 
         return "<!DOCTYPE html>"
@@ -204,7 +203,7 @@ public class Nurse extends Adult implements Pageable {
                 + glucoseChart.generateHTML()
                 + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>"
                 + glucoseInputLayout(req.getContextPath(), glucoseValue, hour, minute)
-                + feedingInputLayout(req.getContextPath(), feedStart, feedDuration, feedType)
+                + feedingInputLayout(req.getContextPath(), feedStartHour, feedStartMinute,feedDuration, feedType)
                 + nurseCommentBox(req.getContextPath())
                 + "</div>"
                 + glucoseChart.commentsInpLayout(comments)
@@ -232,13 +231,15 @@ public class Nurse extends Adult implements Pageable {
 
         // Get latest values for input forms
         List<Double> glucValues = getGlucValue(session);
-
         double glucoseValue = glucValues.get(0);
         double hour = glucValues.get(1);
         double minute = glucValues.get(2);
 
-        double feedStart = getFeedValue(session).get(0);
-        double feedDuration = getFeedValue(session).get(1);
+        List<Double> feedValues = getFeedValue(session);
+        double feedStartHour = feedValues.get(0);
+        double feedStartMinute = feedValues.get(1);
+        double feedDuration = getFeedValue(session).get(2);
+        
         String feedType = getFeedStr(session);
         List<String> comments = baby.getComments();
 
@@ -262,8 +263,6 @@ public class Nurse extends Adult implements Pageable {
                 double hour = Double.parseDouble(req.getParameter("glucHourInp"));
                 double minute = Double.parseDouble(req.getParameter("glucMinInp"));
         
-
-        
                 double timeValue = hour + (minute / 60.0);
                 baby.addSample(
                         timeValue,
@@ -272,13 +271,19 @@ public class Nurse extends Adult implements Pageable {
             }
         }
 
-        if (req.getParameter("startInp") != null) {
+        if (req.getParameter("startHour") != null) {
             if ("undo".equals(action)) {
                 baby.removeLastFeeding(); 
             } else {
+                double feedHour = Double.parseDouble(req.getParameter("startHour"));
+                double feedMinute = Double.parseDouble(req.getParameter("startMinute"));   
+                double feedValue = feedHour + (feedMinute / 60.0);
+
+                double feedDuration = Double.parseDouble(req.getParameter("durInp")) / 60.0;
+
                 baby.addFeeding(
-                        Double.parseDouble(req.getParameter("startInp")),
-                        Double.parseDouble(req.getParameter("durInp")),
+                        feedValue,
+                        feedDuration,
                         req.getParameter("typeInp")
                 );
             }
@@ -295,8 +300,8 @@ public class Nurse extends Adult implements Pageable {
     // Get last glucose value from session
     public List<Double> getGlucValue(HttpSession session) {
         double glucose = defaultGlucose;
-        double hour = defaultGlucHour;
-        double minute = defaultGlucMinute;
+        double hour = defaultHour;
+        double minute = defaultMinute;
         
 
         if (session != null) {
@@ -322,22 +327,29 @@ public class Nurse extends Adult implements Pageable {
 
     // Get last feeding values from session
     public List<Double> getFeedValue(HttpSession session) {
-        double start = defaultFeedStart;
-        double dur = defaultFeedDuration;
+        double startHour = defaultHour;
+        double startMinute = defaultMinute;
+        double duration = defaultFeedDuration;
 
         if (session != null) {
-            List<Double> startList = (List<Double>) session.getAttribute("startList");
-            List<Double> durList = (List<Double>) session.getAttribute("durationList");
-
-            if (startList != null && !startList.isEmpty())
-                start = startList.get(startList.size() - 1);
-            if (durList != null && !durList.isEmpty())
-                dur = durList.get(durList.size() - 1);
+            List<Double> startList = (List<Double>) session.getAttribute("startList"); 
+            List<Double> durList = (List<Double>) session.getAttribute("durationList"); 
+    
+            if (startList != null && !startList.isEmpty()) {
+                double start = startList.get(startList.size() - 1);
+                startHour = (int) start;
+                startMinute = (int) ((start - startHour) * 60);
+            }
+    
+            if (durList != null && !durList.isEmpty()) {
+                duration = durList.get(durList.size() - 1) / 60.0; 
+            }
         }
 
         List<Double> result = new ArrayList<>();
-        result.add(start);
-        result.add(dur);
+        result.add(startHour);
+        result.add(startMinute);
+        result.add(durationDecimal);
         return result;
     }
 
