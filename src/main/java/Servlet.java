@@ -78,7 +78,7 @@ public class Servlet extends HttpServlet {
         String path = req.getServletPath();
 
         if ("/".equals(path)){
-           resp.getWriter().write('Test for Homepage endpoint');
+           resp.getWriter().write("Test for Homepage endpoint");
            return;     
         }
                 
