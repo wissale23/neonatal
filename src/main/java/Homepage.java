@@ -1,7 +1,10 @@
+import javax.servlet.http.HttpServletRequest;
+
 public class Homepage {
     // Returns the full HTML of the homepage
 
-    public static String generatePage() {
+    public static String generatePage(HttpServletRequest req) {
+        String contextPath = req.getContextPath();
         return "<!DOCTYPE html><html><head>"
                 + "<meta name='viewport' content='width=device-width, initial-scale=1'>"
                 + "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">"
@@ -18,7 +21,7 @@ public class Homepage {
                 + "</style>"
                 + "</head><body>"
                 + generateSidebar()           // sidebar HTML
-                + generateSlideshow()         // slideshow content goes inside #main
+                + generateSlideshow(contextPath)         // slideshow content
                 + "<script>"
                 + "function openSidebar(){ document.getElementById('mySidebar').style.width='250px';"
                 + "document.getElementById('main').style.marginLeft='250px'; }"
@@ -39,17 +42,17 @@ public class Homepage {
                 + "  <button class='openbtn' onclick='openSidebar()'>&#9776; Options</button>";
     }
 
-    public static String generateSlideshow() {
+    public static String generateSlideshow(String contextPath) {
         // Reference 3 - Slideshow taken from https://www.w3schools.com/howto/howto_js_slideshow.asp
         return "<div class='slideshow-container'>"
                 + "  <div class='mySlides fade'>"
-                + "    <img src='images/1.jpg' style='width:100%'>"
+                + "  <img src='" + contextPath + "/images/1.jpg' style='width:100%'>"
                 + "  </div>"
                 + "  <div class='mySlides fade'>"
-                + "    <img src='images/2.jpg' style='width:100%'>"
+                + "    <img src='" + contextPath + "/images/2.jpg' style='width:100%'>"
                 + "  </div>"
                 + "  <div class='mySlides fade'>"
-                + "    <img src='images/3.jpg' style='width:100%'>"
+                + "    <img src='" + contextPath + "images/3.jpg' style='width:100%'>"
                 + "  </div>"
                 + "  <a class='prev' onclick='plusSlides(-1)'>&#10094;</a>"
                 + "  <a class='next' onclick='plusSlides(1)'>&#10095;</a>"

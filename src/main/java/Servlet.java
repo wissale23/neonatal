@@ -79,7 +79,7 @@ public class Servlet extends HttpServlet {
 
         if ("/".equals(path)){
             resp.setContentType("text/html");
-            resp.getWriter().write(Homepage.generatePage());
+            resp.getWriter().write(Homepage.generatePage(req));
             return;
         }
                 
