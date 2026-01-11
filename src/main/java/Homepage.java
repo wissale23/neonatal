@@ -115,10 +115,13 @@ public class Homepage {
                     + ".contacts-box p {"
                     + "margin: 12px 0};"
 
-                    + ".contacts-box a {"
+                    + ".contacts-box a,"
+
+                    + ".contacts-box a:visited {"
                     + "font-size: 15px;"
                     + "color: #444;"
-                    + "text-decoration: none};"
+                    + "text-decoration: none;"
+                    + "-webkit-text-fill-color: #444;"
 
                     + ".contacts-box a:hover {"
                     + "color: #031426;"
