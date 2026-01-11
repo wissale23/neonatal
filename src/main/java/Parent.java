@@ -3,11 +3,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-public class Parent extends Adult implements Pageable {
 
-    // Wider safe zone (edit if you want)
-    private final double lowerDefault = 2.0;
-    private final double upperDefault = 12.0;
+public class Parent extends Adult implements Pageable {
 
     // Range + faster playback
     private final double maxValue = 40.0;
@@ -18,15 +15,33 @@ public class Parent extends Adult implements Pageable {
     }
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        // Fix encoding so µM displays correctly
         resp.setContentType("text/html;charset=UTF-8");
         resp.setCharacterEncoding("UTF-8");
 
-        List<Double> timeData = getPatients().get(0).getTimeData();
-        List<Double> rawData = getPatients().get(0).getRawData();
-        List<Double> smoothData = getPatients().get(0).getSmoothData();
+        // Pick which baby to show (defaults to Baby A / id=1)
+        int babyId = 1;
+        try {
+            String idStr = req.getParameter("babyId");   // e.g. /parents?babyId=2
+            if (idStr == null) idStr = req.getParameter("id"); // fallback
+            if (idStr != null) babyId = Integer.parseInt(idStr);
+        } catch (Exception ignored) {}
 
-        resp.getWriter().write(generateHTML(timeData, rawData, smoothData, lowerDefault, upperDefault));
+        // Get baby + data from BabyPatientList
+        Baby baby = BabyPatientList.getBaby(babyId);
+
+        List<Double> timeData = baby.getTimeData();
+        List<Double> rawData = baby.getRawData();
+        List<Double> smoothData = baby.getSmoothData();
+
+        // Get dynamic safe range set by consultant (NOT fixed defaults)
+        double lowerBlood = baby.getLowerRange();
+        double upperBlood = baby.getUpperRange();
+
+        double lower = lowerBlood * 3.5 + 1.5; // convert to skin
+        double upper = upperBlood * 3.5 + 1.5; // convert to skin
+
+
+        resp.getWriter().write(generateHTML(timeData, rawData, smoothData, lower, upper));
     }
 
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -69,8 +84,6 @@ public class Parent extends Adult implements Pageable {
         html.append("<body>\n");
         html.append("  <div class=\"wrap\">\n");
         html.append("    <h2>Baby's Skin Glucose</h2>\n");
-
-        // Removed “Sped-up playback…” line
 
         // Time shown next to current value
         html.append("    <div class=\"value\">Current: <b id=\"currentValue\">--</b><span class=\"time\" id=\"timeLabel\">--</span></div>\n");
@@ -131,7 +144,6 @@ public class Parent extends Adult implements Pageable {
         html.append("      i = (i + 1) % s.length;\n");
         html.append("      if (!Number.isFinite(v)) return;\n\n");
 
-        // Fix µM: use HTML entity so it doesn't become ?M
         html.append("      valueEl.innerHTML = (Math.round(v * 10) / 10) + ' &micro;M';\n");
 
         // Show time from timeData if available, else show clock
