@@ -19,8 +19,10 @@ public class Homepage {
                 + "#main { transition: margin-left .5s; padding:16px; }"
                 + "@media screen and (max-height:450px){.sidebar{padding-top:15px;}.sidebar a{font-size:18px;}}"
                 + "</style>"
+                + contactsCSS           // contacts CSS
                 + "</head><body>"
                 + generateSidebar()           // sidebar HTML
+                + generateContacts()            // contacts HTML
                 + generateSlideshow(contextPath)         // slideshow content
                 + "<script>"
                 + "function openSidebar(){ document.getElementById('mySidebar').style.width='250px';"
@@ -92,5 +94,48 @@ public class Homepage {
                 + " .active, .dot:hover{background-color:#717171;}"
                 + "</style>";
     }
+
+    public static final String contactsCSS =
+            "<style>" +
+                    ".contacts-box {"
+                    + "background-color: #f5f5f5;"
+                    + "border: 2px solid #ccc;"
+                    + "border-radius: 10px;"
+                    + "padding: 20px;"
+                    + "width: 320px;"
+                    + "margin: 30pc auto;"
+                    + "box-shadow: 0 4px 8px rgba(0,0,0,0.2);"
+                    + "font-family: Arial, sans-serif;"
+                    + "}"
+
+                    + ".contacts-box h3 {"
+                    + "text-align: center;"
+                    + "margin-top: 0};"
+
+                    + ".contacts-box p {"
+                    + "margin: 12px 0};"
+
+                    + ".contacts-box a {"
+                    + "font-size: 18px;"
+                    + "color: #072445;"
+                    + "text-decoration: none};"
+
+                    + ".contacts-box a:hover {"
+                    + "text-decoration: underline};"
+
+                    + "</style>";
+
+    public static String generateContacts() {
+        return "<div class='contacts-box'>"
+                + "<h3>Contact Information<h/3>"
+                + "<p><i class='fa-solid fa-phone'></i> <strong>Reception</strong><br/>"
+                + "<a href='tel: 02033135158'>02033135158</a></p>"
+                + "<p><i class='fa-solid fa-phone'></i> <strong>Intensive Care</strong><br/>"
+                + "<a href='tel: 02033133174'>02033133174</a></p>"
+                + "<p><i class='fa-solid fa-phone'></i> <strong>High Dependency and Special Care</strong><br/>"
+                + "<a href='tel: 02033133908'>02033133908</a></p>"
+                + "</div>";
+    }
+
 
 }
