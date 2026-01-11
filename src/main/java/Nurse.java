@@ -245,7 +245,7 @@ public class Nurse extends Adult implements Pageable {
 
         resp.setContentType("text/html");
         resp.getWriter().write(nursePage(glucoseChart, req, babyId,
-                glucoseValue, hour,minute, feedStart, feedDuration, feedType, comments));
+                glucoseValue, hour,minute, feedStartHour,feedStartMinute, feedDuration, feedType, comments));
     }
 
 
@@ -349,7 +349,7 @@ public class Nurse extends Adult implements Pageable {
         List<Double> result = new ArrayList<>();
         result.add(startHour);
         result.add(startMinute);
-        result.add(durationDecimal);
+        result.add(duration);
         return result;
     }
 
