@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Parent extends Adult implements Pageable {
 
-    // Range + faster playback
+    // Range and faster playback
     private final double maxValue = 40.0;
     private final int intervalMs = 150;
 
