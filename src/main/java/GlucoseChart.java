@@ -103,7 +103,7 @@ public class GlucoseChart {
 
 
     public String logoutButton(HttpServletRequest req) {
-        return "<a href='" + req.getContextPath() + "/home' "
+        return "<a href='" + req.getContextPath() + "/' "
                 + "style='position:absolute; top:10px; left:10px;"
                 + "background-color:#ffc0cb;"  
                 + "border:2px solid black;"
