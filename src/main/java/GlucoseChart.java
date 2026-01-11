@@ -118,6 +118,21 @@ public class GlucoseChart {
         String smoothArray = baby.getSmoothData().toString();
         String warningHTML = buildWarningHTML(baby.getRawData());
 
+        // Set x axes range as scaled from time data
+        double minTime = 0.0;
+        double maxTime = 24.0;
+        List<Double> times = baby.getTimeData();
+        if (times != null && !times.isEmpty()) {
+            minTime = times.get(0);
+            maxTime = times.get(0);
+            for (double t : times) {
+                if (t < minTime) minTime = t;
+                if (t > maxTime) maxTime = t;
+            }
+        }
+        int xMin = (int) Math.floor(minTime);
+        int xMax = (int) Math.ceil(maxTime);
+
         return AlertRenderer.alertCSS +
                 "  <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n" +
                 "  <script src=\"https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3\"></script>\n" +
@@ -151,7 +166,7 @@ public class GlucoseChart {
             // Define Axes
                 "          y: {position: 'left',  min: 0, max: 90, title: {display: true, text: 'Skin Glucose (µM)'} },\n" +
                 "          y2: { position: 'right', min: 0, max: 12, title: {display: true, text: 'Blood Glucose (mM)'} },\n" +
-                "          x: { type: 'linear', min: 0.0, max: 24.0,\n" +
+                "          x: { type: 'linear', min: " + xMin + ", max: " + xMax + ",\n" +
                 "            title: { display: true, text: 'Time (hours)' },\n" +
                 "            ticks: {\n" +
                 "              stepSize: (0.5 / 6),\n" +
