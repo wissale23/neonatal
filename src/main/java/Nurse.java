@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 public class Nurse extends Adult implements Pageable {
 
     private final double defaultGlucose = 0.0;
-    private final double defaultTime = 0.0;
+    private final double defaultGlucHour = 0;
+    private final double defaultGlucMinute = 0;
+
     private final double defaultFeedStart = 0.0;
     private final double defaultFeedDuration = 0.0;
     private final String defaultFeedType = "";
@@ -81,7 +83,7 @@ public class Nurse extends Adult implements Pageable {
 
 
 
-    public String glucoseInputLayout(String pathString, double glucoseValue, double time) {
+    public String glucoseInputLayout(String pathString, double glucoseValue, double hour, double minute) {
         return "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;"
                 + "padding: 20px;"
@@ -95,12 +97,20 @@ public class Nurse extends Adult implements Pageable {
     
                 + "<form method='POST' action='" + pathString + "/nurses'>"
                 + "<div>"
+            
                 + "<span style='display:inline-block; width:110px; text-align:right; color:black;'>Sample value: </span>"
-                + "<input type='text' name='glucoseInp' step='0.001' value='" + glucoseValue + "' style='width:100px; text-align:center;'/><br/><br/>"
-                + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Time of day: </span>"
-                + "<input type='text' name='timeInp' step='0.001' value='" + time + "' style='width:100px; text-align:center;'/><br/><br/>"
+                + "<input type='number' name='glucoseInp' step='0.001' value='" 
+                + glucoseValue + "' style='width:100px; text-align:center;'/>"
+                + "<br/><br/>"
     
-                // Buttons in a horizontal row
+                + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Time of day: </span>"
+                + "<input type='number' name='glucHourInp' min='0' max='23' step='1' "
+                + "value='" + hour + "' style='width:45px; text-align:center;'/>"
+                + " : "
+                + "<input type='number' name='glucMinInp' min='0' max='59' step='1' "
+                + "value='" + minute + "' style='width:45px; text-align:center;'/>"
+                + "<br/><br/>"
+    
                 + "<div style='display:flex; justify-content:center; gap:10px;'>"
                 + "<button type='submit' name='action' value='add' "
                 + "style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add sample</button>"
@@ -111,7 +121,8 @@ public class Nurse extends Adult implements Pageable {
                 + "</div>"
                 + "</form>"
                 + "</div>";
-    }    
+    }
+
 
     public String feedingInputLayout(String pathString, double feedStart, double feedDuration, String feedType) {
         return "<div style='background-color: #fedae6; "
@@ -179,7 +190,7 @@ public class Nurse extends Adult implements Pageable {
     }
 
     public String nursePage(GlucoseChart glucoseChart, HttpServletRequest req, int babyId,
-                            double glucoseValue, double time,
+                            double glucoseValue, double hour, double minute,
                             double feedStart, double feedDuration, String feedType,
                             List<String> comments) {
 
@@ -192,7 +203,7 @@ public class Nurse extends Adult implements Pageable {
                 + "</div>"
                 + glucoseChart.generateHTML()
                 + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>"
-                + glucoseInputLayout(req.getContextPath(), glucoseValue, time)
+                + glucoseInputLayout(req.getContextPath(), glucoseValue, hour, minute)
                 + feedingInputLayout(req.getContextPath(), feedStart, feedDuration, feedType)
                 + nurseCommentBox(req.getContextPath())
                 + "</div>"
@@ -221,7 +232,8 @@ public class Nurse extends Adult implements Pageable {
 
         // Get latest values for input forms
         double glucoseValue = getGlucValue(session).get(0);
-        double time = getGlucValue(session).get(1);
+        double hour = getGlucValue.get(1);
+        double minute = getGlucValue.get(2);
         double feedStart = getFeedValue(session).get(0);
         double feedDuration = getFeedValue(session).get(1);
         String feedType = getFeedStr(session);
@@ -229,7 +241,7 @@ public class Nurse extends Adult implements Pageable {
 
         resp.setContentType("text/html");
         resp.getWriter().write(nursePage(glucoseChart, req, babyId,
-                glucoseValue, time, feedStart, feedDuration, feedType, comments));
+                glucoseValue, hour,minute, feedStart, feedDuration, feedType, comments));
     }
 
 
@@ -238,13 +250,20 @@ public class Nurse extends Adult implements Pageable {
         Baby baby = BabyPatientList.getBaby((int) session.getAttribute("babyId"));
 
         String action = req.getParameter("action"); 
+        
 
         if (req.getParameter("glucoseInp") != null) {
             if ("undo".equals(action)) {
                 baby.removeLastSample();
             } else {
+                double hour = Double.parseDouble(req.getParameter("glucHourInp"));
+                double minute = Double.parseDouble(req.getParameter("glucMinInp"));
+        
+
+        
+                double timeValue = hour + (minute / 60.0);
                 baby.addSample(
-                        Double.parseDouble(req.getParameter("timeInp")),
+                        timeValue,
                         Double.parseDouble(req.getParameter("glucoseInp"))
                 );
             }
@@ -273,7 +292,9 @@ public class Nurse extends Adult implements Pageable {
     // Get last glucose value from session
     public List<Double> getGlucValue(HttpSession session) {
         double glucose = defaultGlucose;
-        double time = defaultTime;
+        double hour = defaultGlucHour;
+        double minute = defaultGlucMinute;
+        
 
         if (session != null) {
             List<Double> glucoseList = (List<Double>) session.getAttribute("glucoseList");
@@ -282,12 +303,15 @@ public class Nurse extends Adult implements Pageable {
             if (glucoseList != null && !glucoseList.isEmpty())
                 glucose = glucoseList.get(glucoseList.size() - 1);
             if (timeList != null && !timeList.isEmpty())
-                time = timeList.get(timeList.size() - 1);
+                double time = timeList.get(timeList.size() - 1);
+                hour = (int) time;
+                minute = (int) Math.round((time - hour) * 60);
         }
 
         List<Double> result = new ArrayList<>();
         result.add(glucose);
-        result.add(time);
+        result.add((double) hour);    
+        result.add((double) minute);
         return result;
     }
 
