@@ -22,8 +22,8 @@ public class Homepage {
                 + contactsCSS           // contacts CSS
                 + "</head><body>"
                 + generateSidebar()           // sidebar HTML
-                + generateContacts()            // contacts HTML
                 + generateSlideshow(contextPath)         // slideshow content
+                + generateContacts()            // contacts HTML
                 + "<script>"
                 + "function openSidebar(){ document.getElementById('mySidebar').style.width='250px';"
                 + "document.getElementById('main').style.marginLeft='250px'; }"
@@ -105,7 +105,7 @@ public class Homepage {
                     + "width: 320px;"
                     + "margin: 30pc auto;"
                     + "box-shadow: 0 4px 8px rgba(0,0,0,0.2);"
-                    + "font-family: Arial, sans-serif;"
+                    + "font-family: Lato, sans-serif;"
                     + "}"
 
                     + ".contacts-box h3 {"
@@ -116,23 +116,28 @@ public class Homepage {
                     + "margin: 12px 0};"
 
                     + ".contacts-box a {"
-                    + "font-size: 18px;"
-                    + "color: #072445;"
+                    + "font-size: 15px;"
+                    + "color: #444;"
                     + "text-decoration: none};"
 
                     + ".contacts-box a:hover {"
+                    + "color: #031426;"
                     + "text-decoration: underline};"
+
+                    + ".contact-label {"
+                    + "font-weight: 400;"
+                    + "color: #444"
 
                     + "</style>";
 
     public static String generateContacts() {
         return "<div class='contacts-box'>"
                 + "<h3>Contact Information<h/3>"
-                + "<p><i class='fa-solid fa-phone'></i> <strong>Reception</strong><br/>"
+                + "<p><i class='fa fa-phone'></i> <span>Reception</span><br/>"
                 + "<a href='tel: 02033135158'>02033135158</a></p>"
-                + "<p><i class='fa-solid fa-phone'></i> <strong>Intensive Care</strong><br/>"
+                + "<p><i class='fa fa-phone'></i> <span>Intensive Care</span><br/>"
                 + "<a href='tel: 02033133174'>02033133174</a></p>"
-                + "<p><i class='fa-solid fa-phone'></i> <strong>High Dependency and Special Care</strong><br/>"
+                + "<p><i class='fa fa-phone'></i> <span>High Dependency and Special Care</span><br/>"
                 + "<a href='tel: 02033133908'>02033133908</a></p>"
                 + "</div>";
     }
