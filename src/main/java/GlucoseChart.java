@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 public class GlucoseChart {
     private final Baby baby;
