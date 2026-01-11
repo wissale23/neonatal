@@ -302,10 +302,12 @@ public class Nurse extends Adult implements Pageable {
 
             if (glucoseList != null && !glucoseList.isEmpty())
                 glucose = glucoseList.get(glucoseList.size() - 1);
-            if (timeList != null && !timeList.isEmpty())
+            if (timeList != null && !timeList.isEmpty()) {
                 double time = timeList.get(timeList.size() - 1);
                 hour = (int) time;
-                minute = (int) Math.round((time - hour) * 60);
+                minute = (int) ((time - hour) * 60);
+            }
+
         }
 
         List<Double> result = new ArrayList<>();
