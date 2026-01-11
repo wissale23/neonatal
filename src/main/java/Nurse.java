@@ -82,6 +82,9 @@ public class Nurse extends Adult implements Pageable {
 
 
     public String glucoseInputLayout(String pathString, double glucoseValue, double hour, double minute) {
+        String formattedHour = String.format("%02d", (int) hour);
+        String formattedMinute = String.format("%02d", (int) minute);
+
         return "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;"
                 + "padding: 20px;"
@@ -97,16 +100,16 @@ public class Nurse extends Adult implements Pageable {
                 + "<div>"
             
                 + "<span style='display:inline-block; width:110px; text-align:right; color:black;'>Sample value: </span>"
-                + "<input type='number' name='glucoseInp' step='0.001' value='" 
+                + "<input type='number' name='glucoseInp' step='0.01' value='" 
                 + glucoseValue + "' style='width:100px; text-align:center;'/>"
                 + "<br/><br/>"
     
                 + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Time of day: </span>"
                 + "<input type='number' name='glucHourInp' min='0' max='23' step='1' "
-                + "value='" + hour + "' style='width:45px; text-align:center;'/>"
+                + "value='" + formattedHour + "' style='width:45px; text-align:center;'/>"
                 + " : "
                 + "<input type='number' name='glucMinInp' min='0' max='59' step='1' "
-                + "value='" + minute + "' style='width:45px; text-align:center;'/>"
+                + "value='" + formattedMinute + "' style='width:45px; text-align:center;'/>"
                 + "<br/><br/>"
     
                 + "<div style='display:flex; justify-content:center; gap:10px;'>"
@@ -123,6 +126,11 @@ public class Nurse extends Adult implements Pageable {
 
 
     public String feedingInputLayout(String pathString, double feedStartHour, double feedStartMinute, double feedDuration, String feedType) {
+        String formattedStartHour = String.format("%02d", (int) feedStartHour);
+        String formattedStartMinute = String.format("%02d", (int) feedStartMinute);
+        String formattedDuration = String.format("%02d", (int) feedDuration);
+
+
         return "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;"
                 + "padding: 20px;"
@@ -138,11 +146,11 @@ public class Nurse extends Adult implements Pageable {
                 + "<div>"
                 
                 + "<span style='display:inline-block; width:110px; text-align:right; color:black;'>Start of feeding: </span>"
-                + "<input type='number' name='startHour' min='0' max='23' value='" + feedStartHour + "' style='width:50px; text-align:center;'/> : "
-                + "<input type='number' name='startMinute' min='0' max='59' value='" + feedStartMinute + "' style='width:50px; text-align:center;'/><br/><br/>"
+                + "<input type='number' name='startHour' min='0' max='23' value='" + formattedStartHour + "' style='width:50px; text-align:center;'/> : "
+                + "<input type='number' name='startMinute' min='0' max='59' value='" + formattedStartMinute + "' style='width:50px; text-align:center;'/><br/><br/>"
 
-                + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Duration of feeding: </span>"
-                + "<input type='text' name='durInp' step='0.01' value='" + feedDuration + "' style='width:100px; text-align:center;'/><br/><br/>"
+                + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Duration of feeding (mins): </span>"
+                + "<input type='text' name='durInp' step='0.01' value='" + formattedDuration + "' style='width:100px; text-align:center;'/><br/><br/>"
                 
                 + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Feeding Description: </span>"
                 + "<input type='text' name='typeInp' step='0.01' value='" + feedType + "' style='width:100px; text-align:center;'/><br/><br/>"
@@ -245,7 +253,7 @@ public class Nurse extends Adult implements Pageable {
 
         resp.setContentType("text/html");
         resp.getWriter().write(nursePage(glucoseChart, req, babyId,
-                glucoseValue, hour,minute, feedStart, feedDuration, feedType, comments));
+                glucoseValue, hour,minute, feedStartHour,feedStartMinute, feedDuration, feedType, comments));
     }
 
 
@@ -349,7 +357,7 @@ public class Nurse extends Adult implements Pageable {
         List<Double> result = new ArrayList<>();
         result.add(startHour);
         result.add(startMinute);
-        result.add(durationDecimal);
+        result.add(duration);
         return result;
     }
 
