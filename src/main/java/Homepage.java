@@ -24,6 +24,7 @@ public class Homepage {
                 + "</style>"
                 + "</head><body>"
 
+
                 + "<div id='mySidebar' class='sidebar'>"
                 + "  <a href='javascript:void(0)' class='closebtn' onclick='closeSidebar()'>&times;</a>"
                 + "  <a href='/home'><i class=\"fa fa-fw fa-home\"></i>Home</a>"
