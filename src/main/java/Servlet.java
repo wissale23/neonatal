@@ -76,8 +76,13 @@ public class Servlet extends HttpServlet {
         throws ServletException, IOException {
         
         String path = req.getServletPath();
+
+        if ("/".equals(path)){
+           resp.getWriter().write('Test for Homepage endpoint');
+           return;     
+        }
                 
-        if ("/".equals(path) || "/login".equals(path)) {
+        if ("/login".equals(path)) {
             String error = req.getParameter("error");
             String msg = "";
 
