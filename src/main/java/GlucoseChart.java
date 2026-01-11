@@ -164,7 +164,7 @@ public class GlucoseChart {
                 "        responsive: true,\n" +
                 "        scales: {\n" +
             // Define Axes
-                "          y: {position: 'left',  min: 0, max: 90, title: {display: true, text: 'Skin Glucose (µM)'} },\n" +
+                "          y: {position: 'left',  min: 0, max: 120, title: {display: true, text: 'Skin Glucose (µM)'} },\n" +
                 "          y2: { position: 'right', min: 0, max: 12, title: {display: true, text: 'Blood Glucose (mM)'} },\n" +
                 "          x: { type: 'linear', min: " + xMin + ", max: " + xMax + ",\n" +
                 "            title: { display: true, text: 'Time (hours)' },\n" +
