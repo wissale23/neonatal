@@ -205,6 +205,7 @@ public class Nurse extends Adult implements Pageable {
                 + "<html><head>"
                 + "<title>Nurse Dashboard</title>"
                 + "</head><body>"
+                + glucoseChart.logoutButton(req)
                 + "<h1 style='text-align:center;'>Nurse Dashboard</h1>"
                 + babyDropdown(babyId, req.getContextPath())
                 + "</div>"
