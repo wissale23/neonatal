@@ -1,12 +1,16 @@
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class WarningSystemTest {
 
     @Test
     void detectsBelowAboveAndSafe() {
-        WarningSystem ws = new WarningSystem(1.0, 2.0);
+        Baby baby = mock(Baby.class);
+        when(baby.getLowerRange()).thenReturn(1.0);
+        when(baby.getUpperRange()).thenReturn(2.0);
+
+        WarningSystem ws = new WarningSystem(baby);
 
         assertTrue(ws.isBelowRange(0.5));
         assertFalse(ws.isBelowRange(1.5));
@@ -21,7 +25,11 @@ public class WarningSystemTest {
 
     @Test
     void warningMessageMatchesState() {
-        WarningSystem ws = new WarningSystem(1.0, 2.0);
+        Baby baby = mock(Baby.class);
+        when(baby.getLowerRange()).thenReturn(1.0);
+        when(baby.getUpperRange()).thenReturn(2.0);
+
+        WarningSystem ws = new WarningSystem(baby);
 
         assertTrue(ws.getWarningMessage(0.5).toLowerCase().contains("below"));
         assertTrue(ws.getWarningMessage(2.5).toLowerCase().contains("above"));
