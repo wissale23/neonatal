@@ -118,7 +118,7 @@ public class GlucoseChart {
     public String buildWarningHTML(List<Double> glucoseData) {
         
         double latestGlucose = glucoseData.get(glucoseData.size() - 1);
-        WarningSystem warningSystem = new WarningSystem(baby.getLowerRange(), baby.getUpperRange());
+        WarningSystem warningSystem = new WarningSystem(baby);
 
         return AlertRenderer.buildAlertHTML(warningSystem, latestGlucose);
     }
