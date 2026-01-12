@@ -75,7 +75,7 @@ public class Researcher extends Adult implements Pageable{
             }
 
             // Set headers for file download
-            String filename = "glucose_data_" + selectedBaby.getName().replaceAll("\\s+", "_") + ".csv";
+            String filename = "glucose_data_" + selectedBaby.getId() + ".csv";
             resp.setContentType("text/csv");
             resp.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
 

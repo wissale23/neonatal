@@ -19,9 +19,9 @@ public class Servlet extends HttpServlet {
     private final Map<String, String> roles = new HashMap<>();       // username -> role
 
     // Resource file paths
-    private final String TIME_FILE = "/t_glu.txt";
-    private final String RAW_FILE = "/glu_uM_unsmoothed.txt";
-    private final String SMOOTH_FILE = "/glu_uM_smoothed.txt";
+    private final String TIME_FILE = "/t_glu1.txt";
+    private final String RAW_FILE = "/glu_uM_unsmoothed1.txt";
+    private final String SMOOTH_FILE = "/glu_uM_smoothed1.txt";
     
     private AuthManager auth;
     private LoginPageView loginView;
