@@ -121,7 +121,7 @@ public class Nurse extends Adult implements Pageable {
                 + "</form>"
                 + "</div>";
     }
-    private boolean isStandardFeedType(String type) {
+    public boolean isStandardFeedType(String type) {
         if (type == null) {
             return false;
         }
@@ -133,28 +133,25 @@ public class Nurse extends Adult implements Pageable {
                 || type.equals("Donor breast milk");
     }
 
-    public String feedingTypeDropdown(String feedType){
+    public String feedingTypeDropdown(String feedType) {
+        boolean standard = isStandardFeedType(feedType);
+
         return "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Feeding Type: </span>"
                 + "<select name='typeInp' "
-                + "onchange=\"document.getElementById('otherFeed').style.display = (this.value === 'Other') ? 'inline-block' : 'none';\" "
                 + "style='width:140px; padding:4px;'>"
-
                 + "<option value='Breastfeeding'" + ("Breastfeeding".equals(feedType) ? " selected" : "") + ">Breastfeeding</option>"
                 + "<option value='Expressed breast milk'" + ("Expressed breast milk".equals(feedType) ? " selected" : "") + ">Expressed breast milk</option>"
                 + "<option value='Fortified breast milk'" + ("Fortified breast milk".equals(feedType) ? " selected" : "") + ">Fortified breast milk</option>"
                 + "<option value='Formula'" + ("Formula".equals(feedType) ? " selected" : "") + ">Formula</option>"
                 + "<option value='Donor breast milk'" + ("Donor breast milk".equals(feedType) ? " selected" : "") + ">Donor breast milk</option>"
-                + "<option value='Other'" + (!isStandardFeedType(feedType) ? " selected" : "") + ">Other</option>"
-                + "</select><br/><br/>"
-
-                + "<input type='text' id='otherFeed' name='otherTypeInp' "
-                + "placeholder='Please specify...' "
-                + "value='" + (!isStandardFeedType(feedType) ? feedType : "") + "' "
-                + "style='width:140px; text-align:center; display:"
-                + (!isStandardFeedType(feedType) ? "inline-block" : "none") + ";'/>"
-                + "<br/><br/>";
-
+                + "<option value='Other'" + (!standard ? " selected" : "") + ">Other</option>"
+                + "</select>"
+                + "<input type='text' name='otherTypeInp' "
+                + "placeholder='Specify if Other...' "
+                + "value='" + (!standard ? feedType : "") + "' "
+                + "style='width:140px; text-align:center;'/>";
     }
+
 
 
     // Display the feeding information input
@@ -223,15 +220,7 @@ public class Nurse extends Adult implements Pageable {
                 + "</div>";
     }
 
-    private String parentChart(int babyId, String contextPath) {
-        return "<div style='margin-top:40px; text-align:center;'>"
-                + "<h3>Parent View (Read-only)</h3>"
-                + "<iframe "
-                + "src='" + contextPath + "/parents?babyId=" + babyId + "' "
-                + "style='width:100%; max-width:950px; height:520px; border:2px solid #ccc; border-radius:10px;'>"
-                + "</iframe>"
-                + "</div>";
-    }
+
 
 
     //Display the nurse page with the logout button, baby dropdown, glucose chart, heel pricks input, feeding input and comment box
@@ -255,7 +244,6 @@ public class Nurse extends Adult implements Pageable {
                 + nurseCommentBox(req.getContextPath())
                 + "</div>"
                 + glucoseChart.commentsInpLayout(comments)
-                + parentChart(babyId, req.getContextPath())
                 + "</body></html>";
     }
 
