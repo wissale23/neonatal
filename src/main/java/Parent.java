@@ -7,7 +7,7 @@ import java.util.List;
 public class Parent extends Adult implements Pageable {
 
     // Range and faster playback
-    private final double maxValue = 40.0;
+    private final double maxValue = 50.0;
     private final int intervalMs = 150;
 
     public Parent(String name, int id, String endpoint) {
@@ -70,13 +70,20 @@ public class Parent extends Adult implements Pageable {
         html.append("    .time { font-size: 16px; opacity: 0.7; margin-left: 10px; }\n");
         html.append("    .bar { position: relative; width: 900px; max-width: 100%; height: 18px; border-radius: 10px; overflow: hidden; border: 1px solid rgba(0,0,0,0.15); }\n");
         html.append("    .seg { height: 100%; float: left; }\n");
+        html.append("    .marker { position: absolute; top: -6px; width: 3px; height: 30px; background: #111; border-radius: 2px; transform: translateX(-50%); }\n");
+
 
         // Orange on BOTH sides, green in the middle
         html.append("    .low { background: rgba(255,165,0,0.22); }\n");
         html.append("    .normal { background: rgba(60,160,110,0.20); }\n");
         html.append("    .high { background: rgba(255,165,0,0.22); }\n");
 
-        html.append("    .marker { position: absolute; top: -6px; width: 3px; height: 30px; background: #111; border-radius: 2px; }\n");
+        // replaced .labels rule
+        html.append("    .axis { position: relative; width: 900px; max-width: 100%; height: 26px; margin-top: 8px; }\n");
+        html.append("    .tick { position: absolute; top: 0; width: 1px; height: 8px; background: rgba(0,0,0,0.35); }\n");
+        html.append("    .tickLabel { position: absolute; top: 10px; transform: translateX(-50%); font-size: 12px; opacity: 0.75; }\n");
+        html.append("    .rangeText { margin-top: 8px; font-size: 13px; opacity: 0.75; }\n");
+
         html.append("    .labels { width: 900px; max-width: 100%; display: flex; justify-content: space-between; margin-top: 8px; font-size: 13px; opacity: 0.75; }\n");
         html.append("  </style>\n");
         html.append("</head>\n");
@@ -95,15 +102,13 @@ public class Parent extends Adult implements Pageable {
         html.append("      <div class=\"marker\" id=\"marker\"></div>\n");
         html.append("    </div>\n");
 
-        html.append("    <div class=\"labels\">\n");
-        html.append("      <span>0</span>\n");
-        html.append("      <span>").append(tidy(lower)).append("</span>\n");
-        html.append("      <span>").append(tidy(upper)).append("</span>\n");
-        html.append("      <span>").append(tidy(maxValue)).append("</span>\n");
-        html.append("    </div>\n");
+        // replaceed labels bock in HTML w/ an axis
+        html.append("    <div class=\"axis\" id=\"axis\"></div>\n");
+        html.append("    <div class=\"rangeText\">Safe range: ")
+                .append(tidy(lower)).append(" – ").append(tidy(upper))
+                .append(" &micro;M</div>\n");
 
         html.append("  </div>\n");
-
         html.append("  <script>\n");
         html.append("    const timeData = ").append(jsArray(timeData)).append(";\n");
         html.append("    const rawData = ").append(jsArray(rawData)).append(";\n");
@@ -120,6 +125,27 @@ public class Parent extends Adult implements Pageable {
         html.append("    const valueEl = document.getElementById('currentValue');\n");
         html.append("    const timeEl = document.getElementById('timeLabel');\n");
         html.append("    const bar = document.getElementById('bar');\n\n");
+
+        // added ticks correctly spaced
+        html.append("    const axis = document.getElementById('axis');\n");
+        html.append("    function buildAxis() {\n");
+        html.append("      axis.innerHTML = '';\n");
+        html.append("      const step = 5;\n");
+        html.append("      for (let v = 0; v <= MAXV + 1e-9; v += step) {\n");
+        html.append("        const p = (v / MAXV) * 100;\n");
+        html.append("        const tick = document.createElement('div');\n");
+        html.append("        tick.className = 'tick';\n");
+        html.append("        tick.style.left = p + '%';\n");
+        html.append("        axis.appendChild(tick);\n");
+        html.append("        const lab = document.createElement('div');\n");
+        html.append("        lab.className = 'tickLabel';\n");
+        html.append("        lab.style.left = p + '%';\n");
+        html.append("        lab.textContent = v;\n");
+        html.append("        axis.appendChild(lab);\n");
+        html.append("      }\n");
+        html.append("    }\n");
+        html.append("    buildAxis();\n\n");
+
 
         html.append("    function clamp(x, a, b) { return Math.max(a, Math.min(b, x)); }\n");
         html.append("    function pickSeries() {\n");
@@ -155,8 +181,7 @@ public class Parent extends Adult implements Pageable {
         html.append("      }\n\n");
 
         html.append("      const clamped = clamp(v, 0, MAXV);\n");
-        html.append("      const px = (clamped / MAXV) * bar.clientWidth;\n");
-        html.append("      marker.style.left = (px - 1) + 'px';\n");
+        html.append("      marker.style.left = ((clamped / MAXV) * 100) + '%';\n");
         html.append("    }\n\n");
 
         html.append("    step();\n");
