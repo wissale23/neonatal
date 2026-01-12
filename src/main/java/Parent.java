@@ -8,7 +8,7 @@ public class Parent extends Adult implements Pageable {
 
     // Range and faster playback
     private final double maxValue = 50.0;
-    private final int intervalMs = 150;
+    private final int intervalMs = 25;
 
     public Parent(String name, int id, String endpoint) {
         super(name, id, endpoint);
