@@ -121,36 +121,22 @@ public class Nurse extends Adult implements Pageable {
                 + "</form>"
                 + "</div>";
     }
-    public boolean isStandardFeedType(String type) {
-        if (type == null) {
-            return false;
-        }
 
-        return type.equals("Breastfeeding")
-                || type.equals("Expressed breast milk")
-                || type.equals("Fortified breast milk")
-                || type.equals("Formula")
-                || type.equals("Donor breast milk");
-    }
 
     public String feedingTypeDropdown(String feedType) {
-        boolean standard = isStandardFeedType(feedType);
-
         return "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Feeding Type: </span>"
-                + "<select name='typeInp' "
-                + "style='width:140px; padding:4px;'>"
-                + "<option value='Breastfeeding'" + ("Breastfeeding".equals(feedType) ? " selected" : "") + ">Breastfeeding</option>"
-                + "<option value='Expressed breast milk'" + ("Expressed breast milk".equals(feedType) ? " selected" : "") + ">Expressed breast milk</option>"
-                + "<option value='Fortified breast milk'" + ("Fortified breast milk".equals(feedType) ? " selected" : "") + ">Fortified breast milk</option>"
-                + "<option value='Formula'" + ("Formula".equals(feedType) ? " selected" : "") + ">Formula</option>"
-                + "<option value='Donor breast milk'" + ("Donor breast milk".equals(feedType) ? " selected" : "") + ">Donor breast milk</option>"
-                + "<option value='Other'" + (!standard ? " selected" : "") + ">Other</option>"
-                + "</select>"
-                + "<input type='text' name='otherTypeInp' "
-                + "placeholder='Specify if Other...' "
-                + "value='" + (!standard ? feedType : "") + "' "
-                + "style='width:140px; text-align:center;'/>";
+                + "<input list='feedOptions' name='typeInp' value='" + feedType + "' "
+                + "style='width:150px; text-align:center;'/>"
+                + "<datalist id='feedOptions'>"
+                + "<option value='Breastfeeding'>"
+                + "<option value='Expressed breast milk'>"
+                + "<option value='Fortified breast milk'>"
+                + "<option value='Formula'>"
+                + "<option value='Donor breast milk'>"
+                + "<option value='Other'>"
+                + "</datalist>";
     }
+
 
 
 
