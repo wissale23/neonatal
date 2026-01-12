@@ -118,9 +118,10 @@ public class GlucoseChart {
     public String buildWarningHTML(List<Double> glucoseData) {
         
         double latestGlucose = glucoseData.get(glucoseData.size() - 1);
+        double estimatedGlucose = (latestGlucose - 1.5)/3.5;
         WarningSystem warningSystem = new WarningSystem(baby);
 
-        return AlertRenderer.buildAlertHTML(warningSystem, latestGlucose);
+        return AlertRenderer.buildAlertHTML(warningSystem, estimatedGlucose);
     }
 
     // Display Original Glucose Chart with Continuous Monitoring of Skin Glucose Data, and estimated Blood Glucose Data
