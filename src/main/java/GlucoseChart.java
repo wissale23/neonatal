@@ -102,6 +102,7 @@ public class GlucoseChart {
     }
 
 
+    // Display logout button
     public String logoutButton(HttpServletRequest req) {
         return "<a href='" + req.getContextPath() + "/' "
                 + "style='position:absolute; top:10px; left:10px;"

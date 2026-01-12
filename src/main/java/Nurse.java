@@ -80,10 +80,8 @@ public class Nurse extends Adult implements Pageable {
     }
 
 
-
+    //Display the blood glucose heel pricks input
     public String glucoseInputLayout(String pathString, double glucoseValue, double hour, double minute) {
-        String formattedHour = String.format("%02d", (int) hour);
-        String formattedMinute = String.format("%02d", (int) minute);
 
         return "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;"
@@ -106,10 +104,10 @@ public class Nurse extends Adult implements Pageable {
     
                 + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Time of day: </span>"
                 + "<input type='number' name='glucHourInp' min='0' max='23' step='1' "
-                + "value='" + formattedHour + "' style='width:45px; text-align:center;'/>"
+                + "value='" + String.format("%02d", (int) hour) + "' style='width:45px; text-align:center;'/>"
                 + " : "
                 + "<input type='number' name='glucMinInp' min='0' max='59' step='1' "
-                + "value='" + formattedMinute + "' style='width:45px; text-align:center;'/>"
+                + "value='" + String.format("%02d", (int) minute) + "' style='width:45px; text-align:center;'/>"
                 + "<br/><br/>"
     
                 + "<div style='display:flex; justify-content:center; gap:10px;'>"
@@ -123,13 +121,44 @@ public class Nurse extends Adult implements Pageable {
                 + "</form>"
                 + "</div>";
     }
+    private boolean isStandardFeedType(String type) {
+        if (type == null) {
+            return false;
+        }
+
+        return type.equals("Breastfeeding")
+                || type.equals("Expressed breast milk")
+                || type.equals("Fortified breast milk")
+                || type.equals("Formula")
+                || type.equals("Donor breast milk");
+    }
+
+    public String feedingTypeDropdown(String feedType){
+        return "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Feeding Type: </span>"
+                + "<select name='typeInp' "
+                + "onchange=\"document.getElementById('otherFeed').style.display = (this.value === 'Other') ? 'inline-block' : 'none';\" "
+                + "style='width:140px; padding:4px;'>"
+
+                + "<option value='Breastfeeding'" + ("Breastfeeding".equals(feedType) ? " selected" : "") + ">Breastfeeding</option>"
+                + "<option value='Expressed breast milk'" + ("Expressed breast milk".equals(feedType) ? " selected" : "") + ">Expressed breast milk</option>"
+                + "<option value='Fortified breast milk'" + ("Fortified breast milk".equals(feedType) ? " selected" : "") + ">Fortified breast milk</option>"
+                + "<option value='Formula'" + ("Formula".equals(feedType) ? " selected" : "") + ">Formula</option>"
+                + "<option value='Donor breast milk'" + ("Donor breast milk".equals(feedType) ? " selected" : "") + ">Donor breast milk</option>"
+                + "<option value='Other'" + (!isStandardFeedType(feedType) ? " selected" : "") + ">Other</option>"
+                + "</select><br/><br/>"
+
+                + "<input type='text' id='otherFeed' name='otherTypeInp' "
+                + "placeholder='Please specify...' "
+                + "value='" + (!isStandardFeedType(feedType) ? feedType : "") + "' "
+                + "style='width:140px; text-align:center; display:"
+                + (!isStandardFeedType(feedType) ? "inline-block" : "none") + ";'/>"
+                + "<br/><br/>";
+
+    }
 
 
+    // Display the feeding information input
     public String feedingInputLayout(String pathString, double feedStartHour, double feedStartMinute, double feedDuration, String feedType) {
-        String formattedStartHour = String.format("%02d", (int) feedStartHour);
-        String formattedStartMinute = String.format("%02d", (int) feedStartMinute);
-        String formattedDuration = String.format("%02d", (int) feedDuration);
-
 
         return "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;"
@@ -146,15 +175,13 @@ public class Nurse extends Adult implements Pageable {
                 + "<div>"
                 
                 + "<span style='display:inline-block; width:110px; text-align:right; color:black;'>Start of feeding: </span>"
-                + "<input type='number' name='startHour' min='0' max='23' value='" + formattedStartHour + "' style='width:50px; text-align:center;'/> : "
-                + "<input type='number' name='startMinute' min='0' max='59' value='" + formattedStartMinute + "' style='width:50px; text-align:center;'/><br/><br/>"
+                + "<input type='number' name='startHour' min='0' max='23' value='" + String.format("%02d", (int) feedStartHour) + "' style='width:50px; text-align:center;'/> : "
+                + "<input type='number' name='startMinute' min='0' max='59' value='" + String.format("%02d", (int) feedStartMinute) + "' style='width:50px; text-align:center;'/><br/><br/>"
 
                 + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Duration of feeding (mins): </span>"
-                + "<input type='text' name='durInp' step='0.01' value='" + formattedDuration + "' style='width:100px; text-align:center;'/><br/><br/>"
-                
-                + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Feeding Description: </span>"
-                + "<input type='text' name='typeInp' step='0.01' value='" + feedType + "' style='width:100px; text-align:center;'/><br/><br/>"
-    
+                + "<input type='text' name='durInp' step='0.01' value='" + String.format("%02d", (int) feedDuration) + "' style='width:100px; text-align:center;'/><br/><br/>"
+
+                + feedingTypeDropdown(feedType)
                 // Buttons side by side
                 + "<div style='display:flex; justify-content:center; gap:10px;'>"
                 + "<button type='submit' name='action' value='add' "
@@ -169,7 +196,7 @@ public class Nurse extends Adult implements Pageable {
     }
 
 
-
+    //Display the comment box for nurses
     public String nurseCommentBox(String pathString) {
         return "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;"
@@ -196,6 +223,18 @@ public class Nurse extends Adult implements Pageable {
                 + "</div>";
     }
 
+    private String parentChart(int babyId, String contextPath) {
+        return "<div style='margin-top:40px; text-align:center;'>"
+                + "<h3>Parent View (Read-only)</h3>"
+                + "<iframe "
+                + "src='" + contextPath + "/parents?babyId=" + babyId + "' "
+                + "style='width:100%; max-width:950px; height:520px; border:2px solid #ccc; border-radius:10px;'>"
+                + "</iframe>"
+                + "</div>";
+    }
+
+
+    //Display the nurse page with the logout button, baby dropdown, glucose chart, heel pricks input, feeding input and comment box
     public String nursePage(GlucoseChart glucoseChart, HttpServletRequest req, int babyId,
                             double glucoseValue, double hour, double minute,
                             double feedStartHour, double feedStartMinute, double feedDuration, String feedType,
@@ -216,6 +255,7 @@ public class Nurse extends Adult implements Pageable {
                 + nurseCommentBox(req.getContextPath())
                 + "</div>"
                 + glucoseChart.commentsInpLayout(comments)
+                + parentChart(babyId, req.getContextPath())
                 + "</body></html>";
     }
 
@@ -247,7 +287,7 @@ public class Nurse extends Adult implements Pageable {
         List<Double> feedValues = getFeedValue(session);
         double feedStartHour = feedValues.get(0);
         double feedStartMinute = feedValues.get(1);
-        double feedDuration = getFeedValue(session).get(2);
+        double feedDuration = feedValues.get(2);
         
         String feedType = getFeedStr(session);
         List<String> comments = baby.getComments();
@@ -289,12 +329,21 @@ public class Nurse extends Adult implements Pageable {
                 double feedValue = feedHour + (feedMinute / 60.0);
 
                 double feedDuration = Double.parseDouble(req.getParameter("durInp")) / 60.0;
+                String feedType = req.getParameter("typeInp");
+
+                if ("Other".equals(feedType)) {
+                    String other = req.getParameter("otherTypeInp");
+                    if (other != null && !other.isBlank()) {
+                        feedType = other;
+                    }
+                }
 
                 baby.addFeeding(
                         feedValue,
                         feedDuration,
-                        req.getParameter("typeInp")
+                        feedType
                 );
+
             }
         }
 

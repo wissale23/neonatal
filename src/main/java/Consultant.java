@@ -1,12 +1,9 @@
 import java.io.IOException;
 import java.util.List;
-import java.util.ArrayList;
-
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
 
 
 public class Consultant extends Adult implements Pageable {
@@ -78,7 +75,7 @@ public class Consultant extends Adult implements Pageable {
 
         return sb.toString();
     }
-
+    //Display blood glucose safety range input
     public String rangeLayout(String pathString,double lower,double upper){
         return "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;"
@@ -105,7 +102,7 @@ public class Consultant extends Adult implements Pageable {
                 + "</div>";
 
     }
-
+    // Display comment box for consultant
     public String consultCommentBox(String pathString) {
         return "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;"
@@ -131,6 +128,7 @@ public class Consultant extends Adult implements Pageable {
                 + "</div>";
     }
 
+    //Display consultant page, with the logout button, glucose chart, safety range and comments input
     public String consultPage(GlucoseChart glucoseChart,HttpServletRequest req,double lower,double upper,List<String> comments, int babyId){
         return "<!DOCTYPE html>"
                 + "<html><head>"
