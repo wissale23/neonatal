@@ -3,6 +3,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Researcher extends Adult implements Pageable{
@@ -68,6 +69,10 @@ public class Researcher extends Adult implements Pageable{
             List<Double> timeData = selectedBaby.getTimeData();
             List<Double> rawData = selectedBaby.getRawData();
             List<Double> smoothData = selectedBaby.getSmoothData();
+            List<Double> estimatedData = new ArrayList<>();
+            for (Double v : smoothData) {
+                estimatedData.add((v - 1.5) / 3.5);
+            }
 
             // Set headers for file download
             String filename = "glucose_data_" + selectedBaby.getName().replaceAll("\\s+", "_") + ".csv";
@@ -76,14 +81,15 @@ public class Researcher extends Adult implements Pageable{
 
             // Write CSV content
             PrintWriter writer = resp.getWriter();
-            writer.println("Time,Raw_Glucose_uM,Smoothed_Glucose_uM");
+            writer.println("Time,Raw_Glucose_uM,Smoothed_Glucose_uM,Estimated_Glucose_uM");
 
             int maxSize = Math.max(timeData.size(), Math.max(rawData.size(), smoothData.size()));
             for (int i = 0; i < maxSize; i++) {
                 String time = i < timeData.size() ? String.valueOf(timeData.get(i)) : "";
                 String raw = i < rawData.size() ? String.valueOf(rawData.get(i)) : "";
                 String smooth = i < smoothData.size() ? String.valueOf(smoothData.get(i)) : "";
-                writer.println(time + "," + raw + "," + smooth);
+                String estimated = i < estimatedData.size() ? String.valueOf(estimatedData.get(i)) : "";
+                writer.println(time + "," + raw + "," + smooth + "," + estimated);
             }
             writer.flush();
             writer.close();
