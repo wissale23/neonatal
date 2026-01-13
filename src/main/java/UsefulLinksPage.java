@@ -51,7 +51,7 @@ public class UsefulLinksPage {
                     + "max-width: 1000px;"
                     + "display: grid;"
                     + "gap: 50px;"
-                    + "grid-template-columns: repeat(2, 1fr);"
+                    + "grid-template-columns: repeat(2, 1);"
                     + "margin: 40px auto;}"
 
                     + ".button {"
