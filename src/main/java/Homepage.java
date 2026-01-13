@@ -105,23 +105,63 @@ public class Homepage {
 
                 // Images with number
                 + "  <div class='mySlides fade'>"
-                + "    <div class='numbertext'>1/4</div>"
-                + "    <img src='" + contextPath + "/images/image1.png'>"
+                + "    <div class='numbertext'>1/12</div>"
+                + "    <img src='" + contextPath + "/images/1.png'>"
                 + "  </div>"
 
                 + "  <div class='mySlides fade'>"
-                + "    <div class='numbertext'>2/4</div>"
-                + "    <img src='" + contextPath + "/images/2.jpg'>"
+                + "    <div class='numbertext'>2/12</div>"
+                + "    <img src='" + contextPath + "/images/2.png'>"
                 + "  </div>"
 
                 + "  <div class='mySlides fade'>"
-                + "    <div class='numbertext'>3/4</div>"
-                + "    <img src='" + contextPath + "/images/3.jpg'>"
+                + "    <div class='numbertext'>3/12</div>"
+                + "    <img src='" + contextPath + "/images/3.png'>"
                 + "  </div>"
 
                 + "  <div class='mySlides fade'>"
-                + "    <div class='numbertext'>4/4</div>"
-                + "    <img src='" + contextPath + "/images/4.jpg'>"
+                + "    <div class='numbertext'>4/12</div>"
+                + "    <img src='" + contextPath + "/images/4.png'>"
+                + "  </div>"
+
+                + "  <div class='mySlides fade'>"
+                + "    <div class='numbertext'>5/12</div>"
+                + "    <img src='" + contextPath + "/images/5.png'>"
+                + "  </div>"
+
+                + "  <div class='mySlides fade'>"
+                + "    <div class='numbertext'>6/12</div>"
+                + "    <img src='" + contextPath + "/images/6.png'>"
+                + "  </div>"
+
+                + "  <div class='mySlides fade'>"
+                + "    <div class='numbertext'>7/12</div>"
+                + "    <img src='" + contextPath + "/images/7.png'>"
+                + "  </div>"
+
+                + "  <div class='mySlides fade'>"
+                + "    <div class='numbertext'>8/12</div>"
+                + "    <img src='" + contextPath + "/images/8.png'>"
+                + "  </div>"
+
+                + "  <div class='mySlides fade'>"
+                + "    <div class='numbertext'>9/12</div>"
+                + "    <img src='" + contextPath + "/images/9.png'>"
+                + "  </div>"
+
+                + "  <div class='mySlides fade'>"
+                + "    <div class='numbertext'>10/12</div>"
+                + "    <img src='" + contextPath + "/images/10.png'>"
+                + "  </div>"
+
+                + "  <div class='mySlides fade'>"
+                + "    <div class='numbertext'>11/12</div>"
+                + "    <img src='" + contextPath + "/images/11.png'>"
+                + "  </div>"
+
+                + "  <div class='mySlides fade'>"
+                + "    <div class='numbertext'>12/12</div>"
+                + "    <img src='" + contextPath + "/images/12.png'>"
                 + "  </div>"
 
                 // Next and previous buttons
@@ -156,7 +196,7 @@ public class Homepage {
                 + "  for(i=0;i<dots.length;i++){dots[i].className=dots[i].className.replace(' active','');}"
                 + "  slides[slideIndex-1].style.display='block';"
                 + "  dots[slideIndex-1].className+=' active';"
-                + "  timer=setTimeout(showSlides,4000);" // Change slide every 8 seconds
+                + "  timer=setTimeout(showSlides,8000);" // Change slide
                 + "}"
 
                 + "function plusSlides(n){"
@@ -179,7 +219,7 @@ public class Homepage {
                 + "  for(i=0;i<dots.length;i++){dots[i].className=dots[i].className.replace(' active','');}"
                 + "  slides[slideIndex-1].style.display='block';"
                 + "  dots[slideIndex-1].className+=' active';"
-                + "  timer=setTimeout(showSlides,4000);"
+                + "  timer=setTimeout(showSlides,8000);"
                 + "}"
                 + "</script>";
     }
