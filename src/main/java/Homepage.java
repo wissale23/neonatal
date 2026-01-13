@@ -204,7 +204,7 @@ public class Homepage {
                 + "  for(i=0;i<dots.length;i++){dots[i].className=dots[i].className.replace(' active','');}"
                 + "  slides[slideIndex-1].style.display='block';"
                 + "  dots[slideIndex-1].className+=' active';"
-                + "  timer=setTimeout(showSlides,8000);" // Change slide
+                + "  timer=setTimeout(showSlides,6000);" // Change slide
                 + "}"
 
                 + "function plusSlides(n){"
@@ -227,7 +227,7 @@ public class Homepage {
                 + "  for(i=0;i<dots.length;i++){dots[i].className=dots[i].className.replace(' active','');}"
                 + "  slides[slideIndex-1].style.display='block';"
                 + "  dots[slideIndex-1].className+=' active';"
-                + "  timer=setTimeout(showSlides,8000);"
+                + "  timer=setTimeout(showSlides,6000);"
                 + "}"
                 + "</script>";
     }
