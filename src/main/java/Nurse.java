@@ -254,11 +254,12 @@ public class Nurse extends Adult implements Pageable {
 
                 // added monitoring chart
                 + "<div style='display:flex; justify-content:center; margin: 25px 0 10px 0;'>"
-                // comments display
-                + glucoseChart.commentsInpLayout(comments)
 
                 // monitoring simulation
                 + monitoringChart.generateHTML()
+
+                // comments display
+                + glucoseChart.commentsInpLayout(comments)
                 + "</div>"
 
                 + "<script>"
