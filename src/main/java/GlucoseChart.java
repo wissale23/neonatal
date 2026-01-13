@@ -103,17 +103,7 @@ public class GlucoseChart {
 
 
     // Display logout button
-    public String logoutButton(HttpServletRequest req) {
-        return "<a href='" + req.getContextPath() + "/' "
-                + "style='position:absolute; top:10px; left:10px;"
-                + "background-color:#ffc0cb;"  
-                + "border:2px solid black;"
-                + "padding:5px 10px; border-radius:4px;"
-                + "color:black; font-weight:bold; text-decoration:none; cursor:pointer;"
-                + "transition: background-color 0.2s;'>"
-                + "Logout</a>";
-    }
-    
+
 
     // Display warning alert message box
     public String buildWarningHTML(List<Double> glucoseData) {
