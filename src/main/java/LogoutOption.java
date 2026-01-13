@@ -10,4 +10,5 @@ public class LogoutOption {
                 + "<div id='main'>"
                 + "  <button class='openbtn' onclick='openSidebar()'>&#9776; Options</button>";
     }
+
 }
