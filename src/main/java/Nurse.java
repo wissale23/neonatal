@@ -258,6 +258,9 @@ public class Nurse extends Adult implements Pageable {
                 // monitoring simulation
                 + monitoringChart.generateHTML()
 
+                + "</div>"
+                + "</div>"
+
                 // comments display
                 + glucoseChart.commentsInpLayout(comments)
                 + "</div>"
