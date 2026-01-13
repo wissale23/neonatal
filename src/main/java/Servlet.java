@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.*;
 
 @WebServlet(
-        urlPatterns = {"/", "/useful-links", "/login", "/logout", "/consultants", "/nurses", "/researchers", "/parents"},
+        urlPatterns = {"/", "/useful-links", "/login", "/consultants", "/nurses", "/researchers", "/parents"},
         loadOnStartup = 1
 )
 public class Servlet extends HttpServlet {
@@ -98,9 +98,8 @@ public class Servlet extends HttpServlet {
             return;
         }
                 
-        if ("/logout".equals(path)) {
-            auth.logout(req);
-            resp.sendRedirect(req.getContextPath() + "/login");
+        if ("/parents".equals(path)) {
+            ParentalDisplay.doGet(req,resp);
             return;
         }
         resp.setContentType("text/html");        

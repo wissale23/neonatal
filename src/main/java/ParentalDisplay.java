@@ -10,7 +10,7 @@ public class ParentalDisplay {
     private final double maxValue = 50.0;
     private final int intervalMs = 25;
 
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public static void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html;charset=UTF-8");
         resp.setCharacterEncoding("UTF-8");
 
@@ -35,7 +35,7 @@ public class ParentalDisplay {
     }
 
     
-    private String parentPage(ParentChart parentChart) {
+    private static String parentPage(ParentChart parentChart) {
 
         return ""
                 + "<!DOCTYPE html>\n"
