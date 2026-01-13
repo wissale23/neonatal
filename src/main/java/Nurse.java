@@ -228,9 +228,13 @@ public class Nurse extends Adult implements Pageable {
                 + ".sidebar .closebtn { position:absolute; top:0; right:25px; font-size:36px; }"
                 + ".openbtn { font-size:20px; cursor:pointer; background-color:#111; color:white; padding:10px 15px; border:none; }"
                 + "#main { padding:16px; }"
+
+                // Header CSS
+                + ".header { background-color: #143684; color: white; text-align: center; padding: 20px; font-size: 28px; font-weight: bold; }"
                 + "</style>"
 
                 + "</head><body>"
+                + "<div class='header'>Nurse Dashboard</div>" // Header HTML
 
                 // sidebar display
                 + LogoutOption.generateLogoutSidebar()
