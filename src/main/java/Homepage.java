@@ -234,7 +234,7 @@ public class Homepage {
                     + "font-size: 16px;"
                     + "position: absolute;"
                     + "right: 10%;"
-                    + "bottom: -12px;}"
+                    + "bottom: 15px;}"
 
                     + ".about-toggle::after {"
                     + "content: '';"
