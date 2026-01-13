@@ -26,7 +26,26 @@ public class Researcher extends Adult implements Pageable{
         }
 
         resp.getWriter().write(
-                "<h1>Researcher Portal OOP Branch</h1>" +
+                "<!DOCTYPE html>" +
+                        "<html><head>" +
+                        "<title>Researcher Portal</title>" +
+                        "<meta name='viewport' content='width=device-width, initial-scale=1'>" +
+                        "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>" +
+                        "<style>" +
+                        "body { font-family: 'Lato', sans-serif; }" +
+                        ".sidebar { height:100%; width:0; position:fixed; z-index:1; top:0; left:0; background-color:#111; overflow-x:hidden; transition:0.5s; padding-top:60px; }" +
+                        ".sidebar a { padding:8px 8px 8px 32px; font-size:25px; color:#818181; display:block; text-decoration:none; }" +
+                        ".sidebar a:hover { color:#f1f1f1; }" +
+                        ".sidebar .closebtn { position:absolute; top:0; right:25px; font-size:36px; }" +
+                        ".openbtn { font-size:20px; cursor:pointer; background-color:#111; color:white; padding:10px 15px; border:none; }" +
+                        ".openbtn:hover { background-color:#444; }" +
+                        "#main { transition: margin-left .5s; padding:16px; }" +
+                        "</style>" +
+                        "</head><body>" +
+                        LogoutOption.generateLogoutSidebar() +
+                        "<div id='main'>" +
+
+                        "<h1>Researcher Portal OOP Branch</h1>" +
                         "<p>Download glucose monitoring data:</p>" +
                         "<form method=\"POST\" action=\"" + req.getContextPath() + "/researchers\">" +
                         "<label for=\"babySelect\">Select Baby: </label>" +
@@ -35,7 +54,12 @@ public class Researcher extends Adult implements Pageable{
                         "</select><br><br>" +
                         "<button type=\"submit\" name=\"action\" value=\"download\">Download Data</button>" +
                         "</form>" +
-                        "<p><a href=\"" + req.getContextPath() + "/logout\">Logout</a></p>"
+                        "</div>" +
+                        "<script>" +
+                        "function openSidebar(){ document.getElementById('mySidebar').style.width='250px'; document.getElementById('main').style.marginLeft='250px'; }" +
+                        "function closeSidebar(){ document.getElementById('mySidebar').style.width='0'; document.getElementById('main').style.marginLeft='0'; }" +
+                        "</script>" +
+                        "</body></html>"
         );
     }
 
