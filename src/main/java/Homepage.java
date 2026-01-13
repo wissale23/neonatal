@@ -86,7 +86,7 @@ public class Homepage {
                 + ".prev:hover,.next:hover{background-color:rgba(0,0,0,0.8);color:white;}"
 
                 // Number text
-                + ".numbertext{color:#f2f2f2;font-size:12px;padding:8px 12px;position:absolute;top:0;left:8px;}"
+                + ".numbertext{color:black;font-size:12px;padding:8px 12px;position:absolute;top:0;left:8px;}"
 
                 // Dots for Carousel
                 + ".dot{cursor:pointer;height:13px;width:13px;margin:0 2px;"
