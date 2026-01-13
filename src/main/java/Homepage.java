@@ -58,11 +58,11 @@ public class Homepage {
 
                 + ".mySlides{display:none;}"
 
-                + ".mySlides img{width:100%;height:420px;object-fit:cover;border:3px solid #494B55;}"
+                + ".mySlides img{width:100%;height:420px;object-fit:cover;}"
 
                 + ".prev,.next{cursor:pointer;position:absolute;top:50%;padding:16px;"
                 + "color:#494B55;font-weight:bold;font-size:18px;"
-                + "transition:0.6s;border-radius:0 3px 3px 0;user-select:none;}"
+                + "transition:0.6s;user-select:none;transform:translateY(-50%);"
 
                 + ".next{right:0;border-radius:3px 0 0 3px;}"
 
