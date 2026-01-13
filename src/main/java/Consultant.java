@@ -130,6 +130,7 @@ public class Consultant extends Adult implements Pageable {
 
     //Display consultant page, with the logout button, glucose chart, safety range and comments input
     public String consultPage(GlucoseChart glucoseChart,HttpServletRequest req,double lower,double upper,List<String> comments, int babyId){
+
         return "<!DOCTYPE html>"
                 + "<html><head>"
                 + "<title>Consultant Dashboard</title>"
