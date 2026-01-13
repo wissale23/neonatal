@@ -28,32 +28,7 @@ public class UsefulLinksPage {
                 + "margin-top: 12px;}"
 
                 + "</style>"
-
-                + ".links-grid {"           // columns CSS
-                + "max-width: 1000px;"
-                + "display: grid;"
-                + "gap: 50px;"
-                + "grid-template-columns: repeat(2, 1fr);"
-                + "margin: 40px auto;}"
-
-                + ".button {"
-                + "background-color: #ae2573;"
-                + "border: none;"
-                + "border-radius: 10px;"
-                + "color: white;"
-                + "padding:20px 20px;"
-                + "display: flex;"
-                + "text-align: center;"
-                + "text-decoration: none;"
-                + "font-size: 20px;"
-                + "font-weight: bold;"
-                + "cursor: pointer;"
-                + "transition: transform 0.2s ease, box-shadow 0.2s ease;}"
-
-                + ".button:hover {"
-                + "text-decoration: underline;"
-                + "transform: translateY(-3px);"
-                + "box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);}"
+                + buttonsCSS
 
                 + "</head><body>"
                 + "<div class='header'>Useful Links</div>" // Header HTML
@@ -69,6 +44,36 @@ public class UsefulLinksPage {
                 + "</script>"
                 + "</body></html>";
     }
+
+    public static final String buttonsCSS =
+            "<style>" +
+                    ".links-grid {"
+                    + "max-width: 1000px;"
+                    + "display: grid;"
+                    + "gap: 50px;"
+                    + "grid-template-columns: repeat(2, 1fr);"
+                    + "margin: 40px auto;}"
+
+                    + ".button {"
+                    + "background-color: #ae2573;"
+                    + "border: none;"
+                    + "border-radius: 10px;"
+                    + "color: white;"
+                    + "padding:20px 20px;"
+                    + "display: flex;"
+                    + "text-align: center;"
+                    + "text-decoration: none;"
+                    + "font-size: 20px;"
+                    + "font-weight: bold;"
+                    + "cursor: pointer;"
+                    + "transition: transform 0.2s ease, box-shadow 0.2s ease;}"
+
+                    + ".button:hover {"
+                    + "text-decoration: underline;"
+                    + "transform: translateY(-3px);"
+                    + "box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);}"
+
+                    + "</style>";
 
     public static String generateLinks(){
         return "<div class='links-grid'>"
