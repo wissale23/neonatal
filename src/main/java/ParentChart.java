@@ -44,10 +44,12 @@ public class ParentChart {
                 "    const chart = new Chart(ctx, {\n" +
                 "      type: 'line',\n" +
                 "      data: {\n" +
-                "        labels: labels,\n" +
                 "        datasets: [\n" +
                 // Plot only Estimated Blood Glucose to simplify
-                "          { label: 'Estimated Blood Glucose', data: smoothData.map(v => (v - 1.5) / 3.5), yAxisID: 'y', borderColor: 'rgb(220,25,25)', borderWidth: 3, fill: false, order: 3, pointRadius: 0 }\n" +
+                "          { label: 'Estimated Blood Glucose',\n" +
+                "            data: labels.map((t, i) => ({ x: t, y: (smoothData[i] - 1.5) / 3.5 })),\n" +
+                "            yAxisID: 'y', borderColor: 'rgb(220,25,25)', borderWidth: 3,\n" +
+                "            fill: false, order: 3, pointRadius: 0 }\n" +
                 "        ]\n" +
                 "      },\n" +
                 "      options: {\n" +
@@ -73,7 +75,8 @@ public class ParentChart {
                 "          annotation: {\n" +
                 "            annotations: {\n" +
                 // Plot Acceptable Range only, with no labels to simplify
-                "              normal: { type: 'box', yScaleID: 'y2', yMin: LOWER, yMax: UPPER, backgroundColor: 'rgba(144,238,144,0.35)', drawTime: 'beforeDatasetsDraw', display: true, color: '#1b5e20', font: { size: 12 } } },\n" +
+                "              normal: { type: 'box', yScaleID: 'y', yMin: LOWER, yMax: UPPER,\n" +
+                "                backgroundColor: 'rgba(144,238,144,0.35)', drawTime: 'beforeDatasetsDraw', display: true }\n" +
                 "            }\n" +
                 "          }\n" +
                 "        }\n" +
