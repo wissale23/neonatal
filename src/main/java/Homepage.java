@@ -46,8 +46,9 @@ public class Homepage {
                 + "function toggleAbout() {"
                 + "var content = document.getElementById('about-content');"
                 + "var icon = document.getElementById('about-icon');"
-                + "if (content.style.display === 'none') {icon.className='fa fa-minus';}"
-                + "else {content.style.display = 'none'; icon.className='fa fa-plus';}"
+                + "content.classList.toggle('collapsed');"
+                + "if (content.classList.contains('collapsed') {icon.className='fa fa-plus';}"
+                + "else {icon.className='fa fa-minus';}"
                 + "}"
                 + "</script>"
                 + "</body></html>";
@@ -225,10 +226,14 @@ public class Homepage {
                     + "font-family: Lato, sans-serif;"
                     + "cursor: pointer;"
                     + "text-align: center;"
-                    + "margin-bottom: 15px;}"
+                    + "margin-bottom: 15px;"
+                    + "padding: 0;"
+                    + "position: relative;}"
 
                     + ".about-toggle i {"
-                    + "font-size: 22px;}"
+                    + "font-size: 16px;"
+                    + "position: absolute;"
+                    + "right: 5%;}"
 
                     + ".about-toggle::after {"
                     + "content: '';"
@@ -241,6 +246,9 @@ public class Homepage {
 
                     + ".about-content {"
                     + "display: block;}"
+                    + "#about-content.collapsed {"
+                    + "display: none;}"
+
 
                     // Contacts and Location boxes CSS
                     + ".info-row {"
@@ -309,7 +317,7 @@ public class Homepage {
     public static String generateAboutUs() {
         return "<section class='about-us'>"
                 + "<button class='about-toggle' onclick='toggleAbout()'>"
-                + "<span>About Us</span>"
+                + "<span class='about-title'>About Us</span>"
                 + "<i id='about-icon' class='fa fa-minus'></i>"
                 + "</button>"
                 + "<div id='about-content'>"
