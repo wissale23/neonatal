@@ -24,8 +24,10 @@ public class Homepage {
                 + generateSidebar()           // sidebar HTML
                 + generateSlideshow(contextPath)         // slideshow content
                 + generateAboutUs()         // about us HTML
+                + "<div class='info-row'>"
                 + generateContacts()            // contacts HTML
                 + generateLocation()            // location HTML
+                + "</div>"
                 + "<script>"
                 + "function openSidebar(){ document.getElementById('mySidebar').style.width='250px';"
                 + "document.getElementById('main').style.marginLeft='250px'; }"
