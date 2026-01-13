@@ -23,12 +23,14 @@ public class Homepage {
 
                 // Header CSS
                 + ".header { background-color: navy; color: white; text-align: center; padding: 20px; font-size: 28px; font-weight: bold; }"
-                + "</style>"
                 + sectionsCSS  // Contact CSS
-
+                + "</style>"
                 + "</head><body>"
-                + "<div class='header'>Homepage</div>" // Header HTML
                 + generateSidebar()           // sidebar HTML
+
+                + "<div id='main'>"
+                + "<div class='header'>Homepage</div>" // Header HTML
+
                 + generateSlideshow(contextPath)         // slideshow content
                 + generateAboutUs()         // about us HTML
                 + "<div class='info-row'>"
@@ -50,6 +52,7 @@ public class Homepage {
                 + "  <a href='javascript:void(0)' class='closebtn' onclick='closeSidebar()'>&times;</a>"
                 + "  <a href='/home'><i class=\"fa fa-fw fa-home\"></i>Home</a>"
                 + "  <a href='/login'><i class=\"fa fa-fw fa-user\"></i>Login</a>"
+                + "  <a href='/useful-links'><i class=\"fa fa-fw fa-link\"></i>Useful Links</a>"
                 + "</div>"
                 + "<div id='main'>"
                 + "  <button class='openbtn' onclick='openSidebar()'>&#9776; Options</button>";
