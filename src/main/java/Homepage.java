@@ -47,7 +47,7 @@ public class Homepage {
                 + "var content = document.getElementById('about-content');"
                 + "var icon = document.getElementById('about-icon');"
                 + "content.classList.toggle('collapsed');"
-                + "if (content.classList.contains('collapsed') {icon.className='fa fa-plus';}"
+                + "if (content.classList.contains('collapsed')) {icon.className='fa fa-plus';}"
                 + "else {icon.className='fa fa-minus';}"
                 + "}"
                 + "</script>"
@@ -233,7 +233,8 @@ public class Homepage {
                     + ".about-toggle i {"
                     + "font-size: 16px;"
                     + "position: absolute;"
-                    + "right: 5%;}"
+                    + "right: 10%;"
+                    + "bottom: -12px;}"
 
                     + ".about-toggle::after {"
                     + "content: '';"
@@ -244,11 +245,8 @@ public class Homepage {
                     + "background-color: white;"
                     + "margin: 15px auto 30px auto;}"
 
-                    + ".about-content {"
-                    + "display: block;}"
-                    + "#about-content.collapsed {"
-                    + "display: none;}"
-
+                    + "#about-content {display: block;}"
+                    + "#about-content.collapsed {display: none;}"
 
                     // Contacts and Location boxes CSS
                     + ".info-row {"
