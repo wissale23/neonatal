@@ -57,7 +57,7 @@ public class Nurse extends Adult implements Pageable {
                         + "style='"
                         + "font-size:16px;"
                         + "padding:6px 12px;"
-                        + "border:2px solid #342;"
+                        + "border:2px solid #1565c0;"
                         + "border-radius:6px;"
                         + "background:#ffffff;"
                         + "color:#0d47a1;"
