@@ -238,10 +238,6 @@ public class Nurse extends Adult implements Pageable {
                 + "<h1 style='text-align:center;'>Nurse Dashboard</h1>"
                 + babyDropdown(babyId, req.getContextPath())
                 + glucoseChart.generateHTML()
-                // added monitoring chart
-                + "<div style='display:flex; justify-content:center; margin: 25px 0 10px 0;'>"
-                + monitoringChart.generateHTML()
-                + "</div>"
 
                 + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>"
                 + glucoseInputLayout(req.getContextPath(), glucoseValue, hour, minute)
@@ -249,6 +245,10 @@ public class Nurse extends Adult implements Pageable {
                 + nurseCommentBox(req.getContextPath())
                 + "</div>"
                 + glucoseChart.commentsInpLayout(comments)
+                + "</div>"
+                // added monitoring chart
+                + "<div style='display:flex; justify-content:center; margin: 25px 0 10px 0;'>"
+                + monitoringChart.generateHTML()
                 + "</div>"
                 + "<script>"
                 + "function openSidebar(){"
