@@ -19,18 +19,17 @@ public class Homepage {
                 + ".openbtn { font-size:20px; cursor:pointer; background-color:#111; color:white; padding:10px 15px; border:none; }"
                 + ".openbtn:hover { background-color:#444; }"
                 + "#main { transition: margin-left .5s; padding:16px; }"
-                + "@media screen and (max-height:450px){.sidebar{padding-top:15px;}.sidebar a{font-size:18px;}}" + "</style>"
+                + "@media screen and (max-height:450px){.sidebar{padding-top:15px;}.sidebar a{font-size:18px;}}"
 
                 // Header CSS
                 + ".header { background-color: navy; color: white; text-align: center; padding: 20px; font-size: 28px; font-weight: bold; }"
+
                 + sectionsCSS  // Contact CSS
                 + "</style>"
+
                 + "</head><body>"
+                + "<div class='header'>Useful Links</div>" // Header HTML
                 + generateSidebar()           // sidebar HTML
-
-                + "<div id='main'>"
-                + "<div class='header'>Homepage</div>" // Header HTML
-
                 + generateSlideshow(contextPath)         // slideshow content
                 + generateAboutUs()         // about us HTML
                 + "<div class='info-row'>"
