@@ -79,7 +79,6 @@ public class Nurse extends Adult implements Pageable {
         return sb.toString();
     }
 
-
     //Display the blood glucose heel pricks input
     public String glucoseInputLayout(String pathString, double glucoseValue, double hour, double minute) {
 
