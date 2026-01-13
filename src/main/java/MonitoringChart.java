@@ -55,7 +55,7 @@ public class MonitoringChart {
 
         html.append("  <div class='mon-axis' id='mon_axis'></div>\n");
         html.append("  <div class='mon-rangeText'>Safe range: ")
-                .append(tidy(lower)).append(" – ").append(tidy(upper))
+                .append(tidy(lower)).append(" - ").append(tidy(upper))
                 .append(" &micro;M</div>\n");
         html.append("</div>\n");
 
