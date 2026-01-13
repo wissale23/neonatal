@@ -38,15 +38,16 @@ public class Nurse extends Adult implements Pageable {
                         + "text-align:center;"
                         + "font-size:16px;"
                         + "font-weight:bold;"
-                        + "color:#0d47a1;"
+                        + "color:#00A499;"
                         + "box-shadow: 0 4px 8px rgba(0,0,0,0.1);"
                         + "transition: all 0.2s ease-in-out;'>"
         );
 
-// Form
+        // Form
         sb.append("<form method='get' action='")
                 .append(contextPath)
                 .append("/nurses'>");
+
         sb.append("<label style='margin-right:8px; font-size:16px;'>SELECT BABY:</label>");
         sb.append(
                 "<select name='babyId' "
@@ -54,10 +55,10 @@ public class Nurse extends Adult implements Pageable {
                         + "style='"
                         + "font-size:16px;"
                         + "padding:6px 12px;"
-                        + "border:2px solid #1565c0;"
+                        + "border:2px solid #342;"
                         + "border-radius:6px;"
                         + "background:#ffffff;"
-                        + "color:#0d47a1;"
+                        + "color:#00A499;"
                         + "cursor:pointer;"
                         + "transition: all 0.2s ease-in-out;'>"
         );
@@ -230,17 +231,20 @@ public class Nurse extends Adult implements Pageable {
                 + "#main { padding:16px; }"
 
                 // Header CSS
-                + ".header { background-color: #143684; color: white; text-align: center; padding: 20px; font-size: 28px; font-weight: bold; }"
+                + ".header { background-color: #003087; color: white; text-align: center; padding: 20px; font-size: 28px; font-weight: bold; }"
                 + "</style>"
 
                 + "</head><body>"
                 + "<div class='header'>Nurse Dashboard</div>" // Header HTML
 
+                + babyDropdown(babyId, req.getContextPath())
+
                 // sidebar display
                 + LogoutOption.generateLogoutSidebar()
-                + "<h1 style='text-align:center;'>Nurse Dashboard</h1>"
-                + babyDropdown(babyId, req.getContextPath())
+
+                // Glucose Chart display
                 + glucoseChart.generateHTML()
+
                 // inputs display
                 + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>"
                 + glucoseInputLayout(req.getContextPath(), glucoseValue, hour, minute)

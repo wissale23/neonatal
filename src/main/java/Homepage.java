@@ -22,7 +22,7 @@ public class Homepage {
                 + "@media screen and (max-height:450px){.sidebar{padding-top:15px;}.sidebar a{font-size:18px;}}"
 
                 // Header CSS
-                + ".header { background-color: #143684; color: white; text-align: center; padding: 20px; font-size: 28px; font-weight: bold; }"
+                + ".header { background-color: #003087; color: white; text-align: center; padding: 20px; font-size: 28px; font-weight: bold; }"
 
                 + "</style>"
                 + sectionsCSS  // sections CSS

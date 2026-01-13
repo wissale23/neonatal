@@ -1,6 +1,5 @@
 import java.sql.*;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 
 public class GlucoseChart {
     private final Baby baby;
@@ -100,9 +99,6 @@ public class GlucoseChart {
         }
         return feedingBars;
     }
-
-
-    // Display logout button
 
 
     // Display warning alert message box
