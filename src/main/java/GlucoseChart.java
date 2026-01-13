@@ -1,3 +1,4 @@
+import javax.servlet.http.HttpServletRequest;
 import java.sql.*;
 import java.util.List;
 
@@ -100,8 +101,20 @@ public class GlucoseChart {
         return feedingBars;
     }
 
+    public String parentViewButton(HttpServletRequest req) {
 
-    // Display warning alert message box
+        return "<a href='" + req.getContextPath() + "/parents' "
+                + "style='position:absolute; top:10px; left:10px;"
+                + "background-color:#ffc0cb;"
+                + "border:2px solid black;"
+                + "padding:5px 10px; border-radius:4px;"
+                + "color:black; font-weight:bold; text-decoration:none; cursor:pointer;"
+                + "transition: background-color 0.2s;'>"
+                + "Parent View</a>";
+    }
+
+
+        // Display warning alert message box
     public String buildWarningHTML(List<Double> glucoseData) {
         
         double latestGlucose = glucoseData.get(glucoseData.size() - 1);

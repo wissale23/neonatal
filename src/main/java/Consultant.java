@@ -149,6 +149,7 @@ public class Consultant extends Adult implements Pageable {
 
                 + "</head><body>"
                 + "<div class='header'>Consultant Dashboard</div>" // Header HTML
+                + glucoseChart.parentViewButton(req)
                 + babyDropdown(babyId, req.getContextPath())  // Baby dropdown
                 + LogoutOption.generateLogoutSidebar() //Logout sidebar
                 + "</div>"
