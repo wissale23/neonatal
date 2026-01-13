@@ -29,6 +29,32 @@ public class UsefulLinksPage {
 
                 + "</style>"
 
+                + ".links-grid {"           // columns CSS
+                + "max-width: 1000px;"
+                + "display: grid;"
+                + "gap: 50px;"
+                + "grid-template-columns: repeat(2, 1fr);"
+                + "margin: 40px auto;}"
+
+                + ".button {"
+                + "background-color: #ae2573;"
+                + "border: none;"
+                + "border-radius: 10px;"
+                + "color: white;"
+                + "padding:20px 20px;"
+                + "display: flex;"
+                + "text-align: center;"
+                + "text-decoration: none;"
+                + "font-size: 20px;"
+                + "font-weight: bold;"
+                + "cursor: pointer;"
+                + "transition: transform 0.2s ease, box-shadow 0.2s ease;}"
+
+                + ".button:hover {"
+                + "text-decoration: underline;"
+                + "transform: translateY(-3px);"
+                + "box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);}"
+
                 + "</head><body>"
                 + "<div class='header'>Useful Links</div>" // Header HTML
                 + Homepage.generateSidebar()           // sidebar HTML
@@ -45,89 +71,76 @@ public class UsefulLinksPage {
     }
 
     public static String generateLinks(){
-        return "<div class='links'>"
-                + "<p class='map-link'>"
-                + "<a href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/welcome-to-the-neonatal-unit-at-queen-charlottes-and-chelsea-hospital.pdf?rev=677ec09113014b638bf5bc434c1bd69c&sc_lang=en&hash=502A869B7B6D03FBDD796F1E07818A99\""
+        return "<div class='links-grid'>"
+                + "<a class='button' href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/welcome-to-the-neonatal-unit-at-queen-charlottes-and-chelsea-hospital.pdf?rev=677ec09113014b638bf5bc434c1bd69c&sc_lang=en&hash=502A869B7B6D03FBDD796F1E07818A99\""
                 + "target='_blank'>"
                 + "<i class='fa fa-external-link'></i> Welcome to the neonatal unit at Queen Charlotte's & Chelsea Hospital</a></p>"
 
-                + "<p class='map-link'>"
-                + "<a href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/biometric-fingerprint-access-to-imperial-neonatal-units.pdf?rev=14ab2d05efe24f31bfef1fc55b946cf4&hash=D2E131CD2C9DDA3E578BE583BF9992D4\""
+                + "<a class='button' href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/biometric-fingerprint-access-to-imperial-neonatal-units.pdf?rev=14ab2d05efe24f31bfef1fc55b946cf4&hash=D2E131CD2C9DDA3E578BE583BF9992D4\""
                 + "target='_blank'>"
                 + "<i class='fa fa-external-link'></i> Biometric fingerprint access to Imperial neonatal units</a></p>"
 
-                + "<p class='map-link'>"
-                + "<a href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/breast-milk-fortifier-on-discharge.pdf?rev=7ea9156575694eafae64325f348a3c2a&hash=DD856CE71F8C53120A28AC435FF1E20A\""
+                + "<a class='button' href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/breast-milk-fortifier-on-discharge.pdf?rev=7ea9156575694eafae64325f348a3c2a&hash=DD856CE71F8C53120A28AC435FF1E20A\""
                 + "target='_blank'>"
                 + "<i class='fa fa-external-link'></i> Breast milk fortifier on discharge</a></p>"
 
-                + "<p class='map-link'>"
-                + "<a href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/choosing-a-bottle-for-your-baby.pdf?rev=9ee0aaa2921e4f68b26892c0d687d5dd&hash=2CBF7ADA2E554D3DDAC2BF9855F3371E\""
+                + "<a class='button' href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/choosing-a-bottle-for-your-baby.pdf?rev=9ee0aaa2921e4f68b26892c0d687d5dd&hash=2CBF7ADA2E554D3DDAC2BF9855F3371E\""
                 + "target='_blank'>"
                 + "<i class='fa fa-external-link'></i> Choosing a bottle for your baby</a></p>"
 
-                + "<p class='map-link'>"
-                + "<a href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/maternity-services/choosing-a-breast-pump.pdf?rev=1043388c05c4401b99c4027581df4f6f&hash=455DF3C403B46FF96D349FBF50F22340\""
+                + "<a class='button' href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/maternity-services/choosing-a-breast-pump.pdf?rev=1043388c05c4401b99c4027581df4f6f&hash=455DF3C403B46FF96D349FBF50F22340\""
                 + "target='_blank'>"
                 + "<i class='fa fa-external-link'></i> Choosing a breast pump</a></p>"
 
-                + "<p class='map-link'>"
-                + "<a href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/delayed-cord-clamping.pdf?rev=31dd7a6f13b04277a8e46704d443b76d&hash=2E6386D07A93561578EAC7BE8AD81A62\""
+                + "<a class='button' href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/delayed-cord-clamping.pdf?rev=31dd7a6f13b04277a8e46704d443b76d&hash=2E6386D07A93561578EAC7BE8AD81A62\""
                 + "target='_blank'>"
                 + "<i class='fa fa-external-link'></i> Delayed cord clamping</a></p>"
 
-                + "<p class='map-link'>"
-                + "<a href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/dummies-on-the-neonatal-unit.pdf?rev=cd54f9b741c14cf0b5221af47d45a595&sc_lang=en&hash=A39ADD55A98ADA31A1B6F3A351B6DE75\""
+                + "<a class='button' href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/dummies-on-the-neonatal-unit.pdf?rev=cd54f9b741c14cf0b5221af47d45a595&sc_lang=en&hash=A39ADD55A98ADA31A1B6F3A351B6DE75\""
                 + "target='_blank'>"
                 + "<i class='fa fa-external-link'></i> Dummies on the neonatal unit</a></p>"
 
-                + "<p class='map-link'>"
-                + "<a href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/dummies-on-the-neonatal-unit.pdf?rev=cd54f9b741c14cf0b5221af47d45a595&sc_lang=en&hash=A39ADD55A98ADA31A1B6F3A351B6DE75\""
+                + "<a class='button' href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/dummies-on-the-neonatal-unit.pdf?rev=cd54f9b741c14cf0b5221af47d45a595&sc_lang=en&hash=A39ADD55A98ADA31A1B6F3A351B6DE75\""
                 + "target='_blank'>"
                 + "<i class='fa fa-external-link'></i> Eating well for mothers who are expressing</a></p>"
 
-                + "<p class='map-link'>"
-                + "<a href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/food-for-parents-guardians-and-carers-on-the-qcch-neonatal-unit.pdf?rev=3009ae9d0e7d441792df9d5e885c24ac&hash=9A6C2F1606A1254C7635DA932583600D\""
+                + "<a class='button' href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/food-for-parents-guardians-and-carers-on-the-qcch-neonatal-unit.pdf?rev=3009ae9d0e7d441792df9d5e885c24ac&hash=9A6C2F1606A1254C7635DA932583600D\""
                 + "target='_blank'>"
                 + "<i class='fa fa-external-link'></i> Food for parents, guardians, and carers on the QCCH</a></p>"
 
-                + "<p class='map-link'>"
-                + "<a href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/food-for-parents-guardians-and-carers-on-the-qcch-neonatal-unit.pdf?rev=3009ae9d0e7d441792df9d5e885c24ac&hash=9A6C2F1606A1254C7635DA932583600D\""
+                + "<a class='button' href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/food-for-parents-guardians-and-carers-on-the-qcch-neonatal-unit.pdf?rev=3009ae9d0e7d441792df9d5e885c24ac&hash=9A6C2F1606A1254C7635DA932583600D\""
                 + "target='_blank'>"
                 + "<i class='fa fa-external-link'></i> General movements assessment (GMA)</a></p>"
 
-                +"<p class='map-link'>"
-                + "<a href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/food-for-parents-guardians-and-carers-on-the-qcch-neonatal-unit.pdf?rev=3009ae9d0e7d441792df9d5e885c24ac&hash=9A6C2F1606A1254C7635DA932583600D\""
+                + "<a class='button' href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/food-for-parents-guardians-and-carers-on-the-qcch-neonatal-unit.pdf?rev=3009ae9d0e7d441792df9d5e885c24ac&hash=9A6C2F1606A1254C7635DA932583600D\""
                 + "target='_blank'>"
                 + "<i class='fa fa-external-link'></i> Non-birthing partners in the neonatal intensive care unit (NICU)</a></p>"
 
-                + "<p class='map-link'>"
-                + "<a href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/food-for-parents-guardians-and-carers-on-the-qcch-neonatal-unit.pdf?rev=3009ae9d0e7d441792df9d5e885c24ac&hash=9A6C2F1606A1254C7635DA932583600D\""
+                + "<a class='button' href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/food-for-parents-guardians-and-carers-on-the-qcch-neonatal-unit.pdf?rev=3009ae9d0e7d441792df9d5e885c24ac&hash=9A6C2F1606A1254C7635DA932583600D\""
                 + "target='_blank'>"
                 + "<i class='fa fa-external-link'></i> Integrated family care programme</a></p>"
 
-                + "<p class='map-link'>"
-                + "<a href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/childrens-services/childrens-physiotherapy/positional-talipes-calcaneovalgus.pdf?rev=c0042113cb464805bce04436e30cfee4&hash=E57D079826357BAD8D3B5289486A0E27\""
+                + "<a class='button' href=\"https://apps.apple.com/gb/app/ifdc/id1196284490\""
+                + "target='_blank'>"
+                + "<i class='fa fa-external-link'></i> Integrated family delivery care (IFDC) app</a></p>"
+
+                + "<a class='button' href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/childrens-services/childrens-physiotherapy/positional-talipes-calcaneovalgus.pdf?rev=c0042113cb464805bce04436e30cfee4&hash=E57D079826357BAD8D3B5289486A0E27\""
                 + "target='_blank'>"
                 + "<i class='fa fa-external-link'></i> Positional Talipes Calcaneovalgus</a></p>"
 
-                + "<p class='map-link'>"
-                + "<a href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/probiotics-for-premature-babies.pdf?rev=fbd8f1e0dace4199be003478593a34e7&hash=8FA286CC9BBC48C06418AB08C501EF9B\""
+                + "<a class='button' href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/probiotics-for-premature-babies.pdf?rev=fbd8f1e0dace4199be003478593a34e7&hash=8FA286CC9BBC48C06418AB08C501EF9B\""
                 + "target='_blank'>"
                 + "<i class='fa fa-external-link'></i> Probiotics for premature babies</a></p>"
 
-                + "<p class='map-link'>"
-                + "<a href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/screening-for-antibiotic-resistant-bacteria.pdf?rev=379e3e70bb1b4777b76685419dd831a9&hash=E4BE24927890974DDC8415D2074B437D\""
+                + "<a class='button' href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/screening-for-antibiotic-resistant-bacteria.pdf?rev=379e3e70bb1b4777b76685419dd831a9&hash=E4BE24927890974DDC8415D2074B437D\""
                 + "target='_blank'>"
                 + "<i class='fa fa-external-link'></i> Screening for antibiotic resistant bacteria</a></p>"
 
-                + "<p class='map-link'>"
-                + "<a href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/vitamin-d.pdf?rev=9cdca3a9793b47ef968b3b83c2763a21&hash=B6DDF2C04603FC5C7BE7A6075D7AB133\""
+                + "<a class='button' href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/vitamin-d.pdf?rev=9cdca3a9793b47ef968b3b83c2763a21&hash=B6DDF2C04603FC5C7BE7A6075D7AB133\""
                 + "target='_blank'>"
                 + "<i class='fa fa-external-link'></i> Vitamin D</a></p>"
 
-                + "<p class='map-link'>"
-                + "<a href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/vitamin-d.pdf?rev=9cdca3a9793b47ef968b3b83c2763a21&hash=B6DDF2C04603FC5C7BE7A6075D7AB133\""
+                + "<a class='button' href=\"https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/neonatology/vitamin-d.pdf?rev=9cdca3a9793b47ef968b3b83c2763a21&hash=B6DDF2C04603FC5C7BE7A6075D7AB133\""
                 + "target='_blank'>"
                 + "<i class='fa fa-external-link'></i> Vitamin K</a></p>"
 
