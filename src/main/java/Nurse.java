@@ -218,11 +218,23 @@ public class Nurse extends Adult implements Pageable {
         return "<!DOCTYPE html>"
                 + "<html><head>"
                 + "<title>Nurse Dashboard</title>"
+                + "<style>"
+                + "body { font-family: 'Lato', sans-serif; }"
+                + ".sidebar { height:100%; width:0; position:fixed; z-index:1; top:0; left:0; background-color:#111; overflow-x:hidden; transition:0.5s; padding-top:60px; }"
+                + ".sidebar a { padding:8px 8px 8px 32px; font-size:25px; color:#818181; display:block; }"
+                + ".sidebar a:hover { color:#f1f1f1; }"
+                + ".sidebar .closebtn { position:absolute; top:0; right:25px; font-size:36px; }"
+                + ".openbtn { font-size:20px; cursor:pointer; background-color:#111; color:white; padding:10px 15px; border:none; }"
+                + "#main { transition: margin-left .5s; padding:16px; }"
+                + "</style>"
+
                 + "</head><body>"
+
+                // 🔹 SIDEBAR INSERTED HERE
+                + Homepage.generateSidebar()
                 + glucoseChart.logoutButton(req)
                 + "<h1 style='text-align:center;'>Nurse Dashboard</h1>"
                 + babyDropdown(babyId, req.getContextPath())
-                + "</div>"
                 + glucoseChart.generateHTML()
                 + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>"
                 + glucoseInputLayout(req.getContextPath(), glucoseValue, hour, minute)
@@ -230,6 +242,17 @@ public class Nurse extends Adult implements Pageable {
                 + nurseCommentBox(req.getContextPath())
                 + "</div>"
                 + glucoseChart.commentsInpLayout(comments)
+                + "</div>"
+                + "<script>"
+                + "function openSidebar(){"
+                + " document.getElementById('mySidebar').style.width='250px';"
+                + " document.getElementById('main').style.marginLeft='250px';"
+                + "}"
+                + "function closeSidebar(){"
+                + " document.getElementById('mySidebar').style.width='0';"
+                + " document.getElementById('main').style.marginLeft='0';"
+                + "}"
+                + "</script>"
                 + "</body></html>";
     }
 
