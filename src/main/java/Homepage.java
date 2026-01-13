@@ -121,7 +121,7 @@ public class Homepage {
                     + "content: '';"
                     + "display: block;"
                     + "width: 80%;"
-                    + "max-width: 900px"
+                    + "max-width: 900px;"
                     + "height: 3px;"
                     + "background-color: white;"
                     + "margin: 15px auto 30px auto;}"
