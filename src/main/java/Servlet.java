@@ -31,12 +31,6 @@ public class Servlet extends HttpServlet {
 
         // Demo accounts (replace with real hospital identity system later)
 
-        passwords.put("parent1", "parentpass");
-        roles.put("parent1", "parent");
-        Parent parent1 = new Parent ("parent1",3,"/parents");
-        parent1.addPatient(baby1);
-        users.add(parent1);
-
         passwords.put("research1", "researchpass");
         roles.put("research1", "researcher");
         Researcher research1 = new Researcher("research1", 1, "/researchers");
@@ -60,7 +54,6 @@ public class Servlet extends HttpServlet {
 
         auth.addUser("nurse1", "nursepass", "nurse");
         auth.addUser("consult1", "consultpass", "consultant");
-        auth.addUser("parent1", "parentpass", "parent");
         auth.addUser("research1", "researchpass", "researcher");
         auth.addUser("admin1", "adminpass", "admin");
             
