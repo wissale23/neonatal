@@ -12,9 +12,26 @@ public class ImageServlet extends HttpServlet {
             throws IOException {
 
         String path = req.getPathInfo(); 
+        if (path == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
 
-        resp.setContentType("text/plain");
-        resp.getWriter().println("SERVLET WORKS: " + path);
+        InputStream is = getServletContext()
+                .getResourceAsStream("/images" + path);
+
+        if (is == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        String mime = getServletContext().getMimeType(path);
+        if (mime != null) {
+            resp.setContentType(mime);
+        }
+
+        is.transferTo(resp.getOutputStream());
     }
 }
+
 
