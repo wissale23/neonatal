@@ -210,7 +210,8 @@ public class Nurse extends Adult implements Pageable {
 
 
     //Display the nurse page with the logout button, baby dropdown, glucose chart, heel pricks input, feeding input and comment box
-    public String nursePage(GlucoseChart glucoseChart, HttpServletRequest req, int babyId,
+    // added monitoring chart
+    public String nursePage(GlucoseChart glucoseChart, MonitoringChart monitoringChart, HttpServletRequest req, int babyId,
                             double glucoseValue, double hour, double minute,
                             double feedStartHour, double feedStartMinute, double feedDuration, String feedType,
                             List<String> comments) {
@@ -236,6 +237,11 @@ public class Nurse extends Adult implements Pageable {
                 + "<h1 style='text-align:center;'>Nurse Dashboard</h1>"
                 + babyDropdown(babyId, req.getContextPath())
                 + glucoseChart.generateHTML()
+                // added monitoring chart
+                + "<div style='display:flex; justify-content:center; margin: 25px 0 10px 0;'>"
+                + monitoringChart.generateHTML()
+                + "</div>"
+
                 + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>"
                 + glucoseInputLayout(req.getContextPath(), glucoseValue, hour, minute)
                 + feedingInputLayout(req.getContextPath(), feedStartHour, feedStartMinute,feedDuration, feedType)
@@ -275,6 +281,9 @@ public class Nurse extends Adult implements Pageable {
         // Create chart for selected baby
         GlucoseChart glucoseChart = new GlucoseChart(baby);
 
+        // Create Monitoring chart for selected baby
+        MonitoringChart monitoringChart = new MonitoringChart(baby);
+
         // Get latest values for input forms
         List<Double> glucValues = getGlucValue(session);
         double glucoseValue = glucValues.get(0);
@@ -290,7 +299,7 @@ public class Nurse extends Adult implements Pageable {
         List<String> comments = baby.getComments();
 
         resp.setContentType("text/html");
-        resp.getWriter().write(nursePage(glucoseChart, req, babyId,
+        resp.getWriter().write(nursePage(glucoseChart, monitoringChart, req, babyId,
                 glucoseValue, hour,minute, feedStartHour,feedStartMinute, feedDuration, feedType, comments));
     }
 
