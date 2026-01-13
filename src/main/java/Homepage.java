@@ -223,7 +223,12 @@ public class Homepage {
                     + "border-radius: 5px;"
                     + "background-color: #7eabc2;"
                     + "font-family: Lato, sans-serif;"
-                    + "text-align: left;}"
+                    + "text-align: left;"
+                    + "transition: transform 0.2s ease, box-shadow 0.2s ease;}"
+
+                    + ".info-box:hover {"
+                    + "transform: translateY(-3px);"
+                    + "box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);}"
 
                     + ".info-box h3 {"
                     + "font-size: 22px;"
