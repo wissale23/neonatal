@@ -209,7 +209,19 @@ public class Nurse extends Adult implements Pageable {
     }
 
 
-
+    // Button to switch to Parent Chart Display
+    public String parentViewButton(HttpServletRequest req) {
+        return "<div style='display:flex; justify-content:flex-end; padding:10px 20px;'>"
+                + "<a href='" + req.getContextPath() + "/parents' "
+                + "style='background-color:#ffc0cb;"
+                + "border:2px solid black;"
+                + "padding:6px 12px;"
+                + "border-radius:4px;"
+                + "color:black; font-weight:bold; text-decoration:none;"
+                + "cursor:pointer;'>"
+                + "Parent View</a>"
+                + "</div>";
+    }
 
     //Display the nurse page with the logout button, baby dropdown, glucose chart, heel pricks input, feeding input and comment box
     // added monitoring chart
@@ -241,7 +253,7 @@ public class Nurse extends Adult implements Pageable {
                 + "<div class='header'>Nurse Dashboard</div>"
 
                 // Parent view button
-                + glucoseChart.parentViewButton(req)
+                + parentViewButton(req)
 
                 // baby dropdown display
                 + babyDropdown(babyId, req.getContextPath())

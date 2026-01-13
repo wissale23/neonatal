@@ -101,20 +101,6 @@ public class GlucoseChart {
         return feedingBars;
     }
 
-    //
-    public String parentViewButton(HttpServletRequest req) {
-        return "<div style='display:flex; justify-content:flex-end; padding:10px 20px;'>"
-                + "<a href='" + req.getContextPath() + "/parents' "
-                + "style='background-color:#ffc0cb;"
-                + "border:2px solid black;"
-                + "padding:6px 12px;"
-                + "border-radius:4px;"
-                + "color:black; font-weight:bold; text-decoration:none;"
-                + "cursor:pointer;'>"
-                + "Parent View</a>"
-                + "</div>";
-    }
-
 
 
     // Display warning alert message box

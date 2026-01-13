@@ -129,6 +129,20 @@ public class Consultant extends Adult implements Pageable {
                 + "</div>";
     }
 
+    // Button to switch to Parent Chart Display
+    public String parentViewButton(HttpServletRequest req) {
+        return "<div style='display:flex; justify-content:flex-end; padding:10px 20px;'>"
+                + "<a href='" + req.getContextPath() + "/parents' "
+                + "style='background-color:#ffc0cb;"
+                + "border:2px solid black;"
+                + "padding:6px 12px;"
+                + "border-radius:4px;"
+                + "color:black; font-weight:bold; text-decoration:none;"
+                + "cursor:pointer;'>"
+                + "Parent View</a>"
+                + "</div>";
+    }
+
     //Display consultant page, with the logout button, glucose chart, safety range and comments input
     public String consultPage(GlucoseChart glucoseChart,HttpServletRequest req,double lower,double upper,List<String> comments, int babyId){
 
@@ -152,7 +166,7 @@ public class Consultant extends Adult implements Pageable {
 
                 + "</head><body>"
                 + "<div class='header'>Consultant Dashboard</div>" // Header HTML
-                + glucoseChart.parentViewButton(req) // parent view button
+                + parentViewButton(req) // parent view button
                 + babyDropdown(babyId, req.getContextPath())  // Baby dropdown
                 + LogoutOption.generateLogoutSidebar() //Logout sidebar
                 + "</div>"
