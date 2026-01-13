@@ -38,7 +38,7 @@ public class Nurse extends Adult implements Pageable {
                         + "text-align:center;"
                         + "font-size:16px;"
                         + "font-weight:bold;"
-                        + "color:#00A499;"
+                        + "color:#0d47a1;"
                         + "box-shadow: 0 4px 8px rgba(0,0,0,0.1);"
                         + "transition: all 0.2s ease-in-out;'>"
         );
@@ -58,7 +58,7 @@ public class Nurse extends Adult implements Pageable {
                         + "border:2px solid #342;"
                         + "border-radius:6px;"
                         + "background:#ffffff;"
-                        + "color:#00A499;"
+                        + "color:#0d47a1;"
                         + "cursor:pointer;"
                         + "transition: all 0.2s ease-in-out;'>"
         );
