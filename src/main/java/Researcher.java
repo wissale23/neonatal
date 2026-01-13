@@ -81,7 +81,7 @@ public class Researcher extends Adult implements Pageable{
 
             // Write CSV content
             PrintWriter writer = resp.getWriter();
-            writer.println("Time,Raw_Glucose_uM,Smoothed_Glucose_uM,Estimated_Glucose_uM");
+            writer.println("Time,Raw_Skin_Glucose_uM,Smoothed_Skin_Glucose_uM,Estimated_Blood_Glucose_mM");
 
             int maxSize = Math.max(timeData.size(), Math.max(rawData.size(), smoothData.size()));
             for (int i = 0; i < maxSize; i++) {
