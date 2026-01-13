@@ -10,10 +10,6 @@ import java.util.*;
 )
 public class Servlet extends HttpServlet {
 
-    // In-memory storage for user-submitted values
-    private final List<Double> userRawValues = new ArrayList<>();
-    private final List<Double> userSmoothValues = new ArrayList<>();
-
     // Demo "hospital accounts" for MVP (pre-provisioned externally)
     private final Map<String, String> passwords = new HashMap<>();   // username -> password
     private final Map<String, String> roles = new HashMap<>();       // username -> role

@@ -50,7 +50,6 @@ public class Researcher extends Adult implements Pageable{
                         LogoutOption.generateLogoutSidebar() +
 
                         "<div id='main'>" +
-                        "<h1>Researcher Portal OOP Branch</h1>" +
                         "<p>Download glucose monitoring data:</p>" +
                         "<form method=\"POST\" action=\"" + req.getContextPath() + "/researchers\">" +
                         "<label for=\"babySelect\">Select Baby: </label>" +
