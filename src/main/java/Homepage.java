@@ -173,9 +173,7 @@ public class Homepage {
                     + ".info-box p {"
                     + "margin: 10px 0;}"
 
-                    + ".info-box a,"
-
-                    + ".info-box a:visited {"
+                    + ".info-box a, .info-box a:visited {"
                     + "font-size: 16px;"
                     + "color: #2c4f61;"
                     + "text-decoration: none;"
@@ -207,10 +205,8 @@ public class Homepage {
     }
 
     public static String generateContacts() {
-        return "<div class='contacts-box'>"
-                + "<h3 class='contacts-heading'>"
-                + "<i class='fa fa-phone'></i> Contact Information"
-                + "<h/3>"
+        return "<div class='info-box contacts-box'>"
+                + "<h3><i class='fa fa-phone'></i> Contact Information<h/3>"
                 + "<p><span>Reception</span><br/>"
                 + "<a href='tel: 02033135158'>02033135158</a></p>"
                 + "<p><span>Intensive Care</span><br/>"
@@ -221,7 +217,7 @@ public class Homepage {
     }
 
     public static String generateLocation() {
-        return "<div class='location-box'>"
+        return "<div class='info-box location-box'>"
                 + "<h3 onclick='toggleLocation()' class='collapsible'>"
                 + "<i class='fa fa-map-marker'></i> Find us at"
                 + "</h3>"
