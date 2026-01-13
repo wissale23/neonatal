@@ -101,24 +101,33 @@ public class Homepage {
 
                     // About Us section CSS
                     ".about-us {"
-                    + "max-width: 900px;"
+                    + "max-width: 1000px;"
                     + "margin: 40px auto;"
-                    + "padding: 20px;"
+                    + "padding: 40px 30px;"
+                    + "border-radius: 5px;"
+                    + "background-color: #385f73;"
+                    + "color: white;"
                     + "text-align: left;"
                     + "font-family: Lato, sans-serif;"
                     + "}"
 
                     + ".about-us h2 {"
-                    + "color: #2c4f61;"
+                    + "color: white;"
                     + "font-size: 36px;"
-                    + "margin-bottom: 15px"
-                    + "text-align: center;};"
+                    + "margin-bottom: 10px;"
+                    + "text-align: center;}"
+
+                    + ".about-us h2::after {"
+                    + "content: '';"
+                    + "display: block;"
+                    + "width: 700px;"
+                    + "height: 3px;"
+                    + "background-color: white;"
+                    + "margin: 12px auto 20px auto;}"
 
                     + ".about-us p {"
-                    + "color: #444;"
                     + "font-size: 16px;"
-                    + "line-height: 1.5;"
-
+                    + "line-height: 1.5;}"
 
                     // Contacts box CSS
                     + ".contacts-box {"
@@ -155,6 +164,9 @@ public class Homepage {
                     + "font-weight: 400;"
                     + "color: #444"
 
+                    + ".location-box {"
+                    + ""
+
                     + "</style>";
 
     public static String generateAboutUs() {
@@ -187,5 +199,6 @@ public class Homepage {
                 + "<a href='tel: 02033133908'>02033133908</a></p>"
                 + "</div>";
     }
+
 
 }
