@@ -19,10 +19,11 @@ public class Homepage {
                 + "#main { transition: margin-left .5s; padding:16px; }"
                 + "@media screen and (max-height:450px){.sidebar{padding-top:15px;}.sidebar a{font-size:18px;}}"
                 + "</style>"
-                + contactsCSS           // contacts CSS
+                + sectionsCSS           // contacts CSS
                 + "</head><body>"
                 + generateSidebar()           // sidebar HTML
                 + generateSlideshow(contextPath)         // slideshow content
+                + generateAboutUs()         // about us HTML
                 + generateContacts()            // contacts HTML
                 + "<script>"
                 + "function openSidebar(){ document.getElementById('mySidebar').style.width='250px';"
@@ -95,15 +96,38 @@ public class Homepage {
                 + "</style>";
     }
 
-    public static final String contactsCSS =
+    public static final String sectionsCSS =
             "<style>" +
-                    ".contacts-box {"
-                    + "background-color: #f5f5f5;"
-                    + "border: 2px solid #ccc;"
+
+                    // About Us section CSS
+                    ".about-us {"
+                    + "max-width: 900px;"
+                    + "margin: 40px auto;"
+                    + "padding: 20px;"
+                    + "text-align: left;"
+                    + "font-family: Lato, sans-serif;"
+                    + "}"
+
+                    + ".about-us h2 {"
+                    + "color: #2c4f61;"
+                    + "font-size: 36px;"
+                    + "margin-bottom: 15px"
+                    + "text-align: center;};"
+
+                    + ".about-us p {"
+                    + "color: #444;"
+                    + "font-size: 16px;"
+                    + "line-height: 1.5;"
+
+
+                    // Contacts box CSS
+                    + ".contacts-box {"
+                    + "background-color: #a3d0e6;"
+                    + "border: 2px solid #2c4f61;"
                     + "border-radius: 10px;"
                     + "padding: 20px;"
                     + "width: 320px;"
-                    + "margin: 30pc auto;"
+                    + "margin: 30px auto;"
                     + "box-shadow: 0 4px 8px rgba(0,0,0,0.2);"
                     + "font-family: Lato, sans-serif;"
                     + "}"
@@ -133,6 +157,25 @@ public class Homepage {
 
                     + "</style>";
 
+    public static String generateAboutUs() {
+        return "<section class='about-us'>"
+                + "<h2>About Us</h2>"
+                + "<p>"
+                + "Queen Charlotte's & Chelsea Hospital (QCCH) is a (level 3) neonatal intensive care unit (NICU), " +
+                "which provides neonatal care for infants born <27 weeks of gestation and/or of birthweight <800 grams " +
+                "as well as multiple pregnancies <28 weeks of gestation, as well as IC for more mature infants. " +
+                "The service treat new born babies with complex medical needs, including cardiac and neurological problems, " +
+                "as well as newborn babies with hypoxic ischaemic encephalopathy and retinopathy of prematurity. " +
+                "The service maintain close links with fetal medicine unit, clinical genetics and specialist paediatric services " +
+                "at Imperial College Healthcare NHS Trust (ICHT) (ID, paed surgery, neurology)."
+                + "</p>"
+                + "<p>The unit has two main areas and each has a number of small rooms:</p>"
+                + "<ul class='area-list'>"
+                + "<li>Intensive Care(IC)</li>"
+                + "<li>High Dependency Care (HD) and Special Care (SC)</li>"
+                + "</section>";
+    }
+
     public static String generateContacts() {
         return "<div class='contacts-box'>"
                 + "<h3>Contact Information<h/3>"
@@ -144,6 +187,5 @@ public class Homepage {
                 + "<a href='tel: 02033133908'>02033133908</a></p>"
                 + "</div>";
     }
-
 
 }
