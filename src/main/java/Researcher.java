@@ -40,8 +40,12 @@ public class Researcher extends Adult implements Pageable{
                         ".openbtn { font-size:20px; cursor:pointer; background-color:#111; color:white; padding:10px 15px; border:none; }" +
                         ".openbtn:hover { background-color:#444; }" +
                         "#main { transition: margin-left .5s; padding:16px; }" +
-                        "</style>" +
-                        "</head><body>" +
+                        // Header CSS
+                        ".header { background-color: #003087; color: white; text-align: center; padding: 20px; font-size: 28px; font-weight: bold; }"
+                        + "</style>"
+
+                        + "</head><body>"
+                        + "<div class='header'>Researcher Dashboard</div>" + // Header HTML
 
                         LogoutOption.generateLogoutSidebar() +
 
