@@ -13,7 +13,7 @@ public class LoginPageView {
                 "body{font-family:Arial,sans-serif;max-width:560px;margin:40px auto;padding:0 16px;}" +
                 ".card{border:1px solid #ddd;border-radius:12px;padding:16px;}" +
                 ".row{margin:10px 0;}label{display:block;margin-bottom:6px;}" +
-                "input{width:90%;padding:10px;border:1px solid #ccc;border-radius:8px;}" +
+                "input{width:95%;padding:10px;border:1px solid #ccc;border-radius:8px;}" +
                 "button{margin-top:10px;padding:10px 14px;border:0;border-radius:8px;cursor:pointer;}" +
                 ".err{color:#b00020;margin:10px 0;}" +
                 ".ok{color:#0a7a2f;margin:10px 0;}" +
@@ -38,7 +38,7 @@ public class LoginPageView {
                 "body{font-family:Arial,sans-serif;max-width:720px;margin:40px auto;padding:0 16px;}" +
                 ".card{border:1px solid #ddd;border-radius:12px;padding:16px;margin-top:12px;}" +
                 ".row{margin:10px 0;}label{display:block;margin-bottom:6px;}" +
-                "input,select{width:90%;padding:10px;border:1px solid #ccc;border-radius:8px;}" +
+                "input,select{width:95%;padding:10px;border:1px solid #ccc;border-radius:8px;}" +
                 "button{margin-top:10px;padding:10px 14px;border:0;border-radius:8px;cursor:pointer;}" +
                 ".err{color:#b00020;margin:10px 0;}" +
                 ".ok{color:#0a7a2f;margin:10px 0;}" +
