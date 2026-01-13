@@ -34,6 +34,7 @@ public class ParentalDisplay {
         return;
     }
 
+    
     private String parentPage(ParentChart parentChart) {
 
         return ""
@@ -41,18 +42,25 @@ public class ParentalDisplay {
                 + "<html lang='en'>\n"
                 + "<head>\n"
                 + "  <meta charset='UTF-8'>\n"
+                + "  <meta name='viewport' content='width=device-width, initial-scale=1'>\n"
                 + "  <title>Parent Display</title>\n"
+                + "  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>\n"
 
-                + "</style>"
-                + "body { font-family: 'Lato', sans-serif; }"
-                // Header CSS
-                + ".header { background-color: #003087; color: white; text-align: center; padding: 20px; font-size: 28px; font-weight: bold; }"
-                + "</style>"
+                + "  <style>\n"
+                + "    body { font-family: 'Lato', sans-serif; margin: 0; }\n"
+                + "    .header { background-color: #003087; color: white; text-align: center; padding: 20px; font-size: 28px; font-weight: bold; }\n"
+                + "  </style>\n"
 
-                + "</head><body>"
-                + "<div class='header'>Parent Display</div>"
+                + "</head>\n"
+                + "<body>\n"
+
+                + "<div class='header'>Parent Display</div>\n"
 
                 + parentChart.generateHTML()
+                + "<script>\n"
+                + "  function openSidebar(){ document.getElementById('mySidebar').style.width='250px'; }\n"
+                + "  function closeSidebar(){ document.getElementById('mySidebar').style.width='0'; }\n"
+                + "</script>\n"
                 + "</body>\n"
                 + "</html>";
     }
