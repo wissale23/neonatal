@@ -143,14 +143,18 @@ public class Consultant extends Adult implements Pageable {
                 + ".sidebar .closebtn { position:absolute; top:0; right:25px; font-size:36px; }"
                 + ".openbtn { font-size:20px; cursor:pointer; background-color:#111; color:white; padding:10px 15px; border:none; }"
                 + "#main { padding:16px; }"
+                // Header CSS
+                + ".header { background-color: #003087; color: white; text-align: center; padding: 20px; font-size: 28px; font-weight: bold; }"
                 + "</style>"
+
                 + "</head><body>"
-                + LogoutOption.generateLogoutSidebar()
-                + "<h1 style='text-align:center;'>Consultant Dashboard</h1>"
-                + babyDropdown(babyId, req.getContextPath())
+                + "<div class='header'>Nurse Dashboard</div>" // Header HTML
+                + babyDropdown(babyId, req.getContextPath())  // Baby dropdown
+                + LogoutOption.generateLogoutSidebar() //Logout sidebar
                 + "</div>"
-                + glucoseChart.generateHTML()
+                + glucoseChart.generateHTML() // Display glucose chart
                 + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>"
+                // Range and Comment Inputs
                 + rangeLayout(req.getContextPath(), lower, upper)
                 + consultCommentBox(req.getContextPath())
                 + "</div>"
