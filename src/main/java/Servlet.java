@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.*;
 
 @WebServlet(
-        urlPatterns = {"/", "useful-links", "/home", "/login", "/logout", "/consultants", "/nurses", "/researchers", "/parents"},
+        urlPatterns = {"/", "/useful-links", "/home", "/login", "/logout", "/consultants", "/nurses", "/researchers", "/parents"},
         loadOnStartup = 1
 )
 public class Servlet extends HttpServlet {
