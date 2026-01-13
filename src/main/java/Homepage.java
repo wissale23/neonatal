@@ -73,9 +73,9 @@ public class Homepage {
         return ""
                 + "<style>"
                 + "*{box-sizing:border-box;}"
-                + ".slideshow-container{max-width:800px;position:relative;margin:40px auto;}"
+                + ".slideshow-container{max-width:1000px;position:relative;margin:40px auto;}"
                 + ".mySlides{display:none;}"
-                + ".mySlides img{width:100%;height:200px;object-fit:contain;}"
+                + ".mySlides img{width:100%;height:300px;object-fit:contain;}"
 
                 // Next and Previous Arrows
                 + ".prev,.next{cursor:pointer;position:absolute;top:50%;padding:16px;"
@@ -172,6 +172,14 @@ public class Homepage {
 
                 // The centre dots
                 + "<div style='text-align:center'>"
+                + "  <span class='dot' onclick='currentSlide(1)'></span>"
+                + "  <span class='dot' onclick='currentSlide(2)'></span>"
+                + "  <span class='dot' onclick='currentSlide(3)'></span>"
+                + "  <span class='dot' onclick='currentSlide(4)'></span>"
+                + "  <span class='dot' onclick='currentSlide(1)'></span>"
+                + "  <span class='dot' onclick='currentSlide(2)'></span>"
+                + "  <span class='dot' onclick='currentSlide(3)'></span>"
+                + "  <span class='dot' onclick='currentSlide(4)'></span>"
                 + "  <span class='dot' onclick='currentSlide(1)'></span>"
                 + "  <span class='dot' onclick='currentSlide(2)'></span>"
                 + "  <span class='dot' onclick='currentSlide(3)'></span>"
