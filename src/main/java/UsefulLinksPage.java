@@ -32,6 +32,7 @@ public class UsefulLinksPage {
                 + "</head><body>"
                 + "<div class='header'>Useful Links</div>" // Header HTML
                 + Homepage.generateSidebar()           // sidebar HTML
+                + generateLinks()
 
                 + "</div>"
                 + "<script>"
