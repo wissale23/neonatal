@@ -54,14 +54,17 @@ public class Parent extends Adult implements Pageable {
                 + "<html lang='en'>\n"
                 + "<head>\n"
                 + "  <meta charset='UTF-8'>\n"
-                + "  <title>Glucose Levels</title>\n"
-                + "  <style>\n"
-                + "    body { font-family: Arial, sans-serif; margin: 40px; }\n"
-                + "    h2 { text-align: center; }\n"
-                + "    canvas { display: block; margin: auto; }\n"
-                + "  </style>\n"
-                + "</head>\n"
-                + "<body>\n"
+                + "  <title>Parent Display</title>\n"
+
+                + "</style>"
+                + "body { font-family: 'Lato', sans-serif; }"
+                // Header CSS
+                + ".header { background-color: #003087; color: white; text-align: center; padding: 20px; font-size: 28px; font-weight: bold; }"
+                + "</style>"
+
+                + "</head><body>"
+                + "<div class='header'>Parent Display</div>"
+
                 + parentChart.generateHTML()
                 + "</body>\n"
                 + "</html>";
