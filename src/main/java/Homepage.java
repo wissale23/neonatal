@@ -75,7 +75,7 @@ public class Homepage {
                 + "*{box-sizing:border-box;}"
                 + ".slideshow-container{max-width:800px;position:relative;margin:40px auto;}"
                 + ".mySlides{display:none;}"
-                + ".mySlides img{width:100%;height:200px;object-fit:cover;}"
+                + ".mySlides img{width:100%;height:200px;object-fit:contain;}"
 
                 // Next and Previous Arrows
                 + ".prev,.next{cursor:pointer;position:absolute;top:50%;padding:16px;"
