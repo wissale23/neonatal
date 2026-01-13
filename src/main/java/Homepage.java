@@ -34,11 +34,6 @@ public class Homepage {
                 + "function closeSidebar(){ document.getElementById('mySidebar').style.width='0';"
                 + "document.getElementById('main').style.marginLeft='0'; }"
                 + "</script>"
-                + "<script>"
-                + "function toggleLocation() {"
-                + "var content = document.getElementById('location');"
-                + "content.style.display = content.style.display === 'none' ? 'block' : 'none';}"
-                + "</script>"
                 + "</body></html>";
     }
 
@@ -224,15 +219,11 @@ public class Homepage {
 
     public static String generateLocation() {
         return "<div class='info-box location-box'>"
-                + "<h3 onclick='toggleLocation()' class='collapsible'>"
-                + "<i class='fa fa-map-marker'></i> Find us at"
-                + "</h3>"
-                + "<div id='location' class='location-content'>"
+                + "<h3><i class='fa fa-map-marker'></i> Find us at</h3>"
                 + "<p>4th Floor</p>"
                 + "<p>Queen Charlotte's & Chelsea Hospital</p>"
                 + "<p>Du Cane Road,</p>"
                 + "<p>Hammersmith W12 0HS</p>"
-                + "</div>"
                 + "</div>";
     }
 
