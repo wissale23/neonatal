@@ -10,6 +10,7 @@ public class MonitoringChart {
 
     public String generateHTML() {
 
+        // sped up playback
         final double maxValue = 50.0;
         final int intervalMs = 25;
 
