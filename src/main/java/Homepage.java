@@ -60,15 +60,15 @@ public class Homepage {
                 + ".mySlides img{width:100%;height:420px;object-fit:cover;}"
 
                 // Next and Previous Arrows
-                + ".prev,.next{cursor:pointer;position:absolute;top:50%;"
+                + ".prev,.next{cursor:pointer;position:absolute;top:50%;padding:16px;"
                 + "color:#494B55;font-weight:bold;font-size:18px;"
-                + "transition:0.6s;user-select:none;"
+                + "transition:0.6s;user-select:none;transform:translateY(-50%);}"
 
                 + ".next{right:0;border-radius:3px 0 0 3px;}"
                 + ".prev:hover,.next:hover{background-color:rgba(0,0,0,0.8);color:white;}"
 
                 // Number text
-                + ".numbertext{color:#f2f2f2;font-size:12px;padding:8px 12px;position:absolute;top:0;}"
+                + ".numbertext{color:#f2f2f2;font-size:12px;padding:8px 12px;position:absolute;top:0;left:8px;}"
 
                 // Dots for Carousel
                 + ".dot{cursor:pointer;height:13px;width:13px;margin:0 2px;"
@@ -87,22 +87,22 @@ public class Homepage {
 
                 // Images with number
                 + "  <div class='mySlides fade'>"
-                + "    <div class=\"numbertext\">1/4</div>"
+                + "    <div class='numbertext'>1/4</div>"
                 + "    <img src='" + contextPath + "/images/1.jpg'>"
                 + "  </div>"
 
                 + "  <div class='mySlides fade'>"
-                + "    <div class=\"numbertext\">2/4</div>"
+                + "    <div class='numbertext'>2/4</div>"
                 + "    <img src='" + contextPath + "/images/2.jpg'>"
                 + "  </div>"
 
                 + "  <div class='mySlides fade'>"
-                + "    <div class=\"numbertext\">3/4</div>"
+                + "    <div class='numbertext'>3/4</div>"
                 + "    <img src='" + contextPath + "/images/3.jpg'>"
                 + "  </div>"
 
                 + "  <div class='mySlides fade'>"
-                + "    <div class=\"numbertext\">3/4</div>"
+                + "    <div class='numbertext'>4/4</div>"
                 + "    <img src='" + contextPath + "/images/4.jpg'>"
                 + "  </div>"
 
@@ -138,7 +138,7 @@ public class Homepage {
                 + "  for(i=0;i<dots.length;i++){dots[i].className=dots[i].className.replace(' active','');}"
                 + "  slides[slideIndex-1].style.display='block';"
                 + "  dots[slideIndex-1].className+=' active';"
-                + "  timer=setTimeout(showSlides,4000)" // Change slide every 8 seconds
+                + "  timer=setTimeout(showSlides,4000);" // Change slide every 8 seconds
                 + "}"
 
                 + "function plusSlides(n){"
