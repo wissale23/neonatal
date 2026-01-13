@@ -48,8 +48,10 @@ public class Homepage {
                 + "  <button class='openbtn' onclick='openSidebar()'>&#9776; Options</button>";
     }
 
+    // Autoplay Slideshow with Manual Arrows and Gallery
     public static String generateSlideshow(String contextPath) {
-    // Reference 3 - Slideshow taken from https://www.geeksforgeeks.org/web-templates/programming-a-slideshow-with-html-and-css/
+    // Reference 3 - Slideshow taken from https://www.w3schools.com/howto/howto_js_slideshow.asp
+        // and https://stackoverflow.com/questions/53178768/automatic-slideshow-with-arrows-and-buttons
         return ""
                 + "<style>"
                 + "*{box-sizing:border-box;}"
@@ -57,48 +59,60 @@ public class Homepage {
                 + ".mySlides{display:none;}"
                 + ".mySlides img{width:100%;height:420px;object-fit:cover;}"
 
-                + ".prev,.next{cursor:pointer;position:absolute;top:50%;padding:16px;"
+                // Next and Previous Arrows
+                + ".prev,.next{cursor:pointer;position:absolute;top:50%;"
                 + "color:#494B55;font-weight:bold;font-size:18px;"
-                + "transition:0.6s;user-select:none;transform:translateY(-50%);"
+                + "transition:0.6s;user-select:none;"
 
                 + ".next{right:0;border-radius:3px 0 0 3px;}"
-
                 + ".prev:hover,.next:hover{background-color:rgba(0,0,0,0.8);color:white;}"
 
+                // Number text
+                + ".numbertext{color:#f2f2f2;font-size:12px;padding:8px 12px;position:absolute;top:0;}"
+
+                // Dots for Carousel
                 + ".dot{cursor:pointer;height:13px;width:13px;margin:0 2px;"
                 + "background-color:#bbb;border-radius:50%;display:inline-block;"
                 + "transition:background-color 0.6s ease;}"
 
                 + ".active,.dot:hover{background-color:#494B55;}"
 
+                // Fading animation
                 + ".fade{animation-name:fade;animation-duration:2s;}"
-
                 + "@keyframes fade{from{opacity:.4}to{opacity:1}}"
                 + "</style>"
 
+                // HTML class
                 + "<div class='slideshow-container'>"
 
+                // Images with number
                 + "  <div class='mySlides fade'>"
+                + "    <div class=\"numbertext\">1/4</div>"
                 + "    <img src='" + contextPath + "/images/1.jpg'>"
                 + "  </div>"
 
                 + "  <div class='mySlides fade'>"
+                + "    <div class=\"numbertext\">2/4</div>"
                 + "    <img src='" + contextPath + "/images/2.jpg'>"
                 + "  </div>"
 
                 + "  <div class='mySlides fade'>"
+                + "    <div class=\"numbertext\">3/4</div>"
                 + "    <img src='" + contextPath + "/images/3.jpg'>"
                 + "  </div>"
 
                 + "  <div class='mySlides fade'>"
+                + "    <div class=\"numbertext\">3/4</div>"
                 + "    <img src='" + contextPath + "/images/4.jpg'>"
                 + "  </div>"
 
+                // Next and previous buttons
                 + "  <a class='prev' onclick='plusSlides(-1)'>&#10094;</a>"
                 + "  <a class='next' onclick='plusSlides(1)'>&#10095;</a>"
 
                 + "</div>"
 
+                // The centre dots
                 + "<div style='text-align:center'>"
                 + "  <span class='dot' onclick='currentSlide(1)'></span>"
                 + "  <span class='dot' onclick='currentSlide(2)'></span>"
@@ -107,10 +121,13 @@ public class Homepage {
                 + "</div>"
 
                 + "<script>"
+
+                // Add timer variable
                 + "var slideIndex=0;"
                 + "var slides,dots,timer;"
                 + "showSlides();"
 
+                // Autoplay the slides
                 + "function showSlides(){"
                 + "  var i;"
                 + "  slides=document.getElementsByClassName('mySlides');"
@@ -121,7 +138,7 @@ public class Homepage {
                 + "  for(i=0;i<dots.length;i++){dots[i].className=dots[i].className.replace(' active','');}"
                 + "  slides[slideIndex-1].style.display='block';"
                 + "  dots[slideIndex-1].className+=' active';"
-                + "  timer=setTimeout(showSlides,4000);"
+                + "  timer=setTimeout(showSlides,4000)" // Change slide every 8 seconds
                 + "}"
 
                 + "function plusSlides(n){"
