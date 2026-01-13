@@ -133,6 +133,8 @@ public class Consultant extends Adult implements Pageable {
         return "<!DOCTYPE html>"
                 + "<html><head>"
                 + "<title>Consultant Dashboard</title>"
+                + "<meta name='viewport' content='width=device-width, initial-scale=1'>"
+                + "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>"
                 + "<style>"
                 + "body { font-family: 'Lato', sans-serif; }"
                 + ".sidebar { height:100%; width:0; position:fixed; z-index:1; top:0; left:0; background-color:#111; overflow-x:hidden; transition:0.5s; padding-top:60px; }"
@@ -143,8 +145,7 @@ public class Consultant extends Adult implements Pageable {
                 + "#main { transition: margin-left .5s; padding:16px; }"
                 + "</style>"
                 + "</head><body>"
-                + Homepage.generateSidebar()
-                + glucoseChart.logoutButton(req)
+                + LogoutOption.generateLogoutSidebar()
                 + "<h1 style='text-align:center;'>Consultant Dashboard</h1>"
                 + babyDropdown(babyId, req.getContextPath())
                 + "</div>"
