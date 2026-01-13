@@ -42,6 +42,14 @@ public class Homepage {
                 + "function closeSidebar(){ document.getElementById('mySidebar').style.width='0';"
                 + "document.getElementById('main').style.marginLeft='0'; }"
                 + "</script>"
+                + "<script>"
+                + "function toggleAbout() {"
+                + "var content = document.getElementById('about-content');"
+                + "var icon = document.getElementById('about-icon');"
+                + "if (content.style.display === 'none') {icon.className='fa fa-minus';}"
+                + "else {content.style.display = 'none'; icon.className='fa fa-plus';}"
+                + "}"
+                + "</script>"
                 + "</body></html>";
     }
 
@@ -187,8 +195,7 @@ public class Homepage {
                     + "background-color: #385f73;"
                     + "color: white;"
                     + "text-align: left;"
-                    + "font-family: Lato, sans-serif;"
-                    + "}"
+                    + "font-family: Lato, sans-serif;}"
 
                     + ".about-us h2 {"
                     + "color: white;"
@@ -208,6 +215,32 @@ public class Homepage {
                     + ".about-us p {"
                     + "font-size: 16px;"
                     + "line-height: 1.5;}"
+
+                    + ".about-toggle {"
+                    + "width: 100%;"
+                    + "background-color: #385f73;"
+                    + "border: none;"
+                    + "color: white;"
+                    + "font-size: 36px;"
+                    + "font-family: Lato, sans-serif;"
+                    + "cursor: pointer;"
+                    + "text-align: center;"
+                    + "margin-bottom: 15px;}"
+
+                    + ".about-toggle i {"
+                    + "font-size: 22px;}"
+
+                    + ".about-toggle::after {"
+                    + "content: '';"
+                    + "display: block;"
+                    + "width: 80%;"
+                    + "max-width: 900px;"
+                    + "height: 3px;"
+                    + "background-color: white;"
+                    + "margin: 15px auto 30px auto;}"
+
+                    + ".about-content {"
+                    + "display: block;}"
 
                     // Contacts and Location boxes CSS
                     + ".info-row {"
@@ -275,7 +308,11 @@ public class Homepage {
 
     public static String generateAboutUs() {
         return "<section class='about-us'>"
-                + "<h2>About Us</h2>"
+                + "<button class='about-toggle' onclick='toggleAbout()'>"
+                + "<span>About Us</span>"
+                + "<i id='about-icon' class='fa fa-minus'></i>"
+                + "</button>"
+                + "<div id='about-content'>"
                 + "<p>"
                 + "Queen Charlotte's & Chelsea Hospital (QCCH) is a (level 3) neonatal intensive care unit (NICU), " +
                 "which provides neonatal care for infants born <27 weeks of gestation and/or of birthweight <800 grams " +
@@ -289,6 +326,7 @@ public class Homepage {
                 + "<ul class='area-list'>"
                 + "<li>Intensive Care(IC)</li>"
                 + "<li>High Dependency Care (HD) and Special Care (SC)</li></ul>"
+                + "</div>"
                 + "</section>";
     }
 
