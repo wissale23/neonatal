@@ -236,7 +236,7 @@ public class Nurse extends Adult implements Pageable {
 
                 + "</head><body>"
                 + "<div class='header'>Nurse Dashboard</div>" // Header HTML
-
+                + glucoseChart.parentViewButton(req)
                 + babyDropdown(babyId, req.getContextPath())
 
                 // sidebar display

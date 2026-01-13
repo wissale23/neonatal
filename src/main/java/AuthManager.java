@@ -116,7 +116,7 @@ public class AuthManager {
         if ("/admin".equals(servletPath) && !"admin".equals(role)) return homeForRole(role);
         if ("/nurses".equals(servletPath) && !"nurse".equals(role)) return homeForRole(role);
         if ("/consultants".equals(servletPath) && !"consultant".equals(role)) return homeForRole(role);
-        if ("/parents".equals(servletPath) && !"parent".equals(role)) return homeForRole(role);
+        if ("/parents".equals(servletPath) && !"parent".equals(role) && !"consultant".equals(role) && !"nurse".equals(role)) return homeForRole(role);
         if ("/researchers".equals(servletPath) && !"researcher".equals(role)) return homeForRole(role);
 
         return null;
