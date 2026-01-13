@@ -305,8 +305,6 @@ public class Nurse extends Adult implements Pageable {
                 double feedDuration = Double.parseDouble(req.getParameter("durInp")) / 60.0;
                 String feedType = req.getParameter("typeInp");
 
-                String feedType = req.getParameter("typeInp");
-
                 baby.addFeeding(
                         feedValue,
                         feedDuration,
