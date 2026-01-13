@@ -91,7 +91,7 @@ public class Nurse extends Adult implements Pageable {
                 + "margin: 20px ;"
                 + "text-align: center;'>"
     
-                + "<h3 style='color: black;'>Entering blood glucose values (mM)</h3>"
+                + "<h3 style='color: black;'>Blood Glucose Heel Prick (mM)</h3>"
     
                 + "<form method='POST' action='" + pathString + "/nurses'>"
                 + "<div>"
@@ -227,7 +227,7 @@ public class Nurse extends Adult implements Pageable {
                 + ".sidebar a:hover { color:#f1f1f1; }"
                 + ".sidebar .closebtn { position:absolute; top:0; right:25px; font-size:36px; }"
                 + ".openbtn { font-size:20px; cursor:pointer; background-color:#111; color:white; padding:10px 15px; border:none; }"
-                + "#main { transition: margin-left .5s; padding:16px; }"
+                + "#main { padding:16px; }"
                 + "</style>"
 
                 + "</head><body>"
@@ -253,11 +253,9 @@ public class Nurse extends Adult implements Pageable {
                 + "<script>"
                 + "function openSidebar(){"
                 + " document.getElementById('mySidebar').style.width='250px';"
-                + " document.getElementById('main').style.marginLeft='250px';"
                 + "}"
                 + "function closeSidebar(){"
                 + " document.getElementById('mySidebar').style.width='0';"
-                + " document.getElementById('main').style.marginLeft='0';"
                 + "}"
                 + "</script>"
                 + "</body></html>";
