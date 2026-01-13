@@ -170,6 +170,7 @@ public class Homepage {
 
                     + ".info-box p {"
                     + "margin: 10px 0;"
+                    + "font-size: 16px;"
                     + "color: #2c4f61;"
                     + "text-align: left;}"
 
@@ -182,6 +183,11 @@ public class Homepage {
                     + ".info-box a:hover {"
                     + "color: #031426;"
                     + "text-decoration: underline;}"
+
+                    + ".contact-label {"
+                    + "display: inline-block;"
+                    + "width: 260px;"
+                    + "font-weight: 400;}"
 
                     + "</style>";
 
@@ -206,10 +212,13 @@ public class Homepage {
 
     public static String generateContacts() {
         return "<div class='info-box contacts-box'>"
-                + "<h3><i class='fa fa-phone'></i> Contact Information<h/3>"
-                + "<p>Reception<a href='tel: 02033135158'>02033135158</a></p>"
-                + "<p>Intensive Care<a href='tel: 02033133174'>02033133174</a></p>"
-                + "<p>High Dependency and Special Care<a href='tel: 02033133908'>02033133908</a></p>"
+                + "<h3><i class='fa fa-phone'></i> Contact Information</h3>"
+                + "<p><span class='contact-label'>Reception</span>"
+                + "<a href='tel: 02033135158'>02033135158</a></p>"
+                + "<p><span class='contact-label'>Intensive Care</span>"
+                + "<a href='tel: 02033133174'>02033133174</a></p>"
+                + "<p><span class='contact-label'>High Dependency and Special Care</span>"
+                + "<a href='tel: 02033133908'>02033133908</a></p>"
                 + "</div>";
     }
 
