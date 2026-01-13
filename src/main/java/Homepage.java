@@ -25,11 +25,17 @@ public class Homepage {
                 + generateSlideshow(contextPath)         // slideshow content
                 + generateAboutUs()         // about us HTML
                 + generateContacts()            // contacts HTML
+                + generateLocation()            // location HTML
                 + "<script>"
                 + "function openSidebar(){ document.getElementById('mySidebar').style.width='250px';"
                 + "document.getElementById('main').style.marginLeft='250px'; }"
                 + "function closeSidebar(){ document.getElementById('mySidebar').style.width='0';"
                 + "document.getElementById('main').style.marginLeft='0'; }"
+                + "</script>"
+                + "<script>"
+                + "function toggleLocation() {"
+                + "var content = document.getElementById('location');"
+                + "content.style.display = content.style.display === 'none' ? 'block' : 'none';}"
                 + "</script>"
                 + "</body></html>";
     }
@@ -130,43 +136,52 @@ public class Homepage {
                     + "font-size: 16px;"
                     + "line-height: 1.5;}"
 
-                    // Contacts box CSS
-                    + ".contacts-box {"
-                    + "background-color: #a3d0e6;"
-                    + "border: 2px solid #2c4f61;"
-                    + "border-radius: 10px;"
+                    // Contacts and Location boxes CSS
+                    + "/info-row {"
+                    + "display: flex;"
+                    + "gap: 100px;"
+                    + "max-width: 1000px;"
+                    + "margin: 40px auto;}"
+
+                    + ".info-box {"
+                    + "flex: 1;"
                     + "padding: 20px;"
-                    + "width: 320px;"
-                    + "margin: 30px auto;"
-                    + "box-shadow: 0 4px 8px rgba(0,0,0,0.2);"
-                    + "font-family: Lato, sans-serif;"
-                    + "}"
+                    + "border-radius: 3px;"
+                    + "background-color: #7eabc2;"
+                    + "font-family: Lato, sans-serif;}"
 
-                    + ".contacts-box h3 {"
-                    + "text-align: center;"
-                    + "margin-top: 0};"
+                    + ".info-box h3 {"
+                    + "display: flex;"
+                    + "align-items: center;"
+                    + "justify-content: center;"
+                    + "gap: 10px;"
+                    + "font-size: 22px;"
+                    + "color: #2c4f61;"
+                    + "margin-top: 0;"
+                    + "margin-bottom: 15px;}"
 
-                    + ".contacts-box p {"
-                    + "margin: 12px 0};"
+                    + ".info-box h3::after {"
+                    + "content: '';"
+                    + "display: block;"
+                    + "width: 80%;"
+                    + "height: 3px;"
+                    + "background-color: #2c4f61;"
+                    + "margin: 10px auto;}"
 
-                    + ".contacts-box a,"
+                    + ".info-box p {"
+                    + "margin: 10px 0;}"
 
-                    + ".contacts-box a:visited {"
-                    + "font-size: 15px;"
-                    + "color: #444;"
+                    + ".info-box a,"
+
+                    + ".info-box a:visited {"
+                    + "font-size: 16px;"
+                    + "color: #2c4f61;"
                     + "text-decoration: none;"
-                    + "-webkit-text-fill-color: #444;"
+                    + "-webkit-text-fill-color: #2c4f61;}"
 
-                    + ".contacts-box a:hover {"
+                    + ".info-box a:hover {"
                     + "color: #031426;"
-                    + "text-decoration: underline};"
-
-                    + ".contact-label {"
-                    + "font-weight: 400;"
-                    + "color: #444"
-
-                    + ".location-box {"
-                    + ""
+                    + "text-decoration: underline;}"
 
                     + "</style>";
 
@@ -191,13 +206,29 @@ public class Homepage {
 
     public static String generateContacts() {
         return "<div class='contacts-box'>"
-                + "<h3>Contact Information<h/3>"
-                + "<p><i class='fa fa-phone'></i> <span>Reception</span><br/>"
+                + "<h3 class='contacts-heading'>"
+                + "<i class='fa fa-phone'></i> Contact Information"
+                + "<h/3>"
+                + "<p><span>Reception</span><br/>"
                 + "<a href='tel: 02033135158'>02033135158</a></p>"
-                + "<p><i class='fa fa-phone'></i> <span>Intensive Care</span><br/>"
+                + "<p><span>Intensive Care</span><br/>"
                 + "<a href='tel: 02033133174'>02033133174</a></p>"
-                + "<p><i class='fa fa-phone'></i> <span>High Dependency and Special Care</span><br/>"
+                + "<p><span>High Dependency and Special Care</span><br/>"
                 + "<a href='tel: 02033133908'>02033133908</a></p>"
+                + "</div>";
+    }
+
+    public static String generateLocation() {
+        return "<div class='location-box'>"
+                + "<h3 onclick='toggleLocation()' class='collapsible'>"
+                + "<i class='fa fa-map-marker'></i> Find us at"
+                + "</h3>"
+                + "<div id='location' class='location-content'>"
+                + "<p>4th Floor</p>"
+                + "<p>Queen Charlotte's & Chelsea Hospital</p>"
+                + "<p>Du Cane Road,</p>"
+                + "<p>Hammersmith W12 0HS</p>"
+                + "</div>"
                 + "</div>";
     }
 
