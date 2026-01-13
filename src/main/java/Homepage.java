@@ -24,8 +24,8 @@ public class Homepage {
                 // Header CSS
                 + ".header { background-color: #143684; color: white; text-align: center; padding: 20px; font-size: 28px; font-weight: bold; }"
 
-                + sectionsCSS  // Contact CSS
                 + "</style>"
+                + sectionsCSS  // sections CSS
 
                 + "</head><body>"
                 + "<div class='header'>Queen Charlotte's and Chelsea Hospital's Neonatal Unit</div>" // Header HTML
@@ -288,7 +288,7 @@ public class Homepage {
                 + "<p>The unit has two main areas and each has a number of small rooms:</p>"
                 + "<ul class='area-list'>"
                 + "<li>Intensive Care(IC)</li>"
-                + "<li>High Dependency Care (HD) and Special Care (SC)</li>"
+                + "<li>High Dependency Care (HD) and Special Care (SC)</li></ul>"
                 + "</section>";
     }
 
