@@ -139,7 +139,7 @@ public class Homepage {
                     + "line-height: 1.5;}"
 
                     // Contacts and Location boxes CSS
-                    + "/info-row {"
+                    + ".info-row {"
                     + "display: flex;"
                     + "gap: 100px;"
                     + "max-width: 1000px;"
