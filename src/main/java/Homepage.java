@@ -52,65 +52,104 @@ public class Homepage {
     // Reference 3 - Slideshow taken from https://www.geeksforgeeks.org/web-templates/programming-a-slideshow-with-html-and-css/
         return ""
                 + "<style>"
-                + "#slideshow {"
-                + "  overflow:hidden;"
-                + "  height:420px;"
-                + "  width:100%;"
-                + "  max-width:900px;"
-                + "  margin:40px auto;"
-                + "}"
+                + "*{box-sizing:border-box;}"
 
-                + ".slide-wrapper {"
-                + "  width:400%;"
-                + "  animation: slide 16s ease infinite;"
-                + "}"
+                + ".slideshow-container{max-width:900px;position:relative;margin:40px auto;}"
 
-                + ".slide {"
-                + "  float:left;"
-                + "  width:25%;"
-                + "  height:420px;"
-                + "}"
+                + ".mySlides{display:none;}"
 
-                + ".slide img {"
-                + "  width:100%;"
-                + "  height:100%;"
-                + "  object-fit:cover;"
-                + "}"
+                + ".mySlides img{width:100%;height:420px;object-fit:cover;border:3px solid #494B55;}"
 
-                + "@keyframes slide {"
-                + "  0% {margin-left:0%;}"
-                + "  20% {margin-left:0%;}"
-                + "  25% {margin-left:-100%;}"
-                + "  45% {margin-left:-100%;}"
-                + "  50% {margin-left:-200%;}"
-                + "  70% {margin-left:-200%;}"
-                + "  75% {margin-left:-300%;}"
-                + "  95% {margin-left:-300%;}"
-                + "  100% {margin-left:0%;}"
-                + "}"
+                + ".prev,.next{cursor:pointer;position:absolute;top:50%;padding:16px;"
+                + "color:#494B55;font-weight:bold;font-size:18px;"
+                + "transition:0.6s;border-radius:0 3px 3px 0;user-select:none;}"
+
+                + ".next{right:0;border-radius:3px 0 0 3px;}"
+
+                + ".prev:hover,.next:hover{background-color:rgba(0,0,0,0.8);color:white;}"
+
+                + ".dot{cursor:pointer;height:13px;width:13px;margin:0 2px;"
+                + "background-color:#bbb;border-radius:50%;display:inline-block;"
+                + "transition:background-color 0.6s ease;}"
+
+                + ".active,.dot:hover{background-color:#494B55;}"
+
+                + ".fade{animation-name:fade;animation-duration:2s;}"
+
+                + "@keyframes fade{from{opacity:.4}to{opacity:1}}"
                 + "</style>"
 
-                + "<div id='slideshow'>"
-                + "  <div class='slide-wrapper'>"
+                + "<div class='slideshow-container'>"
 
-                + "    <div class='slide'>"
-                + "      <img src='" + contextPath + "/images/1.jpg' alt='Slide 1'>"
-                + "    </div>"
-
-                + "    <div class='slide'>"
-                + "      <img src='" + contextPath + "/images/2.jpg' alt='Slide 2'>"
-                + "    </div>"
-
-                + "    <div class='slide'>"
-                + "      <img src='" + contextPath + "/images/3.jpg' alt='Slide 3'>"
-                + "    </div>"
-
-                + "    <div class='slide'>"
-                + "      <img src='" + contextPath + "/images/4.jpg' alt='Slide 4'>"
-                + "    </div>"
-
+                + "  <div class='mySlides fade'>"
+                + "    <img src='" + contextPath + "/images/1.jpg'>"
                 + "  </div>"
-                + "</div>";
+
+                + "  <div class='mySlides fade'>"
+                + "    <img src='" + contextPath + "/images/2.jpg'>"
+                + "  </div>"
+
+                + "  <div class='mySlides fade'>"
+                + "    <img src='" + contextPath + "/images/3.jpg'>"
+                + "  </div>"
+
+                + "  <div class='mySlides fade'>"
+                + "    <img src='" + contextPath + "/images/4.jpg'>"
+                + "  </div>"
+
+                + "  <a class='prev' onclick='plusSlides(-1)'>&#10094;</a>"
+                + "  <a class='next' onclick='plusSlides(1)'>&#10095;</a>"
+
+                + "</div>"
+
+                + "<div style='text-align:center'>"
+                + "  <span class='dot' onclick='currentSlide(1)'></span>"
+                + "  <span class='dot' onclick='currentSlide(2)'></span>"
+                + "  <span class='dot' onclick='currentSlide(3)'></span>"
+                + "  <span class='dot' onclick='currentSlide(4)'></span>"
+                + "</div>"
+
+                + "<script>"
+                + "var slideIndex=0;"
+                + "var slides,dots,timer;"
+                + "showSlides();"
+
+                + "function showSlides(){"
+                + "  var i;"
+                + "  slides=document.getElementsByClassName('mySlides');"
+                + "  dots=document.getElementsByClassName('dot');"
+                + "  for(i=0;i<slides.length;i++){slides[i].style.display='none';}"
+                + "  slideIndex++;"
+                + "  if(slideIndex>slides.length){slideIndex=1;}"
+                + "  for(i=0;i<dots.length;i++){dots[i].className=dots[i].className.replace(' active','');}"
+                + "  slides[slideIndex-1].style.display='block';"
+                + "  dots[slideIndex-1].className+=' active';"
+                + "  timer=setTimeout(showSlides,4000);"
+                + "}"
+
+                + "function plusSlides(n){"
+                + "  clearTimeout(timer);"
+                + "  slideIndex+=n;"
+                + "  if(slideIndex>slides.length){slideIndex=1;}"
+                + "  if(slideIndex<1){slideIndex=slides.length;}"
+                + "  updateSlides();"
+                + "}"
+
+                + "function currentSlide(n){"
+                + "  clearTimeout(timer);"
+                + "  slideIndex=n;"
+                + "  updateSlides();"
+                + "}"
+
+                + "function updateSlides(){"
+                + "  var i;"
+                + "  for(i=0;i<slides.length;i++){slides[i].style.display='none';}"
+                + "  for(i=0;i<dots.length;i++){dots[i].className=dots[i].className.replace(' active','');}"
+                + "  slides[slideIndex-1].style.display='block';"
+                + "  dots[slideIndex-1].className+=' active';"
+                + "  timer=setTimeout(showSlides,4000);"
+                + "}"
+                + "</script>";
     }
 
     public static final String sectionsCSS =
