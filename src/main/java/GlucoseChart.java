@@ -101,6 +101,7 @@ public class GlucoseChart {
         return feedingBars;
     }
 
+    //
     public String parentViewButton(HttpServletRequest req) {
         return "<div style='display:flex; justify-content:flex-end; padding:10px 20px;'>"
                 + "<a href='" + req.getContextPath() + "/parents' "

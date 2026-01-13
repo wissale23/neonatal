@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class Consultant extends Adult implements Pageable {
 
+    // Default upper and lower blood glucose limit
     private final double defaultLower = 2.6;
     private final double defaultUpper = 10;
 
@@ -90,9 +91,9 @@ public class Consultant extends Adult implements Pageable {
                 + "<form method='POST' action='" + pathString + "/consultants'>"
                 + "<div>"
                 + "<span style='display:inline-block; width:110px; text-align:right; color:black;'>Lower limit: </span>"
-                + "<input type='text' name='lowerLimit' step='0.1' value='" + lower + "' style='width:100px; text-align:center;'/><br/><br/>"
+                + "<input type='text' name='lowerLimit' step='0.1' value='" + lower + "' style='width:100px; text-align:center;'/><br/><br/>" // lower limit input
                 + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Upper limit: </span>"
-                + "<input type='text' name='upperLimit' step='0.1' value='" + upper + "' style='width:100px; text-align:center;'/><br/><br/>"
+                + "<input type='text' name='upperLimit' step='0.1' value='" + upper + "' style='width:100px; text-align:center;'/><br/><br/>" // upper limit input
 
 
                 + "<button type='submit' style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Apply</button>"
@@ -134,6 +135,7 @@ public class Consultant extends Adult implements Pageable {
         return "<!DOCTYPE html>"
                 + "<html><head>"
                 + "<title>Consultant Dashboard</title>"
+                // Sidebar display
                 + "<meta name='viewport' content='width=device-width, initial-scale=1'>"
                 + "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>"
                 + "<style>"
@@ -150,19 +152,20 @@ public class Consultant extends Adult implements Pageable {
 
                 + "</head><body>"
                 + "<div class='header'>Consultant Dashboard</div>" // Header HTML
-                + glucoseChart.parentViewButton(req)
+                + glucoseChart.parentViewButton(req) // parent view button
                 + babyDropdown(babyId, req.getContextPath())  // Baby dropdown
                 + LogoutOption.generateLogoutSidebar() //Logout sidebar
                 + "</div>"
                 + glucoseChart.generateHTML() // Display glucose chart
                 + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>"
                 // Range and Comment Inputs
-                + rangeLayout(req.getContextPath(), lower, upper)
-                + consultCommentBox(req.getContextPath())
+                + rangeLayout(req.getContextPath(), lower, upper) // safety range input
+                + consultCommentBox(req.getContextPath()) // comment box input
                 + "</div>"
-                + glucoseChart.commentsInpLayout(comments)
+                + glucoseChart.commentsInpLayout(comments) // comments display
                 + "</div>"
                 + "<script>"
+                // Sidebar display
                 + "function openSidebar(){"
                 + " document.getElementById('mySidebar').style.width='250px';"
                 + "}"

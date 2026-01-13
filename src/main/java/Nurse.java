@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class Nurse extends Adult implements Pageable {
 
+    // Default input values
     private final double defaultGlucose = 0.0;
     private final int defaultHour = 00;
     private final int defaultMinute = 00;
@@ -18,6 +19,7 @@ public class Nurse extends Adult implements Pageable {
         super(name, id, endpoint);
     }
 
+    //Display the baby selector
     private String babyDropdown(int selectedId, String contextPath) {
 
         // Get all babies from the Baby Patient List
@@ -122,7 +124,7 @@ public class Nurse extends Adult implements Pageable {
                 + "</div>";
     }
 
-
+    //Display feeding type dropdown
     public String feedingTypeDropdown(String feedType) {
         return "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Feeding Description: </span>"
                 + "<input list='feedOptions' name='typeInp' value='" + feedType + "' "
@@ -165,7 +167,7 @@ public class Nurse extends Adult implements Pageable {
                 + "<input type='text' name='durInp' step='0.01' value='" + String.format("%02d", (int) feedDuration) + "' style='width:100px; text-align:center;'/><br/><br/>"
 
                 + feedingTypeDropdown(feedType)
-                // Buttons side by side
+                // Buttons to add sample and undo
                 + "<div style='display:flex; justify-content:center; gap:10px;margin-top:15px;'>"
                 + "<button type='submit' name='action' value='add' "
                 + "style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add feeding information</button>"
@@ -219,6 +221,7 @@ public class Nurse extends Adult implements Pageable {
         return "<!DOCTYPE html>"
                 + "<html><head>"
                 + "<title>Nurse Dashboard</title>"
+                // Sidebar display
                 + "<meta name='viewport' content='width=device-width, initial-scale=1'>"
                 + "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>"
                 + "<style>"
@@ -235,8 +238,12 @@ public class Nurse extends Adult implements Pageable {
                 + "</style>"
 
                 + "</head><body>"
-                + "<div class='header'>Nurse Dashboard</div>" // Header HTML
+                + "<div class='header'>Nurse Dashboard</div>"
+
+                // Parent view button
                 + glucoseChart.parentViewButton(req)
+
+                // baby dropdown display
                 + babyDropdown(babyId, req.getContextPath())
 
                 // sidebar display
@@ -264,7 +271,7 @@ public class Nurse extends Adult implements Pageable {
                 // comments display
                 + glucoseChart.commentsInpLayout(comments)
                 + "</div>"
-
+                // Sidebar display
                 + "<script>"
                 + "function openSidebar(){"
                 + " document.getElementById('mySidebar').style.width='250px';"
@@ -313,6 +320,8 @@ public class Nurse extends Adult implements Pageable {
         List<String> comments = baby.getComments();
 
         resp.setContentType("text/html");
+
+        // Display nurse page on browser
         resp.getWriter().write(nursePage(glucoseChart, monitoringChart, req, babyId,
                 glucoseValue, hour,minute, feedStartHour,feedStartMinute, feedDuration, feedType, comments));
     }
@@ -323,16 +332,15 @@ public class Nurse extends Adult implements Pageable {
         Baby baby = BabyPatientList.getBaby((int) session.getAttribute("babyId"));
 
         String action = req.getParameter("action"); 
-        
 
         if (req.getParameter("glucoseInp") != null) {
             if ("undo".equals(action)) {
-                baby.removeLastSample();
+                baby.removeLastSample(); // remove last sample
             } else {
                 double hour = Double.parseDouble(req.getParameter("glucHourInp"));
                 double minute = Double.parseDouble(req.getParameter("glucMinInp"));
         
-                double timeValue = hour + (minute / 60.0);
+                double timeValue = hour + (minute / 60.0); // converts HH:MM input to chart input
                 baby.addSample(
                         timeValue,
                         Double.parseDouble(req.getParameter("glucoseInp"))
@@ -348,7 +356,7 @@ public class Nurse extends Adult implements Pageable {
                 double feedMinute = Double.parseDouble(req.getParameter("startMinute"));   
                 double feedValue = feedHour + (feedMinute / 60.0);
 
-                double feedDuration = Double.parseDouble(req.getParameter("durInp")) / 60.0;
+                double feedDuration = Double.parseDouble(req.getParameter("durInp")) / 60.0; // converts minutes to chart input
                 String feedType = req.getParameter("typeInp");
 
                 baby.addFeeding(
@@ -356,7 +364,6 @@ public class Nurse extends Adult implements Pageable {
                         feedDuration,
                         feedType
                 );
-
             }
         }
 
@@ -374,13 +381,16 @@ public class Nurse extends Adult implements Pageable {
         double hour = defaultHour;
         double minute = defaultMinute;
         
-
+        //
         if (session != null) {
             List<Double> glucoseList = (List<Double>) session.getAttribute("glucoseList");
             List<Double> timeList = (List<Double>) session.getAttribute("timeList");
 
+            // If glucose values exist, take the most recent one
             if (glucoseList != null && !glucoseList.isEmpty())
                 glucose = glucoseList.get(glucoseList.size() - 1);
+
+            // If time values exist, extract the most recent time
             if (timeList != null && !timeList.isEmpty()) {
                 double time = timeList.get(timeList.size() - 1);
                 hour = (int) time;

@@ -29,6 +29,8 @@ public class Parent extends Adult implements Pageable {
         // Get baby + data from BabyPatientList
         Baby baby = BabyPatientList.getBaby(babyId);
 
+        ParentChart parentChart = new ParentChart(baby);
+        resp.getWriter().write(parentPage(parentChart));
 
     }
 
@@ -44,4 +46,25 @@ public class Parent extends Adult implements Pageable {
         if (Math.abs(v - Math.round(v)) < 1e-9) return String.valueOf((long) Math.round(v));
         return String.valueOf(v);
     }
+
+    private String parentPage(ParentChart parentChart) {
+
+        return ""
+                + "<!DOCTYPE html>\n"
+                + "<html lang='en'>\n"
+                + "<head>\n"
+                + "  <meta charset='UTF-8'>\n"
+                + "  <title>Glucose Levels</title>\n"
+                + "  <style>\n"
+                + "    body { font-family: Arial, sans-serif; margin: 40px; }\n"
+                + "    h2 { text-align: center; }\n"
+                + "    canvas { display: block; margin: auto; }\n"
+                + "  </style>\n"
+                + "</head>\n"
+                + "<body>\n"
+                + parentChart.generateHTML()
+                + "</body>\n"
+                + "</html>";
+    }
+
 }
