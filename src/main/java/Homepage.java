@@ -251,6 +251,12 @@ public class Homepage {
                     + "width: 300px;"
                     + "font-weight: bold;}"
 
+                    + ".location-box .map-link {"
+                    + "margin-top: 12px;}"
+
+                    + ".location-box .map-link a {"
+                    + "font-weight: 500;}"
+
                     + "</style>";
 
     public static String generateAboutUs() {
@@ -291,6 +297,10 @@ public class Homepage {
                 + "<p>Queen Charlotte's & Chelsea Hospital</p>"
                 + "<p>Du Cane Road,</p>"
                 + "<p>Hammersmith W12 0HS</p>"
+                + "<p class='map-link'>"
+                + "<a href='https://www.google.com/maps/place/Queen+Charlotte's+and+Chelsea+Hospital'"
+                + "target='_blank'>"
+                + "<i class='fa fa-external-link'></i> Open in Google Maps</a></p>"
                 + "</div>";
     }
 
