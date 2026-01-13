@@ -44,59 +44,74 @@ public class Testpage {
                 + "  <a href='/login'><i class=\"fa fa-fw fa-user\"></i>Login</a>"
                 + "</div>"
                 + "<div id='main'>"
-                + "  <button class='openbtn' onclick='openSidebar()'>&#9776; Options</button>";
+                + "  <button class='openbtn' onclick='openSidebar()'>&#9776; Options test</button>";
     }
 
     public static String generateSlideshow(String contextPath) {
-        // Reference 3 - Slideshow taken from https://www.w3schools.com/howto/howto_js_slideshow.asp
-        return "<div class='slideshow-container'>"
-                + "  <div class='mySlides fade'>"
-                + "    <img src='" + contextPath + "/images/4.png' style='width:100%'>"
-                + "  </div>"
-                + "  <div class='mySlides fade'>"
-                + "    <img src='" + contextPath + "/images/2.jpg' style='width:100%'>"
-                + "  </div>"
-                + "  <div class='mySlides fade'>"
-                + "    <img src='" + contextPath + "/images/3.jpg' style='width:100%'>"
-                + "  </div>"
-                + "  <a class='prev' onclick='plusSlides(-1)'>&#10094;</a>"
-                + "  <a class='next' onclick='plusSlides(1)'>&#10095;</a>"
-                + "</div>"
-                + "<br>"
-                + "<div style='text-align:center'>"
-                + "  <span class='dot' onclick='currentSlide(1)'></span>"
-                + "  <span class='dot' onclick='currentSlide(2)'></span>"
-                + "  <span class='dot' onclick='currentSlide(3)'></span>"
-                + "</div>"
-                + "<script>"
-                + "let slideIndex = 1;"
-                + "showSlides(slideIndex);"
-                + "function plusSlides(n){ showSlides(slideIndex += n); }"
-                + "function currentSlide(n){ showSlides(slideIndex = n); }"
-                + "function showSlides(n){"
-                + "  let i;"
-                + "  let slides = document.getElementsByClassName('mySlides');"
-                + "  let dots = document.getElementsByClassName('dot');"
-                + "  if(n > slides.length){slideIndex = 1;}"
-                + "  if(n < 1){slideIndex = slides.length;}"
-                + "  for(i=0;i<slides.length;i++){slides[i].style.display='none';}"
-                + "  for(i=0;i<dots.length;i++){dots[i].className=dots[i].className.replace(' active','');}"
-                + "  slides[slideIndex-1].style.display='block';"
-                + "  dots[slideIndex-1].className += ' active';"
-                + "}"
-                + "</script>"
+
+        return ""
                 + "<style>"
-                + " .mySlides{display:none;} "
-                + " .fade{animation-name:fade;animation-duration:1.5s;} "
-                + " @keyframes fade{from{opacity:.4} to{opacity:1}} "
-                + " .prev, .next{cursor:pointer;position:absolute;top:50%;width:auto;padding:16px;margin-top:-22px;color:white;font-weight:bold;font-size:18px;transition:0.6s;user-select:none;} "
-                + " .prev{left:0;border-radius:0 3px 3px 0;} "
-                + " .next{right:0;border-radius:3px 0 0 3px;} "
-                + " .prev:hover, .next:hover{background-color:rgba(0,0,0,0.8);} "
-                + " .dot{cursor:pointer;height:15px;width:15px;margin:0 2px;background-color:#bbb;border-radius:50%;display:inline-block;transition:background-color 0.6s;} "
-                + " .active, .dot:hover{background-color:#717171;}"
-                + "</style>";
+                + "#slideshow {"
+                + "  overflow:hidden;"
+                + "  height:420px;"
+                + "  width:100%;"
+                + "  max-width:900px;"
+                + "  margin:40px auto;"
+                + "}"
+
+                + ".slide-wrapper {"
+                + "  width:400%;"
+                + "  animation: slide 16s ease infinite;"
+                + "}"
+
+                + ".slide {"
+                + "  float:left;"
+                + "  width:25%;"
+                + "  height:420px;"
+                + "}"
+
+                + ".slide img {"
+                + "  width:100%;"
+                + "  height:100%;"
+                + "  object-fit:cover;"
+                + "}"
+
+                + "@keyframes slide {"
+                + "  0% {margin-left:0%;}"
+                + "  20% {margin-left:0%;}"
+                + "  25% {margin-left:-100%;}"
+                + "  45% {margin-left:-100%;}"
+                + "  50% {margin-left:-200%;}"
+                + "  70% {margin-left:-200%;}"
+                + "  75% {margin-left:-300%;}"
+                + "  95% {margin-left:-300%;}"
+                + "  100% {margin-left:0%;}"
+                + "}"
+                + "</style>"
+
+                + "<div id='slideshow'>"
+                + "  <div class='slide-wrapper'>"
+
+                + "    <div class='slide'>"
+                + "      <img src='" + contextPath + "/images/1.jpg' alt='Slide 1'>"
+                + "    </div>"
+
+                + "    <div class='slide'>"
+                + "      <img src='" + contextPath + "/images/2.jpg' alt='Slide 2'>"
+                + "    </div>"
+
+                + "    <div class='slide'>"
+                + "      <img src='" + contextPath + "/images/3.jpg' alt='Slide 3'>"
+                + "    </div>"
+
+                + "    <div class='slide'>"
+                + "      <img src='" + contextPath + "/images/4.jpg' alt='Slide 4'>"
+                + "    </div>"
+
+                + "  </div>"
+                + "</div>";
     }
+
 
     public static final String sectionsCSS =
             "<style>" +
