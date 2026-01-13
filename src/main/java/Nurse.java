@@ -124,7 +124,7 @@ public class Nurse extends Adult implements Pageable {
 
 
     public String feedingTypeDropdown(String feedType) {
-        return "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Feeding Type: </span>"
+        return "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Feeding Description: </span>"
                 + "<input list='feedOptions' name='typeInp' value='" + feedType + "' "
                 + "style='width:150px; text-align:center;'/>"
                 + "<datalist id='feedOptions'>"
@@ -166,7 +166,7 @@ public class Nurse extends Adult implements Pageable {
 
                 + feedingTypeDropdown(feedType)
                 // Buttons side by side
-                + "<div style='display:flex; justify-content:center; gap:10px;'>"
+                + "<div style='display:flex; justify-content:center; gap:10px;margin-top:15px;'>"
                 + "<button type='submit' name='action' value='add' "
                 + "style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add feeding information</button>"
                 + "<button type='submit' name='action' value='undo' "
@@ -305,12 +305,7 @@ public class Nurse extends Adult implements Pageable {
                 double feedDuration = Double.parseDouble(req.getParameter("durInp")) / 60.0;
                 String feedType = req.getParameter("typeInp");
 
-                if ("Other".equals(feedType)) {
-                    String other = req.getParameter("otherTypeInp");
-                    if (other != null && !other.isBlank()) {
-                        feedType = other;
-                    }
-                }
+                String feedType = req.getParameter("typeInp");
 
                 baby.addFeeding(
                         feedValue,
