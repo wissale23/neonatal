@@ -53,11 +53,8 @@ public class Homepage {
         return ""
                 + "<style>"
                 + "*{box-sizing:border-box;}"
-
                 + ".slideshow-container{max-width:900px;position:relative;margin:40px auto;}"
-
                 + ".mySlides{display:none;}"
-
                 + ".mySlides img{width:100%;height:420px;object-fit:cover;}"
 
                 + ".prev,.next{cursor:pointer;position:absolute;top:50%;padding:16px;"
