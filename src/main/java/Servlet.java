@@ -114,7 +114,10 @@ public class Servlet extends HttpServlet {
             }
         }
 
-
+        if ("/parents".equals(path)) {
+            ParentalDisplay.doGet(req,resp);
+            return;
+        }
 
         // Require login + correct role before allowing access to role-specific endpoints
         HttpSession session = req.getSession(false);
