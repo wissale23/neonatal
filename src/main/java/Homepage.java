@@ -147,7 +147,7 @@ public class Homepage {
 
                     + ".info-box {"
                     + "flex: 1;"
-                    + "padding: 20px;"
+                    + "padding: 20px 20px;"
                     + "border-radius: 5px;"
                     + "background-color: #7eabc2;"
                     + "font-family: Lato, sans-serif;"
@@ -163,7 +163,7 @@ public class Homepage {
                     + ".info-box h3::after {"
                     + "content: '';"
                     + "display: block;"
-                    + "width: 80%;"
+                    + "width: 90%;"
                     + "height: 3px;"
                     + "background-color: #2c4f61;"
                     + "margin: 10px auto 15px auto;}"
@@ -207,12 +207,9 @@ public class Homepage {
     public static String generateContacts() {
         return "<div class='info-box contacts-box'>"
                 + "<h3><i class='fa fa-phone'></i> Contact Information<h/3>"
-                + "<p><span>Reception</span><br/>"
-                + "<a href='tel: 02033135158'>02033135158</a></p>"
-                + "<p><span>Intensive Care</span><br/>"
-                + "<a href='tel: 02033133174'>02033133174</a></p>"
-                + "<p><span>High Dependency and Special Care</span><br/>"
-                + "<a href='tel: 02033133908'>02033133908</a></p>"
+                + "<p>Reception<a href='tel: 02033135158'>02033135158</a></p>"
+                + "<p>Intensive Care<a href='tel: 02033133174'>02033133174</a></p>"
+                + "<p>High Dependency and Special Care<a href='tel: 02033133908'>02033133908</a></p>"
                 + "</div>";
     }
 
