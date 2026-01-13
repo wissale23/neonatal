@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.*;
 
 @WebServlet(
-        urlPatterns = {"/", "/login", "/logout", "/consultants", "/nurses", "/researchers", "/parents"},
+        urlPatterns = {"/", "/home", "/login", "/logout", "/consultants", "/nurses", "/researchers", "/parents"},
         loadOnStartup = 1
 )
 public class Servlet extends HttpServlet {
@@ -81,6 +81,12 @@ public class Servlet extends HttpServlet {
         if ("/".equals(path)){
             resp.setContentType("text/html");
             resp.getWriter().write(Homepage.generatePage(req));
+            return;
+        }
+
+        if ("/home".equals(path)){
+            resp.setContentType("text/html");
+            resp.getWriter().write(Testpage.generatePage(req));
             return;
         }
                 
