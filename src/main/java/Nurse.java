@@ -232,7 +232,7 @@ public class Nurse extends Adult implements Pageable {
                 + glucoseChart.commentsInpLayout(comments)
                 + "<h2>Parent Chart</h2>"
                 + "<iframe src='" + req.getContextPath() + "/parent?babyId=" + babyId + "' "
-                + "style='width:100%; height:500px; border:none;'></iframe>";
+                + "style='width:100%; height:500px; border:none;'></iframe>"
                 + "</body></html>";
     }
 
