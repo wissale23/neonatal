@@ -121,19 +121,16 @@ public class Servlet extends HttpServlet {
                 
         if ("/consultants".equals(path)) {
 
-            users.get(2).doGet(req,resp);
+            users.get(1).doGet(req,resp);
             return;    
 
         } else if ("/nurses".equals(path)) {
-            users.get(3).doGet(req,resp);
+            users.get(2).doGet(req,resp);
             return;    
 
-                
         } else if("/researchers".equals(path)){
-            users.get(1).doGet(req,resp);
-                
-        } else if("/parents".equals(path)){
-            users.get(0).doGet(req, resp);
+            users.get(0).doGet(req,resp);
+
         } else if ("/admin".equals(path)) {
             String status = req.getParameter("status");
             String error = req.getParameter("error");
