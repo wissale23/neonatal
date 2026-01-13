@@ -28,7 +28,7 @@ public class Homepage {
                 + "</style>"
 
                 + "</head><body>"
-                + "<div class='header'>Useful Links</div>" // Header HTML
+                + "<div class='header'>Queen Charlotte's and Chelsea Hospital's Neonatal Unit</div>" // Header HTML
                 + generateSidebar()           // sidebar HTML
                 + generateSlideshow(contextPath)         // slideshow content
                 + generateAboutUs()         // about us HTML
