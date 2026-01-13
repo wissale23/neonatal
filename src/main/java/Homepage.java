@@ -147,7 +147,7 @@ public class Homepage {
 
                     + ".info-box {"
                     + "flex: 1;"
-                    + "padding: 20px 20px;"
+                    + "padding: 30px 30px;"
                     + "border-radius: 5px;"
                     + "background-color: #7eabc2;"
                     + "font-family: Lato, sans-serif;"
@@ -169,7 +169,7 @@ public class Homepage {
                     + "margin: 10px auto 15px auto;}"
 
                     + ".info-box p {"
-                    + "margin: 10px 0;"
+                    + "margin: 10px 30px;"
                     + "font-size: 16px;"
                     + "color: #2c4f61;"
                     + "text-align: left;}"
@@ -186,8 +186,8 @@ public class Homepage {
 
                     + ".contact-label {"
                     + "display: inline-block;"
-                    + "width: 260px;"
-                    + "font-weight: 400;}"
+                    + "width: 300px;"
+                    + "font-weight: bold;}"
 
                     + "</style>";
 
