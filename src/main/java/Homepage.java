@@ -73,7 +73,7 @@ public class Homepage {
         return ""
                 + "<style>"
                 + "*{box-sizing:border-box;}"
-                + ".slideshow-container{max-width:1750px;position:relative;margin:40px auto;}"
+                + ".slideshow-container{max-width:1000px;position:relative;margin:40px auto;}"
                 + ".mySlides{display:none;}"
                 + ".mySlides img{width:100%;height:400px;object-fit:cover;}"
 
