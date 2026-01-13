@@ -42,9 +42,10 @@ public class Researcher extends Adult implements Pageable{
                         "#main { transition: margin-left .5s; padding:16px; }" +
                         "</style>" +
                         "</head><body>" +
-                        LogoutOption.generateLogoutSidebar() +
-                        "<div id='main'>" +
 
+                        LogoutOption.generateLogoutSidebar() +
+
+                        "<div id='main'>" +
                         "<h1>Researcher Portal OOP Branch</h1>" +
                         "<p>Download glucose monitoring data:</p>" +
                         "<form method=\"POST\" action=\"" + req.getContextPath() + "/researchers\">" +
@@ -55,6 +56,7 @@ public class Researcher extends Adult implements Pageable{
                         "<button type=\"submit\" name=\"action\" value=\"download\">Download Data</button>" +
                         "</form>" +
                         "</div>" +
+
                         "<script>" +
                         "function openSidebar(){ document.getElementById('mySidebar').style.width='250px'; document.getElementById('main').style.marginLeft='250px'; }" +
                         "function closeSidebar(){ document.getElementById('mySidebar').style.width='0'; document.getElementById('main').style.marginLeft='0'; }" +
