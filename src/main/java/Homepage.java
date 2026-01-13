@@ -106,7 +106,7 @@ public class Homepage {
                 // Images with number
                 + "  <div class='mySlides fade'>"
                 + "    <div class='numbertext'>1/4</div>"
-                + "    <img src='" + contextPath + "/images/1.jpg'>"
+                + "    <img src='" + contextPath + "/images/image1.png'>"
                 + "  </div>"
 
                 + "  <div class='mySlides fade'>"
