@@ -49,7 +49,7 @@ public class Homepage {
         // Reference 2 - Collapsable Sidebar taken from https://www.w3schools.com/howto/howto_js_collapse_sidebar.asp
         return "<div id='mySidebar' class='sidebar'>"
                 + "  <a href='javascript:void(0)' class='closebtn' onclick='closeSidebar()'>&times;</a>"
-                + "  <a href='/home'><i class=\"fa fa-fw fa-home\"></i>Home</a>"
+                + "  <a href='/'><i class=\"fa fa-fw fa-home\"></i>Home</a>"
                 + "  <a href='/login'><i class=\"fa fa-fw fa-user\"></i>Login</a>"
                 + "  <a href='/useful-links'><i class=\"fa fa-fw fa-link\"></i>Useful Links</a>"
                 + "</div>"
