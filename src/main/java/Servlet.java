@@ -33,7 +33,6 @@ public class Servlet extends HttpServlet {
     public void init() {
 
         // Demo accounts (replace with real hospital identity system later)
-
         passwords.put("research1", "researchpass");
         roles.put("research1", "researcher");
         Researcher research1 = new Researcher("research1", 1, "/researchers");
