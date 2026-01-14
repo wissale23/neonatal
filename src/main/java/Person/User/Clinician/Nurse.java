@@ -230,7 +230,7 @@ public class Nurse extends Adult implements Pageable {
 
         return "<!DOCTYPE html>"
                 + "<html><head>"
-                + "<title>Clinician.Nurse Dashboard</title>"
+                + "<title> Nurse Dashboard</title>"
                 // Sidebar display
                 + "<meta name='viewport' content='width=device-width, initial-scale=1'>"
                 + "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>"
@@ -248,7 +248,7 @@ public class Nurse extends Adult implements Pageable {
                 + "</style>"
 
                 + "</head><body>"
-                + "<div class='header'>Clinician.Nurse Dashboard</div>"
+                + "<div class='header'>Nurse Dashboard</div>"
 
                 // Parent view button
                 + glucoseChart.parentViewButton(req,babyId)

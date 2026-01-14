@@ -36,7 +36,7 @@ public class Researcher extends Adult implements Pageable {
         resp.getWriter().write(
                 "<!DOCTYPE html>" +
                         "<html><head>" +
-                        "<title>User.Researcher Portal</title>" +
+                        "<title>Researcher Portal</title>" +
                         "<meta name='viewport' content='width=device-width, initial-scale=1'>" +
                         "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>" +
                         "<style>" +
@@ -53,7 +53,7 @@ public class Researcher extends Adult implements Pageable {
                         + "</style>"
 
                         + "</head><body>"
-                        + "<div class='header'>User.Researcher Dashboard</div>" + // Header HTML
+                        + "<div class='header'>Researcher Dashboard</div>" + // Header HTML
 
                         LogoutOption.generateLogoutSidebar() +
 
@@ -61,7 +61,7 @@ public class Researcher extends Adult implements Pageable {
                         "<div id='main'>" +
                         "<p>Download glucose monitoring data:</p>" +
                         "<form method=\"POST\" action=\"" + req.getContextPath() + "/researchers\">" +
-                        "<label for=\"babySelect\">Select Person.Baby: </label>" +
+                        "<label for=\"babySelect\">Select Baby: </label>" +
                         "<select name=\"babyIndex\" id=\"babySelect\" required>" +
                         options +
                         "</select><br><br>" +
