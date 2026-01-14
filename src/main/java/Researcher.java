@@ -24,7 +24,7 @@ public class Researcher extends Adult implements Pageable{
                     .append("ID: ").append(baby.getId())
                     .append("</option>");
         }
-
+        // Generative AI (Claude) was used to help write this section as I was unfamiliar with HTML syntax
         resp.getWriter().write(
                 "<!DOCTYPE html>" +
                         "<html><head>" +
@@ -49,6 +49,7 @@ public class Researcher extends Adult implements Pageable{
 
                         LogoutOption.generateLogoutSidebar() +
 
+                        // Building the HTML form that controls the download
                         "<div id='main'>" +
                         "<p>Download glucose monitoring data:</p>" +
                         "<form method=\"POST\" action=\"" + req.getContextPath() + "/researchers\">" +
@@ -85,6 +86,7 @@ public class Researcher extends Adult implements Pageable{
                 return;
             }
 
+            // Baby selection validation
             int babyIndex = Integer.parseInt(babyIndexParam);
             List<Baby> patients = getPatients();
 
@@ -103,6 +105,8 @@ public class Researcher extends Adult implements Pageable{
                 estimatedData.add((v - 1.5) / 3.5);
             }
 
+            // Generative AI (Claude) was used to help write this section to understand how to generate a donwloadable file
+            
             // Set headers for file download
             String filename = "glucose_data_" + selectedBaby.getId() + ".csv";
             resp.setContentType("text/csv");
