@@ -55,9 +55,9 @@ public class LoginPageView {
                 "<div class='row'><label>Password</label><input name='newPassword' type='password' required></div>" +
                 "<div class='row'><label>Role</label>" +
                 "<select name='newRole' required>" +
-                "<option value='nurse'>Clinician.Nurse</option>" +
-                "<option value='consultant'>Clinician.Consultant</option>" +
-                "<option value='researcher'>User.Researcher</option>" +
+                "<option value='nurse'>Nurse</option>" +
+                "<option value='consultant'>Consultant</option>" +
+                "<option value='researcher'>Researcher</option>" +
                 "<option value='admin'>Admin</option>" +
                 "</select></div>" +
                 "<button type='submit'>Create account</button>" +
