@@ -1,4 +1,4 @@
-package User.Clinician;
+package Person.User.Clinician;
 
 import Chart.GlucoseChart;
 import Display.LogoutOption;

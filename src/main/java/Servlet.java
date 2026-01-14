@@ -3,9 +3,9 @@ import Display.LoginPageView;
 import Display.ParentalDisplay;
 import Display.UsefulLinksPage;
 import Person.Adult;
-import User.Clinician.Consultant;
-import User.Clinician.Nurse;
-import User.Researcher;
+import Person.User.Clinician.Consultant;
+import Person.User.Clinician.Nurse;
+import Person.User.Researcher;
 import Servlet.AuthManager;
 
 import javax.servlet.ServletException;

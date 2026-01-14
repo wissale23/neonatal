@@ -1,4 +1,4 @@
-package User;
+package Person.User;
 
 import Display.LogoutOption;
 import Person.Adult;
