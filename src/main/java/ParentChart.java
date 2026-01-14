@@ -38,6 +38,23 @@ public class ParentChart {
                 "    const LOWER = " + baby.getLowerRange() + ";\n" +
                 "    const UPPER = " + baby.getUpperRange() + ";\n" +
                 "\n" +
+                // Reference 4 - moving average taken from
+                "    // Function to compute moving average\n" +
+                "    function movingAverage(data, k) {\n" +
+                "      return data.map((_, i) => {\n" +
+                "        if (i < k - 1) return null; // fill = NA, same as R example\n" +
+                "        let sum = 0;\n" +
+                "        for (let j = i - k + 1; j <= i; j++) {\n" +
+                "          sum += data[j];\n" +
+                "        }\n" +
+                "        return sum / k;\n" +
+                "      });\n" +
+                "    }\n" +
+                "\n" +
+                // Estimated Blood Glucose passed through MA filter
+                "    const estimatedBlood = smoothData.map(v => (v - 1.5) / 3.5);\n" +
+                "    const windowSize = 5; // Adjust smoothing window (similar to k in R rollmean)\n" +
+                "    const smoothedEstimatedBlood = movingAverage(estimatedBlood, windowSize);\n" +
                 // Plot Chart
                 "    Chart.register(window['chartjs-plugin-annotation']);\n" +
                 "    const ctx = document.getElementById('glucoseChart').getContext('2d');\n" +
@@ -47,7 +64,7 @@ public class ParentChart {
                 "        datasets: [\n" +
                 // Plot only Estimated Blood Glucose to simplify
                 "          { label: 'Estimated Blood Glucose',\n" +
-                "            data: labels.map((t, i) => ({ x: t, y: (smoothData[i] - 1.5) / 3.5 })),\n" +
+                "            data: labels.map((t, i) => ({ x: t, y: estimatedBlood[i] })),\n" +
                 "            yAxisID: 'y', borderColor: 'rgb(220,25,25)', borderWidth: 3,\n" +
                 "            fill: false, order: 3, pointRadius: 0 }\n" +
                 "        ]\n" +
