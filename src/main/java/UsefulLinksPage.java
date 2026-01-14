@@ -54,6 +54,7 @@ public class UsefulLinksPage {
                     + "grid-template-columns: repeat(2, 1fr);"
                     + "margin: 40px auto;}"
 
+                    // Reference 1 - Button taken from https://www.w3schools.com/howto/howto_css_pill_button.asp
                     + ".button {"
                     + "background-color: #ae2573;"
                     + "border: none;"

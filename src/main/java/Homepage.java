@@ -265,6 +265,7 @@ public class Homepage {
                     + "font-size: 16px;"
                     + "line-height: 1.5;}"
 
+                    // Reference 4 - Collapsible box taken from https://www.w3schools.com/howto/howto_js_collapsible.asp
                     + ".about-toggle {"
                     + "width: 100%;"
                     + "background-color: #385f73;"
