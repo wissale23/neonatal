@@ -2,8 +2,7 @@ package Person.User.Clinician;
 
 import Chart.GlucoseChart;
 import Display.LogoutOption;
-import Person.Adult;
-import Person.Baby;
+import Person.*;
 import Servlets.BabyPatientList;
 import Servlets.Pageable;
 
@@ -145,7 +144,7 @@ public class Consultant extends Adult implements Pageable {
 
         return "<!DOCTYPE html>"
                 + "<html><head>"
-                + "<title>Clinician.Consultant Dashboard</title>"
+                + "<title>Consultant Dashboard</title>"
                 // Sidebar display
                 + "<meta name='viewport' content='width=device-width, initial-scale=1'>"
                 + "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>"
@@ -162,7 +161,7 @@ public class Consultant extends Adult implements Pageable {
                 + "</style>"
 
                 + "</head><body>"
-                + "<div class='header'>Clinician.Consultant Dashboard</div>" // Header HTML
+                + "<div class='header'>Consultant Dashboard</div>" // Header HTML
                 + glucoseChart.parentViewButton(req,babyId) // parent view button
                 + babyDropdown(babyId, req.getContextPath())  // Person.Baby dropdown
                 + LogoutOption.generateLogoutSidebar() //Logout sidebar
@@ -234,7 +233,7 @@ public class Consultant extends Adult implements Pageable {
         // Update comments
         String commentStr = req.getParameter("commInp");
         String consultUsername = (String) session.getAttribute("username");
-        if (consultUsername == null) consultUsername = "Unknown Clinician.Consultant";
+        if (consultUsername == null) consultUsername = "Unknown Consultant";
         if (commentStr != null && !commentStr.isEmpty()) baby.addComment(consultUsername, commentStr);
 
         resp.sendRedirect(req.getContextPath() + "/consultants?babyId=" + baby.getId());
