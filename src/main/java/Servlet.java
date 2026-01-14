@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.*;
 
 @WebServlet(
-        urlPatterns = {"/", "/useful-links", "/login", "/logout", "/consultants", "/nurses", "/researchers", "/parents"},
+        urlPatterns = {"/", "/useful-links", "/login", "/logout", "/consultants", "/nurses", "/researchers", "/parents", "/admin"},
         loadOnStartup = 1
 )
 public class Servlet extends HttpServlet {
@@ -216,17 +216,18 @@ public class Servlet extends HttpServlet {
         }    
 
         if ("/researchers".equals(req.getServletPath())) {
-            users.get(1).doPost(req,resp);
+            users.get(0).doPost(req,resp);
+            return;
         }
 
         if ("/consultants".equals(req.getServletPath())) {
-            users.get(2).doPost(req,resp);
+            users.get(1).doPost(req,resp);
             return;    
         }
             
         
         if ("/nurses".equals(req.getServletPath())) {
-            users.get(3).doPost(req,resp);
+            users.get(2).doPost(req,resp);
             return;    
         }
             
