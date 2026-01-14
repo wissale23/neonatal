@@ -61,8 +61,8 @@ public class ParentChart {
                 "    }\n" +
                 // Estimated Blood Glucose passed through MA filter
                 "    const estimatedBlood = smoothData.map(v => (v - 1.5) / 3.5);\n" +
-                "    // Apply moving average with window size 50\n" +
-                "    const ma = new MovingAverage(50);\n" +
+                "    // Apply moving average with window size 100\n" +
+                "    const ma = new MovingAverage(100);\n" +
                 "    const smoothedEstimatedBlood = estimatedBlood.map(val => ma.next(val));\n" +
                 // Plot Chart
                 "    Chart.register(window['chartjs-plugin-annotation']);\n" +
