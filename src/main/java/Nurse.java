@@ -18,14 +18,13 @@ public class Nurse extends Adult implements Pageable {
         super(name, id, endpoint);
     }
 
-    private String babyDropdown(int selectedId, String contextPath) {
+    private String babyDropdown(int selectedId, HttpServletRequest req) {
+        HttpSession session = req.getSession(false);
+        List<Integer> allowed = (session == null) ? null : (List<Integer>) session.getAttribute("allowedBabyIds");
 
-        // Get all babies from the Baby Patient List
         List<Baby> babies = BabyPatientList.getAll();
-    
         StringBuilder sb = new StringBuilder();
-    
-        // Design of Dropdown
+
         sb.append(
                 "<div style='"
                         + "background:#e3f2fd;"
@@ -43,9 +42,8 @@ public class Nurse extends Adult implements Pageable {
                         + "transition: all 0.2s ease-in-out;'>"
         );
 
-// Form
         sb.append("<form method='get' action='")
-                .append(contextPath)
+                .append(req.getContextPath())
                 .append("/nurses'>");
         sb.append("<label style='margin-right:8px; font-size:16px;'>SELECT BABY:</label>");
         sb.append(
@@ -62,8 +60,9 @@ public class Nurse extends Adult implements Pageable {
                         + "transition: all 0.2s ease-in-out;'>"
         );
 
+        for (Baby b : babies) {
+            if (allowed != null && !allowed.contains(b.getId())) continue;
 
-        for (Baby b : BabyPatientList.getAll()) {
             sb.append("<option value='")
                     .append(b.getId()).append("'")
                     .append(b.getId() == selectedId ? " selected" : "")
@@ -75,7 +74,7 @@ public class Nurse extends Adult implements Pageable {
         sb.append("</select>");
         sb.append("</form>");
         sb.append("</div>");
-    
+
         return sb.toString();
     }
 
@@ -221,7 +220,7 @@ public class Nurse extends Adult implements Pageable {
                 + "</head><body>"
                 + glucoseChart.logoutButton(req)
                 + "<h1 style='text-align:center;'>Nurse Dashboard</h1>"
-                + babyDropdown(babyId, req.getContextPath())
+                + babyDropdown(babyId, req)
                 + "</div>"
                 + glucoseChart.generateHTML()
                 + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>"
@@ -237,22 +236,34 @@ public class Nurse extends Adult implements Pageable {
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
 
-        // Get babyId from dropdown or session, default to first baby
-        int babyId = 1;
-        if (req.getParameter("babyId") != null) {
-            babyId = Integer.parseInt(req.getParameter("babyId"));
+        List<Integer> allowed = (List<Integer>) session.getAttribute("allowedBabyIds");
+        if (allowed == null) {
+            allowed = new ArrayList<>();
+            for (Baby b : BabyPatientList.getAll()) allowed.add(b.getId());
+        }
+
+        if (allowed.isEmpty()) {
+            resp.setContentType("text/html");
+            resp.getWriter().write("<h1 style='text-align:center;'>Nurse Dashboard</h1><p style='text-align:center;'>No babies assigned.</p><p style='text-align:center;'><a href='" + req.getContextPath() + "/logout'>Logout</a></p>");
+            return;
+        }
+
+        int babyId = allowed.get(0);
+
+        String param = req.getParameter("babyId");
+        if (param != null) {
+            try { babyId = Integer.parseInt(param); } catch (Exception ignored) {}
         } else if (session.getAttribute("babyId") != null) {
             babyId = (int) session.getAttribute("babyId");
         }
+
+        if (!allowed.contains(babyId)) babyId = allowed.get(0);
+
         session.setAttribute("babyId", babyId);
 
-        // Get selected baby
         Baby baby = BabyPatientList.getBaby(babyId);
-
-        // Create chart for selected baby
         GlucoseChart glucoseChart = new GlucoseChart(baby);
 
-        // Get latest values for input forms
         List<Double> glucValues = getGlucValue(session);
         double glucoseValue = glucValues.get(0);
         double hour = glucValues.get(1);
@@ -262,19 +273,32 @@ public class Nurse extends Adult implements Pageable {
         double feedStartHour = feedValues.get(0);
         double feedStartMinute = feedValues.get(1);
         double feedDuration = feedValues.get(2);
-        
+
         String feedType = getFeedStr(session);
         List<String> comments = baby.getComments();
 
         resp.setContentType("text/html");
         resp.getWriter().write(nursePage(glucoseChart, req, babyId,
-                glucoseValue, hour,minute, feedStartHour,feedStartMinute, feedDuration, feedType, comments));
+                glucoseValue, hour, minute, feedStartHour, feedStartMinute, feedDuration, feedType, comments));
     }
 
 
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
-        Baby baby = BabyPatientList.getBaby((int) session.getAttribute("babyId"));
+
+        List<Integer> allowed = (List<Integer>) session.getAttribute("allowedBabyIds");
+        if (allowed == null) {
+            allowed = new ArrayList<>();
+            for (Baby b : BabyPatientList.getAll()) allowed.add(b.getId());
+        }
+
+        Integer currentBabyId = (Integer) session.getAttribute("babyId");
+        if (currentBabyId == null || !allowed.contains(currentBabyId)) {
+            resp.sendError(403);
+            return;
+        }
+
+        Baby baby = BabyPatientList.getBaby(currentBabyId);
 
         String action = req.getParameter("action"); 
         

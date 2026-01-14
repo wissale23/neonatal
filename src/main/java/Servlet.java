@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.*;
 
 @WebServlet(
-        urlPatterns = {"/", "/home", "/login", "/logout", "/consultants", "/nurses", "/researchers", "/parents"},
+        urlPatterns = {"/", "/home", "/login", "/logout", "/consultants", "/nurses", "/researchers", "/parents", "/admin"},
         loadOnStartup = 1
 )
 public class Servlet extends HttpServlet {
@@ -26,49 +26,35 @@ public class Servlet extends HttpServlet {
     private AuthManager auth;
     private LoginPageView loginView;
 
-    private ArrayList<Adult> users = new ArrayList<Adult>();
+    //private ArrayList<Adult> users = new ArrayList<Adult>();
 
     @Override
     public void init() {
         // Adding babies
         Baby baby1 = new Baby("baby1",2,TIME_FILE,RAW_FILE,SMOOTH_FILE);
 
-        // Demo accounts (replace with real hospital identity system later)
+//        // Demo seeded users
+//        passwords.put("research1", "researchpass");
+//        roles.put("research1", "researcher");
+//        Researcher research1 = new Researcher("research1", 1, "/researchers");
+//        research1.addPatient(baby1);
+//        users.add(research1);
+//
+//        passwords.put("consult1", "consultpass");
+//        roles.put("consult1", "consultant");
+//        Consultant consult1 = new Consultant("consult1",4,"/consultants");
+//        consult1.addPatient(baby1);
+//        users.add(consult1);
+//
+//        passwords.put("nurse1", "nursepass");
+//        roles.put("nurse1", "nurse");
+//        Nurse nurse1 = new Nurse("nurse1",5,"/nurses");
+//        nurse1.addPatient(baby1);
+//        users.add(nurse1);
 
-        passwords.put("parent1", "parentpass");
-        roles.put("parent1", "parent");
-        Parent parent1 = new Parent ("parent1",3,"/parents");
-        parent1.addPatient(baby1);
-        users.add(parent1);
-
-        passwords.put("research1", "researchpass");
-        roles.put("research1", "researcher");
-        Researcher research1 = new Researcher("research1", 1, "/researchers");
-        research1.addPatient(baby1);
-        users.add(research1);
-        
-        passwords.put("consult1", "consultpass");
-        roles.put("consult1", "consultant");  
-        Consultant consult1 = new Consultant("consult1",4,"/consultants");
-        consult1.addPatient(baby1);
-        users.add(consult1); 
-
-        passwords.put("nurse1", "nursepass");
-        roles.put("nurse1", "nurse");
-        Nurse nurse1 = new Nurse("nurse1",5,"/nurses");
-        nurse1.addPatient(baby1);
-        users.add(nurse1); 
-            
         auth = new AuthManager();
         loginView = new LoginPageView();
 
-        auth.addUser("nurse1", "nursepass", "nurse");
-        auth.addUser("consult1", "consultpass", "consultant");
-        auth.addUser("parent1", "parentpass", "parent");
-        auth.addUser("research1", "researchpass", "researcher");
-        auth.addUser("admin1", "adminpass", "admin");
-            
-                  
     }
 
     @Override
@@ -89,7 +75,7 @@ public class Servlet extends HttpServlet {
             resp.getWriter().write(Testpage.generatePage(req));
             return;
         }
-                
+
         if ("/login".equals(path)) {
             String error = req.getParameter("error");
             String msg = "";
@@ -129,29 +115,40 @@ public class Servlet extends HttpServlet {
 
         // Require login + correct role before allowing access to role-specific endpoints
         HttpSession session = req.getSession(false);
-                
+
         if ("/consultants".equals(path)) {
+            new Consultant("consult", 0, "/consultants").doGet(req, resp);
+            return;
+        }
 
-            users.get(2).doGet(req,resp);
-            return;    
+        if ("/nurses".equals(path)) {
+            new Nurse("nurse", 0, "/nurses").doGet(req, resp);
+            return;
+        }
 
-        } else if ("/nurses".equals(path)) {
-            users.get(3).doGet(req,resp);
-            return;    
+        if ("/researchers".equals(path)) {
+            new Researcher("research", 0, "/researchers").doGet(req, resp);
+            return;
+        }
 
-                
-        } else if("/researchers".equals(path)){
-            users.get(1).doGet(req,resp);
-                
-        } else if("/parents".equals(path)){
-            users.get(0).doGet(req, resp);
-        } else if ("/admin".equals(path)) {
+        if ("/parents".equals(path)) {
+            new Parent("parentview", 0, "/parents").doGet(req, resp);
+            return;
+        }
+
+        else if ("/admin".equals(path)) {
             String status = req.getParameter("status");
             String error = req.getParameter("error");
             String msg = "";
 
             if ("created".equals(status)) {
                 msg = LoginPageView.okBox("Account created successfully.");
+            } else if ("assigned".equals(status)) {
+                msg = LoginPageView.okBox("Baby assigned successfully.");
+            } else if ("unassigned".equals(status)) {
+                msg = LoginPageView.okBox("Baby removed successfully.");
+            } else if ("deleted".equals(status)) {
+                msg = LoginPageView.okBox("User deleted successfully.");
             } else if ("username_taken".equals(error)) {
                 msg = LoginPageView.errorBox("That username is already taken.");
             } else if ("invalid_role".equals(error)) {
@@ -161,7 +158,8 @@ public class Servlet extends HttpServlet {
             }
 
             resp.setContentType("text/html");
-            resp.getWriter().write(loginView.renderAdminPage(req.getContextPath(), msg));
+            resp.getWriter().write(loginView.renderAdminPage(req.getContextPath(), msg, auth.listUsers(), BabyPatientList.getAll()));
+            return;
         }
     }
 
@@ -192,55 +190,110 @@ public class Servlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + auth.homeForRole(role));
             return;
         }
+
         if ("/admin".equals(req.getServletPath())) {
             String role = auth.currentRole(req);
 
-            // must be logged in
             if (role == null) {
                 resp.sendRedirect(req.getContextPath() + "/login?error=login_required");
                 return;
             }
 
-            // must be admin
             if (!"admin".equals(role)) {
                 resp.sendRedirect(req.getContextPath() + auth.homeForRole(role));
                 return;
             }
 
-            String newUsername = req.getParameter("newUsername");
-            String newPassword = req.getParameter("newPassword");
-            String newRole = req.getParameter("newRole");
+            String action = req.getParameter("action");
+            if (action == null) action = "create";
 
-            AuthManager.CreateResult cr = auth.createUser(newUsername, newPassword, newRole);
+            if ("create".equals(action)) {
+                String newUsername = req.getParameter("newUsername");
+                String newPassword = req.getParameter("newPassword");
+                String newRole = req.getParameter("newRole");
 
-            if (!cr.isOk()) {
-                String err;
-                if (cr.getError() == AuthManager.CreateError.USERNAME_TAKEN) err = "username_taken";
-                else if (cr.getError() == AuthManager.CreateError.INVALID_ROLE) err = "invalid_role";
-                else err = "missing_fields";
+                AuthManager.CreateResult cr = auth.createUser(newUsername, newPassword, newRole);
 
-                resp.sendRedirect(req.getContextPath() + "/admin?error=" + err);
+                if (!cr.isOk()) {
+                    String err;
+                    if (cr.getError() == AuthManager.CreateError.USERNAME_TAKEN) err = "username_taken";
+                    else if (cr.getError() == AuthManager.CreateError.INVALID_ROLE) err = "invalid_role";
+                    else err = "missing_fields";
+                    resp.sendRedirect(req.getContextPath() + "/admin?error=" + err);
+                    return;
+                }
+
+                String cleanNewUser = (newUsername == null) ? "" : newUsername.trim();
+                String[] babyIds = req.getParameterValues("babyIds");
+                if (babyIds != null) {
+                    for (String s : babyIds) {
+                        try {
+                            int id = Integer.parseInt(s);
+                            auth.assignBaby(cleanNewUser, id);
+                        } catch (Exception ignored) {}
+                    }
+                }
+
+                resp.sendRedirect(req.getContextPath() + "/admin?status=created");
                 return;
             }
-            resp.sendRedirect(req.getContextPath() + "/admin?status=created");
-            return;
-        }    
 
-        if ("/researchers".equals(req.getServletPath())) {
-            users.get(1).doPost(req,resp);
+            if ("assign".equals(action)) {
+                String targetUser = req.getParameter("targetUser");
+                String babyStr = req.getParameter("babyId");
+                try {
+                    int id = Integer.parseInt(babyStr);
+                    auth.assignBaby(targetUser, id);
+                    resp.sendRedirect(req.getContextPath() + "/admin?status=assigned");
+                } catch (Exception e) {
+                    resp.sendRedirect(req.getContextPath() + "/admin?error=missing_fields");
+                }
+                return;
+            }
+
+            if ("unassign".equals(action)) {
+                String targetUser = req.getParameter("targetUser");
+                String babyStr = req.getParameter("babyId");
+                try {
+                    int id = Integer.parseInt(babyStr);
+                    auth.unassignBaby(targetUser, id);
+                    resp.sendRedirect(req.getContextPath() + "/admin?status=unassigned");
+                } catch (Exception e) {
+                    resp.sendRedirect(req.getContextPath() + "/admin?error=missing_fields");
+                }
+                return;
+            }
+
+            if ("delete".equals(action)) {
+                String targetUser = req.getParameter("targetUser");
+                if (targetUser == null || targetUser.trim().isEmpty()) {
+                    resp.sendRedirect(req.getContextPath() + "/admin?error=missing_fields");
+                    return;
+                }
+                auth.deleteUser(targetUser.trim());
+                resp.sendRedirect(req.getContextPath() + "/admin?status=deleted");
+                return;
+            }
+
+            resp.sendRedirect(req.getContextPath() + "/admin");
+            return;
         }
 
         if ("/consultants".equals(req.getServletPath())) {
-            users.get(2).doPost(req,resp);
-            return;    
+            new Consultant("consult", 0, "/consultants").doPost(req, resp);
+            return;
         }
-            
-        
+
         if ("/nurses".equals(req.getServletPath())) {
-            users.get(3).doPost(req,resp);
-            return;    
+            new Nurse("nurse", 0, "/nurses").doPost(req, resp);
+            return;
         }
-            
+
+        if ("/researchers".equals(req.getServletPath())) {
+            new Researcher("research", 0, "/researchers").doPost(req, resp);
+            return;
+        }
+
         HttpSession session = req.getSession(false);
 
         if (session == null) {

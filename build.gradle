@@ -1,4 +1,5 @@
 plugins {
+    id 'java'
     id 'war'    // Creates a webapp jar file, ie a '.war' file. Extends the ‘java’ plugin
     id 'org.gretty' version '3.1.1' // This includes a jetty webserver
 }
@@ -34,6 +35,7 @@ dependencies {
     implementation 'org.postgresql:postgresql:42.7.3'
     testImplementation 'org.mockito:mockito-core:5.7.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.7.0'
+    implementation 'org.postgresql:postgresql:42.7.4'
 
 }
 test {
