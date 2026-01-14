@@ -1,10 +1,10 @@
+import Servlet.AuthManager;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.mockito.Mockito;
 import static org.mockito.Mockito.*;
 
 public class AuthManagerTest {

@@ -1,3 +1,4 @@
+import Person.Baby;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -5,7 +6,7 @@ public class BabyTest {
 
     private Baby freshBaby() {
         // Use real resource files that exist in src/main/resources
-        return new Baby("Test Baby", 99,
+        return new Baby("Test Person.Baby", 99,
                 "/t_glu1.txt", "/glu_uM_unsmoothed1.txt", "/glu_uM_smoothed1.txt");
     }
 

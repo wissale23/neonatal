@@ -1,3 +1,13 @@
+package User.Clinician;
+
+import Chart.GlucoseChart;
+import Chart.MonitoringChart;
+import Display.LogoutOption;
+import Person.Adult;
+import Person.Baby;
+import Servlet.BabyPatientList;
+import Servlet.Pageable;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
@@ -22,7 +32,7 @@ public class Nurse extends Adult implements Pageable {
     //Display the baby selector
     private String babyDropdown(int selectedId, String contextPath) {
 
-        // Get all babies from the Baby Patient List
+        // Get all babies from the Person.Baby Patient List
         List<Baby> babies = BabyPatientList.getAll();
     
         StringBuilder sb = new StringBuilder();
@@ -220,7 +230,7 @@ public class Nurse extends Adult implements Pageable {
 
         return "<!DOCTYPE html>"
                 + "<html><head>"
-                + "<title>Nurse Dashboard</title>"
+                + "<title>Clinician.Nurse Dashboard</title>"
                 // Sidebar display
                 + "<meta name='viewport' content='width=device-width, initial-scale=1'>"
                 + "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>"
@@ -238,7 +248,7 @@ public class Nurse extends Adult implements Pageable {
                 + "</style>"
 
                 + "</head><body>"
-                + "<div class='header'>Nurse Dashboard</div>"
+                + "<div class='header'>Clinician.Nurse Dashboard</div>"
 
                 // Parent view button
                 + glucoseChart.parentViewButton(req,babyId)

@@ -1,3 +1,5 @@
+package Display;
+
 public class LogoutOption {
 
     public static String generateLogoutSidebar(){

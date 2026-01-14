@@ -1,3 +1,7 @@
+package Warning;
+
+import Person.Baby;
+
 public class WarningSystem {
 
     private final Baby baby;

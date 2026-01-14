@@ -107,7 +107,7 @@ public class ServletAdminPostTest {
 
         when(req.getParameter("newUsername")).thenReturn("userX");
         when(req.getParameter("newPassword")).thenReturn("pw123");
-        // role not allowed by AuthManager.createUser
+        // role not allowed by Servlet.AuthManager.createUser
         when(req.getParameter("newRole")).thenReturn("parent");
 
         servlet.doPost(req, resp);

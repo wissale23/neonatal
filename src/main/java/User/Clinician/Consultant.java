@@ -1,3 +1,12 @@
+package User.Clinician;
+
+import Chart.GlucoseChart;
+import Display.LogoutOption;
+import Person.Adult;
+import Person.Baby;
+import Servlet.BabyPatientList;
+import Servlet.Pageable;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -18,7 +27,7 @@ public class Consultant extends Adult implements Pageable {
 
     private String babyDropdown(int selectedId, String contextPath) {
 
-        // Get all babies from the Baby Patient List
+        // Get all babies from the Person.Baby Patient List
         List<Baby> babies = BabyPatientList.getAll();
 
         StringBuilder sb = new StringBuilder();
@@ -132,11 +141,11 @@ public class Consultant extends Adult implements Pageable {
 
 
     //Display consultant page, with the logout button, glucose chart, safety range and comments input
-    public String consultPage(GlucoseChart glucoseChart,HttpServletRequest req,double lower,double upper,List<String> comments, int babyId){
+    public String consultPage(GlucoseChart glucoseChart, HttpServletRequest req, double lower, double upper, List<String> comments, int babyId){
 
         return "<!DOCTYPE html>"
                 + "<html><head>"
-                + "<title>Consultant Dashboard</title>"
+                + "<title>Clinician.Consultant Dashboard</title>"
                 // Sidebar display
                 + "<meta name='viewport' content='width=device-width, initial-scale=1'>"
                 + "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>"
@@ -153,9 +162,9 @@ public class Consultant extends Adult implements Pageable {
                 + "</style>"
 
                 + "</head><body>"
-                + "<div class='header'>Consultant Dashboard</div>" // Header HTML
+                + "<div class='header'>Clinician.Consultant Dashboard</div>" // Header HTML
                 + glucoseChart.parentViewButton(req,babyId) // parent view button
-                + babyDropdown(babyId, req.getContextPath())  // Baby dropdown
+                + babyDropdown(babyId, req.getContextPath())  // Person.Baby dropdown
                 + LogoutOption.generateLogoutSidebar() //Logout sidebar
                 + "</div>"
                 + glucoseChart.generateHTML() // Display glucose chart
@@ -225,7 +234,7 @@ public class Consultant extends Adult implements Pageable {
         // Update comments
         String commentStr = req.getParameter("commInp");
         String consultUsername = (String) session.getAttribute("username");
-        if (consultUsername == null) consultUsername = "Unknown Consultant";
+        if (consultUsername == null) consultUsername = "Unknown Clinician.Consultant";
         if (commentStr != null && !commentStr.isEmpty()) baby.addComment(consultUsername, commentStr);
 
         resp.sendRedirect(req.getContextPath() + "/consultants?babyId=" + baby.getId());

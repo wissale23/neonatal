@@ -1,3 +1,5 @@
+package Warning;
+
 public class AlertRenderer {
 
     public static final String alertCSS =

@@ -1,3 +1,13 @@
+import Display.Homepage;
+import Display.LoginPageView;
+import Display.ParentalDisplay;
+import Display.UsefulLinksPage;
+import Person.Adult;
+import User.Clinician.Consultant;
+import User.Clinician.Nurse;
+import User.Researcher;
+import Servlet.AuthManager;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -150,7 +160,7 @@ public class Servlet extends HttpServlet {
             String username = req.getParameter("username");
             String password = req.getParameter("password");
 
-            AuthManager.AuthResult result = auth.authenticate(username, password);
+            Servlet.AuthManager.AuthResult result = auth.authenticate(username, password);
 
             if (!result.isOk()) {
                 String errorParam;
@@ -189,7 +199,7 @@ public class Servlet extends HttpServlet {
             String newPassword = req.getParameter("newPassword");
             String newRole = req.getParameter("newRole");
 
-            AuthManager.CreateResult cr = auth.createUser(newUsername, newPassword, newRole);
+            Servlet.AuthManager.CreateResult cr = auth.createUser(newUsername, newPassword, newRole);
 
             if (!cr.isOk()) {
                 String err;

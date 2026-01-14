@@ -7,7 +7,7 @@
 
     <servlet>
         <servlet-name>ImageServlet</servlet-name>
-        <servlet-class>ImageServlet</servlet-class>
+        <servlet-class>Servlet.ImageServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

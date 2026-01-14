@@ -1,7 +1,12 @@
+package Display;
+
+import Chart.ParentChart;
+import Person.Baby;
+import Servlet.BabyPatientList;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 
 public class ParentalDisplay {
@@ -14,7 +19,7 @@ public class ParentalDisplay {
         resp.setContentType("text/html;charset=UTF-8");
         resp.setCharacterEncoding("UTF-8");
 
-        // Pick which baby to show (defaults to Baby A / id=1)
+        // Pick which baby to show (defaults to Person.Baby A / id=1)
         int babyId = 1;
         try {
             String idStr = req.getParameter("babyId");   // e.g. /parents?babyId=2
@@ -22,7 +27,7 @@ public class ParentalDisplay {
             if (idStr != null) babyId = Integer.parseInt(idStr);
         } catch (Exception ignored) {}
 
-        // Get baby + data from BabyPatientList
+        // Get baby + data from Servlet.BabyPatientList
         Baby baby = BabyPatientList.getBaby(babyId);
 
         ParentChart parentChart = new ParentChart(baby);

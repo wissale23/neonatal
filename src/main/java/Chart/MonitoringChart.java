@@ -1,3 +1,7 @@
+package Chart;
+
+import Person.Baby;
+
 import java.util.List;
 
 public class MonitoringChart {

@@ -1,4 +1,9 @@
-public abstract class Adult extends Person implements Pageable{
+package Person;
+
+
+import Servlet.Pageable;
+
+public abstract class Adult extends Person implements Pageable {
     private final String endpoint;
 
     public Adult(String name, int id, String endpoint) {

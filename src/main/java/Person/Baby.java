@@ -1,3 +1,5 @@
+package Person;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -14,7 +16,7 @@ public class Baby extends Person{
     private final List<Double> rawData;
     private final List<Double> smoothData;
 
-    // Nurse-entered glucose
+    // Clinician.Nurse-entered glucose
     private final List<Double> sampleTimes = new ArrayList<>();
     private final List<Double> sampleValues = new ArrayList<>();
 
@@ -23,7 +25,7 @@ public class Baby extends Person{
     private final List<Double> feedDurations = new ArrayList<>();
     private final List<String> feedTypes = new ArrayList<>();
 
-    // Consultant ranges
+    // Clinician.Consultant ranges
     private double lowerRange = 2.6;
     private double upperRange = 10.0;
 
