@@ -10,7 +10,7 @@ public class MonitoringChart {
 
     public String generateHTML() {
 
-        // sped up playback
+        // Display scale and playback speed
         final double maxValue = 50.0;
         final int intervalMs = 25;
 
@@ -18,13 +18,19 @@ public class MonitoringChart {
         List<Double> rawData = baby.getRawData();
         List<Double> smoothData = baby.getSmoothData();
 
+        // safe range is initially stored as blood glucose
         double lowerBlood = baby.getLowerRange();
         double upperBlood = baby.getUpperRange();
         double lower = lowerBlood * 3.5 + 1.5; // convert to skin
         double upper = upperBlood * 3.5 + 1.5;
 
+        // Real-time monitoring graph (safe-range bar + axis ticks + live playback of skin glucose values) rendered with HTML/CSS + JavaScript.
+        // References: https://www.w3schools.com/jsref/met_win_setinterval.asp , https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
+        // Also used generative AI (ChatGPT) in this section as I was initially unfamiliar with HTML syntax
+        
         StringBuilder html = new StringBuilder();
 
+        //styles
         html.append("<style>\n");
         html.append("  .mon-wrap { max-width: 900px; width: 100%; }\n");
         html.append("  .mon-title { font-family: Arial, sans-serif; }\n");
@@ -84,6 +90,7 @@ public class MonitoringChart {
         html.append("      return [];\n");
         html.append("    }\n\n");
 
+        //Build axis ticks
         html.append("    function buildAxis() {\n");
         html.append("      axis.innerHTML = '';\n");
         html.append("      const step = 5;\n");
@@ -102,12 +109,14 @@ public class MonitoringChart {
         html.append("    }\n");
         html.append("    buildAxis();\n\n");
 
+        //set safe range segment widths
         html.append("    const lowEnd = clamp(LOWER, 0, MAXV);\n");
         html.append("    const highStart = clamp(UPPER, 0, MAXV);\n");
         html.append("    segLow.style.width = (lowEnd / MAXV) * 100 + '%';\n");
         html.append("    segNormal.style.width = (Math.max(0, highStart - lowEnd) / MAXV) * 100 + '%';\n");
         html.append("    segHigh.style.width = (Math.max(0, MAXV - highStart) / MAXV) * 100 + '%';\n\n");
 
+        //Playback loop through valyes for demo
         html.append("    let i = 0;\n");
         html.append("    function step() {\n");
         html.append("      const s = pickSeries();\n");
