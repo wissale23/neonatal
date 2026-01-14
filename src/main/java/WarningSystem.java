@@ -1,19 +1,17 @@
 public class WarningSystem {
 
-    private final double lower;
-    private final double upper;
+    private final Baby baby;
 
-    public WarningSystem(double lower, double upper) {
-        this.lower = lower;
-        this.upper = upper;
+    public WarningSystem(Baby baby) {
+        this.baby = baby;
     }
 
     public boolean isAboveRange(double glucoseLevel) {
-        return glucoseLevel > upper;
+        return glucoseLevel > baby.getUpperRange();
     }
 
     public boolean isBelowRange(double glucoseLevel) {
-        return glucoseLevel < lower;
+        return glucoseLevel < baby.getLowerRange();
     }
 
     public boolean isUnsafe(double glucoseLevel) {

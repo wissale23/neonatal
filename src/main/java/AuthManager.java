@@ -102,7 +102,6 @@ public class AuthManager {
         if ("admin".equals(r)) return "/admin";
         if ("nurse".equals(r)) return "/nurses";
         if ("consultant".equals(r)) return "/consultants";
-        if ("parent".equals(r)) return "/parents";
         if ("researcher".equals(r)) return "/researchers";
         return "/login?error=login_required";
     }
@@ -116,7 +115,7 @@ public class AuthManager {
         if ("/admin".equals(servletPath) && !"admin".equals(role)) return homeForRole(role);
         if ("/nurses".equals(servletPath) && !"nurse".equals(role)) return homeForRole(role);
         if ("/consultants".equals(servletPath) && !"consultant".equals(role)) return homeForRole(role);
-        if ("/parents".equals(servletPath) && !"parent".equals(role)) return homeForRole(role);
+        if ("/parents".equals(servletPath) && !"parent".equals(role) && !"consultant".equals(role) && !"nurse".equals(role)) return homeForRole(role);
         if ("/researchers".equals(servletPath) && !"researcher".equals(role)) return homeForRole(role);
 
         return null;

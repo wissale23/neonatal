@@ -1,10 +1,6 @@
+import javax.servlet.http.HttpServletRequest;
 import java.sql.*;
 import java.util.List;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-
 
 public class GlucoseChart {
     private final Baby baby;
@@ -32,29 +28,7 @@ public class GlucoseChart {
         return sampleTriangles;
     }
 
-    public static List<String> getComments(HttpSession session) {
-        List<String> comments = (List<String>) session.getAttribute("commentsList");
-        if (comments == null) {
-            comments = new ArrayList<>();
-            session.setAttribute("commentsList", comments);
-        }
-        return comments;
-    }
-
-
-    //adding new comment to select whenever there is a new one
-
-    public static void addComment(HttpSession session, String username, String commentText) {
-
-        if (commentText == null || commentText.isEmpty()) return;
-        List<String> comments = getComments(session);
-        String time = LocalDateTime.now().format(
-            DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-        comments.add(time + "\n" + username + ": " + commentText);
-    }
-
-
-
+    // Display Comments Box
     public String commentsInpLayout(List<String> comments) {
 
         String options = "";
@@ -129,21 +103,55 @@ public class GlucoseChart {
     
 
 
+
+    // Button to switch to Parent Chart Display
+    public String parentViewButton(HttpServletRequest req, int babyId) {
+        return "<div style='display:flex; justify-content:flex-end; padding:10px 20px;'>"
+                + "<a href='" + req.getContextPath() + "/parents?babyId=" + babyId + "' "
+                + "style='background-color:#ffc0cb;"
+                + "border:2px solid black;"
+                + "padding:6px 12px;"
+                + "border-radius:4px;"
+                + "color:black; font-weight:bold; text-decoration:none;"
+                + "cursor:pointer;'>"
+                + "Parent View</a>"
+                + "</div>";
+    }
+
+
     // Display warning alert message box
     public String buildWarningHTML(List<Double> glucoseData) {
         
         double latestGlucose = glucoseData.get(glucoseData.size() - 1);
-        WarningSystem warningSystem = new WarningSystem(baby.getLowerRange(), baby.getUpperRange());
+        double estimatedGlucose = (latestGlucose - 1.5)/3.5;
+        WarningSystem warningSystem = new WarningSystem(baby);
 
-        return AlertRenderer.buildAlertHTML(warningSystem, latestGlucose);
+        return AlertRenderer.buildAlertHTML(warningSystem, estimatedGlucose);
     }
 
-
+    // Display Original Glucose Chart with Continuous Monitoring of Skin Glucose Data, and estimated Blood Glucose Data
+    // Chart.js properties from https://www.chartjs.org/docs/latest/charts/line.html
+    // Reference 1 - taken from https://www.w3schools.com/js/js_graphics_chartjs.asp
     public String generateHTML() {
         String timeArray = baby.getTimeData().toString();
         String rawArray = baby.getRawData().toString();
         String smoothArray = baby.getSmoothData().toString();
         String warningHTML = buildWarningHTML(baby.getRawData());
+
+        // Set x axes range as scaled from time data
+        double minTime = 0.0;
+        double maxTime = 24.0;
+        List<Double> times = baby.getTimeData();
+        if (times != null && !times.isEmpty()) {
+            minTime = times.get(0);
+            maxTime = times.get(0);
+            for (double t : times) {
+                if (t < minTime) minTime = t;
+                if (t > maxTime) maxTime = t;
+            }
+        }
+        int xMin = (int) Math.floor(minTime);
+        int xMax = (int) Math.ceil(maxTime);
 
         return AlertRenderer.alertCSS +
                 "  <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n" +
@@ -167,19 +175,20 @@ public class GlucoseChart {
                 "        labels: labels,\n" +
                 "        datasets: [\n" +
             // Plot Raw Skin Glucose, Filtered (Smoothed) Skin Glucose, Estimated Blood Glucose
-                "          { label: 'Raw Skin Glucose', data: rawData, yAxisID: 'y', borderColor: 'rgb(252,168,168)', borderWidth: 3, fill: false, order: 2, pointRadius: 0 },\n" + 
+                "          { label: 'Raw Skin Glucose', data: rawData, yAxisID: 'y', borderColor: 'rgb(252,168,168)', borderWidth: 3, fill: false, order: 2, pointRadius: 0},\n" +
                 "          { label: 'Smoothed Skin Glucose', data: smoothData, yAxisID: 'y', borderColor: 'rgb(220,25,25)', borderWidth: 1.5, fill: false, order: 1, pointRadius: 0 },\n" +
-                "          { label: 'Estimated Blood Glucose', data: smoothData.map(v => (v - 1.5) / 3.5), yAxisID: 'y2', borderColor: 'rgb(255,210,210)', borderWidth: 6, fill: false, order: 3, pointRadius: 0 }\n" +
+                "          { label: 'Estimated Blood Glucose', data: smoothData.map(v => (v - 1.5) / 3.5), yAxisID: 'y2', borderColor: 'rgb(255,210,210)', borderWidth: 6, fill: false, order: 3, pointRadius: 0 },\n" +
+                "          { label: 'Blood Glucose', data: [], yAxisID: 'y2', showLine: false, pointRadius: 6, pointStyle: 'triangle', backgroundColor: 'rgb(220,0,0)', borderColor: 'rgb(220,0,0)' }\n" +
                 "        ]\n" +
                 "      },\n" +
                 "      options: {\n" +
                 "        responsive: true,\n" +
                 "        scales: {\n" +
             // Define Axes
-                "          y: {position: 'left',  min: 0, max: 90, title: {display: true, text: 'Skin Glucose (µM)'} },\n" +
-                "          y2: { position: 'right', min: 0, max: 12, title: {display: true, text: 'Blood Glucose (mM)'} },\n" +
-                "          x: { type: 'linear', min: 11.0, max: 14.0,\n" +
-                "            title: { display: true, text: 'Time (hours)' },\n" +
+                "          y: {position: 'left',  min: 0, max: 120, title: {display: true, text: 'Skin Glucose (µM)', font: { size: 16, weight: 'bold' } } },\n" +
+                "          y2: { position: 'right', min: 0, max: 12, title: {display: true, text: 'Blood Glucose (mM)', font: { size: 16, weight: 'bold' } } },\n" +
+                "          x: { type: 'linear', min: " + xMin + ", max: " + xMax + ",\n" +
+                "            title: { display: true, text: 'Time (hours)', font: { size: 16, weight: 'bold' } },\n" +
                 "            ticks: {\n" +
                 "              stepSize: (0.5 / 6),\n" +
                 "              callback: function(value) {\n" +
@@ -193,6 +202,7 @@ public class GlucoseChart {
                 "          }\n" +
                 "        },\n" +
                 "        plugins: {\n" +
+                "          legend: { labels: { usePointStyle: true } },\n" +
                 "          annotation: {\n" +
                 "            annotations: {\n" +
             // Plot Acceptable Range

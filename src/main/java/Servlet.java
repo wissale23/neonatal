@@ -5,23 +5,14 @@ import java.io.*;
 import java.util.*;
 
 @WebServlet(
-        urlPatterns = {"/", "/login", "/logout", "/consultants", "/nurses", "/researchers", "/parents"},
+        urlPatterns = {"/", "/useful-links", "/login", "/logout", "/consultants", "/nurses", "/researchers", "/parents", "/admin"},
         loadOnStartup = 1
 )
 public class Servlet extends HttpServlet {
 
-    // In-memory storage for user-submitted values
-    private final List<Double> userRawValues = new ArrayList<>();
-    private final List<Double> userSmoothValues = new ArrayList<>();
-
     // Demo "hospital accounts" for MVP (pre-provisioned externally)
     private final Map<String, String> passwords = new HashMap<>();   // username -> password
     private final Map<String, String> roles = new HashMap<>();       // username -> role
-
-    // Resource file paths
-    private final String TIME_FILE = "/t_glu.txt";
-    private final String RAW_FILE = "/glu_uM_unsmoothed.txt";
-    private final String SMOOTH_FILE = "/glu_uM_smoothed.txt";
     
     private AuthManager auth;
     private LoginPageView loginView;
@@ -30,33 +21,21 @@ public class Servlet extends HttpServlet {
 
     @Override
     public void init() {
-        // Adding babies
-        Baby baby1 = new Baby("baby1",2,TIME_FILE,RAW_FILE,SMOOTH_FILE);
-
         // Demo accounts (replace with real hospital identity system later)
-
-        passwords.put("parent1", "parentpass");
-        roles.put("parent1", "parent");
-        Parent parent1 = new Parent ("parent1",3,"/parents");
-        parent1.addPatient(baby1);
-        users.add(parent1);
 
         passwords.put("research1", "researchpass");
         roles.put("research1", "researcher");
         Researcher research1 = new Researcher("research1", 1, "/researchers");
-        research1.addPatient(baby1);
         users.add(research1);
         
         passwords.put("consult1", "consultpass");
         roles.put("consult1", "consultant");  
         Consultant consult1 = new Consultant("consult1",4,"/consultants");
-        consult1.addPatient(baby1);
         users.add(consult1); 
 
         passwords.put("nurse1", "nursepass");
         roles.put("nurse1", "nurse");
         Nurse nurse1 = new Nurse("nurse1",5,"/nurses");
-        nurse1.addPatient(baby1);
         users.add(nurse1); 
             
         auth = new AuthManager();
@@ -64,7 +43,6 @@ public class Servlet extends HttpServlet {
 
         auth.addUser("nurse1", "nursepass", "nurse");
         auth.addUser("consult1", "consultpass", "consultant");
-        auth.addUser("parent1", "parentpass", "parent");
         auth.addUser("research1", "researchpass", "researcher");
         auth.addUser("admin1", "adminpass", "admin");
             
@@ -74,10 +52,23 @@ public class Servlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) 
         throws ServletException, IOException {
-        
+
         String path = req.getServletPath();
+
+
+        if ("/".equals(path)){
+            resp.setContentType("text/html");
+            resp.getWriter().write(Homepage.generatePage(req));
+            return;
+        }
+
+        if ("/useful-links".equals(path)){
+            resp.setContentType("text/html");
+            resp.getWriter().write(UsefulLinksPage.generatePage(req));
+            return;
+        }
                 
-        if ("/".equals(path) || "/login".equals(path)) {
+        if ("/login".equals(path)) {
             String error = req.getParameter("error");
             String msg = "";
 
@@ -112,26 +103,26 @@ public class Servlet extends HttpServlet {
             }
         }
 
-
+        if ("/parents".equals(path)) {
+            ParentalDisplay.doGet(req,resp);
+            return;
+        }
 
         // Require login + correct role before allowing access to role-specific endpoints
         HttpSession session = req.getSession(false);
                 
         if ("/consultants".equals(path)) {
 
-            users.get(2).doGet(req,resp);
+            users.get(1).doGet(req,resp);
             return;    
 
         } else if ("/nurses".equals(path)) {
-            users.get(3).doGet(req,resp);
+            users.get(2).doGet(req,resp);
             return;    
 
-                
         } else if("/researchers".equals(path)){
-            users.get(1).doGet(req,resp);
-                
-        } else if("/parents".equals(path)){
-            users.get(0).doGet(req, resp);
+            users.get(0).doGet(req,resp);
+
         } else if ("/admin".equals(path)) {
             String status = req.getParameter("status");
             String error = req.getParameter("error");
@@ -214,17 +205,18 @@ public class Servlet extends HttpServlet {
         }    
 
         if ("/researchers".equals(req.getServletPath())) {
-            users.get(1).doPost(req,resp);
+            users.get(0).doPost(req,resp);
+            return;
         }
 
         if ("/consultants".equals(req.getServletPath())) {
-            users.get(2).doPost(req,resp);
+            users.get(1).doPost(req,resp);
             return;    
         }
             
         
         if ("/nurses".equals(req.getServletPath())) {
-            users.get(3).doPost(req,resp);
+            users.get(2).doPost(req,resp);
             return;    
         }
             
@@ -243,5 +235,4 @@ public class Servlet extends HttpServlet {
 
     }
 
-        
 }

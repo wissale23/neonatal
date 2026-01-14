@@ -7,10 +7,11 @@ import javax.servlet.http.HttpServletResponse;
 
 public class Nurse extends Adult implements Pageable {
 
+    // Default input values
     private final double defaultGlucose = 0.0;
-    private final double defaultTime = 0.0;
-    private final double defaultFeedStart = 0.0;
-    private final double defaultFeedDuration = 0.0;
+    private final int defaultHour = 00;
+    private final int defaultMinute = 00;
+    private final int defaultFeedDuration = 00;
     private final String defaultFeedType = "";
     private final String defaultComment = "Add a comment";
 
@@ -18,6 +19,7 @@ public class Nurse extends Adult implements Pageable {
         super(name, id, endpoint);
     }
 
+    //Display the baby selector
     private String babyDropdown(int selectedId, String contextPath) {
 
         // Get all babies from the Baby Patient List
@@ -43,10 +45,11 @@ public class Nurse extends Adult implements Pageable {
                         + "transition: all 0.2s ease-in-out;'>"
         );
 
-// Form
+        // Form
         sb.append("<form method='get' action='")
                 .append(contextPath)
                 .append("/nurses'>");
+
         sb.append("<label style='margin-right:8px; font-size:16px;'>SELECT BABY:</label>");
         sb.append(
                 "<select name='babyId' "
@@ -79,9 +82,9 @@ public class Nurse extends Adult implements Pageable {
         return sb.toString();
     }
 
+    //Display the blood glucose heel pricks input
+    public String glucoseInputLayout(String pathString, double glucoseValue, double hour, double minute) {
 
-
-    public String glucoseInputLayout(String pathString,double glucoseValue, double time){
         return "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;"
                 + "padding: 20px;"
@@ -90,59 +93,95 @@ public class Nurse extends Adult implements Pageable {
                 + "min-height:250px;"
                 + "margin: 20px ;"
                 + "text-align: center;'>"
-
-                + "<h3 style='color: black;'>Entering blood glucose values(mM)</h3>"
-
+    
+                + "<h3 style='color: black;'>Blood Glucose Heel Prick (mM)</h3>"
+    
                 + "<form method='POST' action='" + pathString + "/nurses'>"
                 + "<div>"
+            
                 + "<span style='display:inline-block; width:110px; text-align:right; color:black;'>Sample value: </span>"
-                + "<input type='text' name='glucoseInp' step='0.001' value='" + glucoseValue + "' style='width:100px; text-align:center;'/><br/><br/>"
+                + "<input type='number' name='glucoseInp' step='0.01' value='" 
+                + glucoseValue + "' style='width:100px; text-align:center;'/>"
+                + "<br/><br/>"
+    
                 + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Time of day: </span>"
-                + "<input type='text' name='timeInp' step='0.001' value='" + time + "' style='width:100px; text-align:center;'/><br/><br/>"
-
-
-                + "<button type='submit' style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add sample</button>"
-                            
+                + "<input type='number' name='glucHourInp' min='0' max='23' step='1' "
+                + "value='" + String.format("%02d", (int) hour) + "' style='width:45px; text-align:center;'/>"
+                + " : "
+                + "<input type='number' name='glucMinInp' min='0' max='59' step='1' "
+                + "value='" + String.format("%02d", (int) minute) + "' style='width:45px; text-align:center;'/>"
+                + "<br/><br/>"
+    
+                + "<div style='display:flex; justify-content:center; gap:10px;'>"
+                + "<button type='submit' name='action' value='add' "
+                + "style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add sample</button>"
+                + "<button type='submit' name='action' value='undo' "
+                + "style='background-color:#ff8c8c; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Undo last</button>"
+                + "</div>"
+    
                 + "</div>"
                 + "</form>"
                 + "</div>";
+    }
 
-    }    
-
-    public String feedingInputLayout (String pathString,double feedStart, double feedDuration, String feedType){
-        return "<div style='background-color: #fedae6; "
-                + "border: 2px solid black;"
-                + "padding: 20px;"
-                + "border-radius: 10px;"
-                + "width: 300px;"
-                + "min-height:250px;"
-                + "margin: 20px ;"
-                + "text-align: center;'>"
-
-                + "<h3 style='color: black;'>Feeding Information</h3>"
-
-                + "<form method='POST' action='" + pathString + "/nurses'>"
-                + "<div>"
-            
-                + "<span style='display:inline-block; width:110px; text-align:right; color:black;'>Start of feeding: </span>"
-                + "<input type='text' name='startInp' step='0.001' value='" + feedStart + "' style='width:100px; text-align:center;'/><br/><br/>"
-            
-                + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Duration of feeding: </span>"
-                + "<input type='text' name='durInp' step='0.001' value='" + feedDuration + "' style='width:100px; text-align:center;'/><br/><br/>"
-            
-                + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Feeding Description: </span>"
-                + "<input type='text' name='typeInp' step='0.001' value='" + feedType+ "' style='width:100px; text-align:center;'/><br/><br/>"
-
-
-                + "<button type='submit' style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add feeding information</button>"
-                            
-                + "</div>"
-                + "</form>"
-                + "</div>";
-
+    //Display feeding type dropdown
+    public String feedingTypeDropdown(String feedType) {
+        return "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Feeding Description: </span>"
+                + "<input list='feedOptions' name='typeInp' value='" + feedType + "' "
+                + "style='width:150px; text-align:center;'/>"
+                + "<datalist id='feedOptions'>"
+                + "<option value='Breastfeeding'>"
+                + "<option value='Expressed breast milk'>"
+                + "<option value='Fortified breast milk'>"
+                + "<option value='Formula'>"
+                + "<option value='Donor breast milk'>"
+                + "<option value='Other'>"
+                + "</datalist>";
     }
 
 
+
+
+    // Display the feeding information input
+    public String feedingInputLayout(String pathString, double feedStartHour, double feedStartMinute, double feedDuration, String feedType) {
+
+        return "<div style='background-color: #fedae6; "
+                + "border: 2px solid black;"
+                + "padding: 20px;"
+                + "border-radius: 10px;"
+                + "width: 300px;"
+                + "min-height:250px;"
+                + "margin: 20px ;"
+                + "text-align: center;'>"
+    
+                + "<h3 style='color: black;'>Feeding Information</h3>"
+    
+                + "<form method='POST' action='" + pathString + "/nurses'>"
+                + "<div>"
+                
+                + "<span style='display:inline-block; width:110px; text-align:right; color:black;'>Start of feeding: </span>"
+                + "<input type='number' name='startHour' min='0' max='23' value='" + String.format("%02d", (int) feedStartHour) + "' style='width:50px; text-align:center;'/> : "
+                + "<input type='number' name='startMinute' min='0' max='59' value='" + String.format("%02d", (int) feedStartMinute) + "' style='width:50px; text-align:center;'/><br/><br/>"
+
+                + "<span style='display:inline-block; width:110px; text-align:right;color:black;'>Duration of feeding (mins): </span>"
+                + "<input type='text' name='durInp' step='0.01' value='" + String.format("%02d", (int) feedDuration) + "' style='width:100px; text-align:center;'/><br/><br/>"
+
+                + feedingTypeDropdown(feedType)
+                // Buttons to add sample and undo
+                + "<div style='display:flex; justify-content:center; gap:10px;margin-top:15px;'>"
+                + "<button type='submit' name='action' value='add' "
+                + "style='background-color:#ffc0cb; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Add feeding information</button>"
+                + "<button type='submit' name='action' value='undo' "
+                + "style='background-color:#ff8c8c; border:2px solid black; padding:5px 10px; border-radius:4px; color:black; font-weight:bold;'>Undo last</button>"
+                + "</div>"
+    
+                + "</div>"
+                + "</form>"
+                + "</div>";
+    }
+
+
+    //Display the comment box for nurses
     public String nurseCommentBox(String pathString) {
         return "<div style='background-color: #fedae6; "
                 + "border: 2px solid black;"
@@ -169,25 +208,78 @@ public class Nurse extends Adult implements Pageable {
                 + "</div>";
     }
 
-    public String nursePage(GlucoseChart glucoseChart, HttpServletRequest req, int babyId,
-                            double glucoseValue, double time,
-                            double feedStart, double feedDuration, String feedType,
+
+
+
+    //Display the nurse page with the logout button, baby dropdown, glucose chart, heel pricks input, feeding input and comment box
+    // added monitoring chart
+    public String nursePage(GlucoseChart glucoseChart, MonitoringChart monitoringChart, HttpServletRequest req, int babyId,
+                            double glucoseValue, double hour, double minute,
+                            double feedStartHour, double feedStartMinute, double feedDuration, String feedType,
                             List<String> comments) {
 
         return "<!DOCTYPE html>"
                 + "<html><head>"
                 + "<title>Nurse Dashboard</title>"
+                // Sidebar display
+                + "<meta name='viewport' content='width=device-width, initial-scale=1'>"
+                + "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>"
+                + "<style>"
+                + "body { font-family: 'Lato', sans-serif; }"
+                + ".sidebar { height:100%; width:0; position:fixed; z-index:1; top:0; left:0; background-color:#111; overflow-x:hidden; transition:0.5s; padding-top:60px; }"
+                + ".sidebar a { padding:8px 8px 8px 32px; font-size:25px; color:#818181; display:block; text-decoration:none; }"
+                + ".sidebar a:hover { color:#f1f1f1; }"
+                + ".sidebar .closebtn { position:absolute; top:0; right:25px; font-size:36px; }"
+                + ".openbtn { font-size:20px; cursor:pointer; background-color:#111; color:white; padding:10px 15px; border:none; }"
+                + "#main { padding:16px; }"
+
+                // Header CSS
+                + ".header { background-color: #003087; color: white; text-align: center; padding: 20px; font-size: 28px; font-weight: bold; }"
+                + "</style>"
+
                 + "</head><body>"
-                + "<h1 style='text-align:center;'>Nurse Dashboard</h1>"
+                + "<div class='header'>Nurse Dashboard</div>"
+
+                // Parent view button
+                + glucoseChart.parentViewButton(req,babyId)
+
+                // baby dropdown display
                 + babyDropdown(babyId, req.getContextPath())
-                + "</div>"
+
+                // sidebar display
+                + LogoutOption.generateLogoutSidebar()
+
+                // Glucose Chart display
                 + glucoseChart.generateHTML()
+
+                // inputs display
                 + "<div style='display:flex; justify-content:center; gap:30px; margin-top:20px;'>"
-                + glucoseInputLayout(req.getContextPath(), glucoseValue, time)
-                + feedingInputLayout(req.getContextPath(), feedStart, feedDuration, feedType)
+                + glucoseInputLayout(req.getContextPath(), glucoseValue, hour, minute)
+                + feedingInputLayout(req.getContextPath(), feedStartHour, feedStartMinute,feedDuration, feedType)
                 + nurseCommentBox(req.getContextPath())
                 + "</div>"
+
+                // added monitoring chart
+                + "<div style='display:flex; justify-content:center; margin: 25px 0 10px 0;'>"
+
+                // monitoring simulation
+                + monitoringChart.generateHTML()
+
+                + "</div>"
+                + "</div>"
+
+                // comments display
                 + glucoseChart.commentsInpLayout(comments)
+                + "</div>"
+                // Sidebar display
+                + "<script>"
+                + "function openSidebar(){"
+                + " document.getElementById('mySidebar').style.width='250px';"
+                + "}"
+                + "function closeSidebar(){"
+                + " document.getElementById('mySidebar').style.width='0';"
+                + "}"
+                + "</script>"
                 + "</body></html>";
     }
 
@@ -210,17 +302,28 @@ public class Nurse extends Adult implements Pageable {
         // Create chart for selected baby
         GlucoseChart glucoseChart = new GlucoseChart(baby);
 
+        // Create Monitoring chart for selected baby
+        MonitoringChart monitoringChart = new MonitoringChart(baby);
+
         // Get latest values for input forms
-        double glucoseValue = getGlucValue(session).get(0);
-        double time = getGlucValue(session).get(1);
-        double feedStart = getFeedValue(session).get(0);
-        double feedDuration = getFeedValue(session).get(1);
+        List<Double> glucValues = getGlucValue(session);
+        double glucoseValue = glucValues.get(0);
+        double hour = glucValues.get(1);
+        double minute = glucValues.get(2);
+
+        List<Double> feedValues = getFeedValue(session);
+        double feedStartHour = feedValues.get(0);
+        double feedStartMinute = feedValues.get(1);
+        double feedDuration = feedValues.get(2);
+        
         String feedType = getFeedStr(session);
         List<String> comments = baby.getComments();
 
         resp.setContentType("text/html");
-        resp.getWriter().write(nursePage(glucoseChart, req, babyId,
-                glucoseValue, time, feedStart, feedDuration, feedType, comments));
+
+        // Display nurse page on browser
+        resp.getWriter().write(nursePage(glucoseChart, monitoringChart, req, babyId,
+                glucoseValue, hour,minute, feedStartHour,feedStartMinute, feedDuration, feedType, comments));
     }
 
 
@@ -228,18 +331,41 @@ public class Nurse extends Adult implements Pageable {
         HttpSession session = req.getSession();
         Baby baby = BabyPatientList.getBaby((int) session.getAttribute("babyId"));
 
-        if (req.getParameter("glucoseInp") != null)
-            baby.addSample(
-                    Double.parseDouble(req.getParameter("timeInp")),
-                    Double.parseDouble(req.getParameter("glucoseInp"))
-            );
+        String action = req.getParameter("action"); 
 
-        if (req.getParameter("startInp") != null)
-            baby.addFeeding(
-                    Double.parseDouble(req.getParameter("startInp")),
-                    Double.parseDouble(req.getParameter("durInp")),
-                    req.getParameter("typeInp")
-            );
+        if (req.getParameter("glucoseInp") != null) {
+            if ("undo".equals(action)) {
+                baby.removeLastSample(); // remove last sample
+            } else {
+                double hour = Double.parseDouble(req.getParameter("glucHourInp"));
+                double minute = Double.parseDouble(req.getParameter("glucMinInp"));
+        
+                double timeValue = hour + (minute / 60.0); // converts HH:MM input to chart input
+                baby.addSample(
+                        timeValue,
+                        Double.parseDouble(req.getParameter("glucoseInp"))
+                );
+            }
+        }
+
+        if (req.getParameter("startHour") != null) {
+            if ("undo".equals(action)) {
+                baby.removeLastFeeding(); 
+            } else {
+                double feedHour = Double.parseDouble(req.getParameter("startHour"));
+                double feedMinute = Double.parseDouble(req.getParameter("startMinute"));   
+                double feedValue = feedHour + (feedMinute / 60.0);
+
+                double feedDuration = Double.parseDouble(req.getParameter("durInp")) / 60.0; // converts minutes to chart input
+                String feedType = req.getParameter("typeInp");
+
+                baby.addFeeding(
+                        feedValue,
+                        feedDuration,
+                        feedType
+                );
+            }
+        }
 
         if (req.getParameter("commInp") != null)
             baby.addComment(
@@ -252,42 +378,59 @@ public class Nurse extends Adult implements Pageable {
     // Get last glucose value from session
     public List<Double> getGlucValue(HttpSession session) {
         double glucose = defaultGlucose;
-        double time = defaultTime;
-
+        double hour = defaultHour;
+        double minute = defaultMinute;
+        
+        //
         if (session != null) {
             List<Double> glucoseList = (List<Double>) session.getAttribute("glucoseList");
             List<Double> timeList = (List<Double>) session.getAttribute("timeList");
 
+            // If glucose values exist, take the most recent one
             if (glucoseList != null && !glucoseList.isEmpty())
                 glucose = glucoseList.get(glucoseList.size() - 1);
-            if (timeList != null && !timeList.isEmpty())
-                time = timeList.get(timeList.size() - 1);
+
+            // If time values exist, extract the most recent time
+            if (timeList != null && !timeList.isEmpty()) {
+                double time = timeList.get(timeList.size() - 1);
+                hour = (int) time;
+                minute = (int) ((time - hour) * 60);
+            }
+
         }
 
         List<Double> result = new ArrayList<>();
         result.add(glucose);
-        result.add(time);
+        result.add((double) hour);    
+        result.add((double) minute);
         return result;
     }
 
     // Get last feeding values from session
     public List<Double> getFeedValue(HttpSession session) {
-        double start = defaultFeedStart;
-        double dur = defaultFeedDuration;
+        double startHour = defaultHour;
+        double startMinute = defaultMinute;
+        double duration = defaultFeedDuration;
 
         if (session != null) {
-            List<Double> startList = (List<Double>) session.getAttribute("startList");
-            List<Double> durList = (List<Double>) session.getAttribute("durationList");
-
-            if (startList != null && !startList.isEmpty())
-                start = startList.get(startList.size() - 1);
-            if (durList != null && !durList.isEmpty())
-                dur = durList.get(durList.size() - 1);
+            List<Double> startList = (List<Double>) session.getAttribute("startList"); 
+            List<Double> durList = (List<Double>) session.getAttribute("durationList"); 
+    
+            if (startList != null && !startList.isEmpty()) {
+                double start = startList.get(startList.size() - 1);
+                startHour = (int) start;
+                startMinute = (int) ((start - startHour) * 60);
+            }
+    
+            if (durList != null && !durList.isEmpty()) {
+                duration = durList.get(durList.size() - 1) / 60.0; 
+            }
         }
 
         List<Double> result = new ArrayList<>();
-        result.add(start);
-        result.add(dur);
+        result.add(startHour);
+        result.add(startMinute);
+        result.add(duration);
         return result;
     }
 
