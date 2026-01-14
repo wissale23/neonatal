@@ -31,6 +31,7 @@ public class Servlet extends HttpServlet {
 
     @Override
     public void init() {
+
         // Demo accounts (replace with real hospital identity system later)
 
         passwords.put("research1", "researchpass");
