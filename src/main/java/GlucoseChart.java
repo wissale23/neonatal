@@ -217,6 +217,5 @@ public class GlucoseChart {
                 "    });\n" +
                 "  </script>\n";
     }
-
 }
 
