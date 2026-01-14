@@ -6,7 +6,7 @@ import Person.Adult;
 import Person.User.Clinician.Consultant;
 import Person.User.Clinician.Nurse;
 import Person.User.Researcher;
-import Servlet.AuthManager;
+import Servlets.AuthManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -160,7 +160,7 @@ public class Servlet extends HttpServlet {
             String username = req.getParameter("username");
             String password = req.getParameter("password");
 
-            Servlet.AuthManager.AuthResult result = auth.authenticate(username, password);
+            Servlets.AuthManager.AuthResult result = auth.authenticate(username, password);
 
             if (!result.isOk()) {
                 String errorParam;
@@ -199,7 +199,7 @@ public class Servlet extends HttpServlet {
             String newPassword = req.getParameter("newPassword");
             String newRole = req.getParameter("newRole");
 
-            Servlet.AuthManager.CreateResult cr = auth.createUser(newUsername, newPassword, newRole);
+            Servlets.AuthManager.CreateResult cr = auth.createUser(newUsername, newPassword, newRole);
 
             if (!cr.isOk()) {
                 String err;

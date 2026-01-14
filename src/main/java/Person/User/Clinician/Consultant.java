@@ -4,8 +4,8 @@ import Chart.GlucoseChart;
 import Display.LogoutOption;
 import Person.Adult;
 import Person.Baby;
-import Servlet.BabyPatientList;
-import Servlet.Pageable;
+import Servlets.BabyPatientList;
+import Servlets.Pageable;
 
 import java.io.IOException;
 import java.util.List;

@@ -1,4 +1,4 @@
-package Servlet;
+package Servlets;
 
 import Person.Baby;
 

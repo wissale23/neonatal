@@ -1,5 +1,5 @@
 import Person.Baby;
-import Servlet.BabyPatientList;
+import Servlets.BabyPatientList;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

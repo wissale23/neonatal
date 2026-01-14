@@ -1,7 +1,7 @@
 package Person;
 
 
-import Servlet.Pageable;
+import Servlets.Pageable;
 
 public abstract class Adult extends Person implements Pageable {
     private final String endpoint;

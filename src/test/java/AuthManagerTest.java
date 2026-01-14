@@ -1,4 +1,4 @@
-import Servlet.AuthManager;
+import Servlets.AuthManager;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

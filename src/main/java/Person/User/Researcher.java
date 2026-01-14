@@ -3,8 +3,8 @@ package Person.User;
 import Display.LogoutOption;
 import Person.Adult;
 import Person.Baby;
-import Servlet.BabyPatientList;
-import Servlet.Pageable;
+import Servlets.BabyPatientList;
+import Servlets.Pageable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

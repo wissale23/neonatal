@@ -2,7 +2,7 @@ package Display;
 
 import Chart.ParentChart;
 import Person.Baby;
-import Servlet.BabyPatientList;
+import Servlets.BabyPatientList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
