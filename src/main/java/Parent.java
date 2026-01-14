@@ -9,7 +9,7 @@ public class Parent extends Adult implements Pageable {
     private final double lowerDefault = 2.0;
     private final double upperDefault = 12.0;
 
-    // Range + faster playback
+    // Range and faster playback
     private final double maxValue = 40.0;
     private final int intervalMs = 150;
 

@@ -126,6 +126,8 @@ public class GlucoseChart {
         }
         return feedingBars;
     }
+    
+
 
     // Display warning alert message box
     public String buildWarningHTML(List<Double> glucoseData) {
