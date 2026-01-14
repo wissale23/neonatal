@@ -102,6 +102,19 @@ public class GlucoseChart {
     }
 
 
+    // Button to switch to Parent Chart Display
+    public String parentViewButton(HttpServletRequest req, int babyId) {
+        return "<div style='display:flex; justify-content:flex-end; padding:10px 20px;'>"
+                + "<a href='" + req.getContextPath() + "/parents?babyId=" + babyId + "'>"
+                + "style='background-color:#ffc0cb;"
+                + "border:2px solid black;"
+                + "padding:6px 12px;"
+                + "border-radius:4px;"
+                + "color:black; font-weight:bold; text-decoration:none;"
+                + "cursor:pointer;'>"
+                + "Parent View</a>"
+                + "</div>";
+    }
 
     // Display warning alert message box
     public String buildWarningHTML(List<Double> glucoseData) {
