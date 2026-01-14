@@ -17,13 +17,12 @@ public class Researcher extends Adult implements Pageable{
 
         // Build dropdown options from patients list
         StringBuilder options = new StringBuilder();
-        List<Baby> patients = getPatients();
-        for (int i = 0; i < patients.size(); i++) {
-            Baby baby = patients.get(i);
-            options.append("<option value=\"").append(i).append("\">")
-                    .append("ID: ").append(baby.getId())
+        for (Baby b : BabyPatientList.getAll()) {
+            options.append("<option value=\"").append(b).append("\">")
+                    .append("ID: ").append(b.getId())
                     .append("</option>");
         }
+
         // Generative AI (Claude) was used to help write this section as I was unfamiliar with HTML syntax
         resp.getWriter().write(
                 "<!DOCTYPE html>" +
@@ -88,15 +87,15 @@ public class Researcher extends Adult implements Pageable{
 
             // Baby selection validation
             int babyIndex = Integer.parseInt(babyIndexParam);
-            List<Baby> patients = getPatients();
+            List<Baby> babies = BabyPatientList.getAll();
 
-            if (babyIndex < 0 || babyIndex >= patients.size()) {
+            if (babyIndex < 0 || babyIndex >= babies.size()) {
                 resp.sendError(400, "Invalid baby selection");
                 return;
             }
 
             // Load data for selected baby
-            Baby selectedBaby = patients.get(babyIndex);
+            Baby selectedBaby = babies.get(babyIndex);
             List<Double> timeData = selectedBaby.getTimeData();
             List<Double> rawData = selectedBaby.getRawData();
             List<Double> smoothData = selectedBaby.getSmoothData();
