@@ -200,6 +200,7 @@ public class GlucoseChart {
                 "          }\n" +
                 "        },\n" +
                 "        plugins: {\n" +
+                "          legend: { labels: { usePointStyle: true } },\n" +
                 "          annotation: {\n" +
                 "            annotations: {\n" +
             // Plot Acceptable Range
@@ -216,5 +217,6 @@ public class GlucoseChart {
                 "    });\n" +
                 "  </script>\n";
     }
+
 }
 
