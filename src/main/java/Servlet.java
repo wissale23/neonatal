@@ -13,11 +13,6 @@ public class Servlet extends HttpServlet {
     // Demo "hospital accounts" for MVP (pre-provisioned externally)
     private final Map<String, String> passwords = new HashMap<>();   // username -> password
     private final Map<String, String> roles = new HashMap<>();       // username -> role
-
-    // Resource file paths
-    private final String TIME_FILE = "/t_glu1.txt";
-    private final String RAW_FILE = "/glu_uM_unsmoothed1.txt";
-    private final String SMOOTH_FILE = "/glu_uM_smoothed1.txt";
     
     private AuthManager auth;
     private LoginPageView loginView;
@@ -26,27 +21,21 @@ public class Servlet extends HttpServlet {
 
     @Override
     public void init() {
-        // Adding babies
-        Baby baby1 = new Baby("baby1",2,TIME_FILE,RAW_FILE,SMOOTH_FILE);
-
         // Demo accounts (replace with real hospital identity system later)
 
         passwords.put("research1", "researchpass");
         roles.put("research1", "researcher");
         Researcher research1 = new Researcher("research1", 1, "/researchers");
-        research1.addPatient(baby1);
         users.add(research1);
         
         passwords.put("consult1", "consultpass");
         roles.put("consult1", "consultant");  
         Consultant consult1 = new Consultant("consult1",4,"/consultants");
-        consult1.addPatient(baby1);
         users.add(consult1); 
 
         passwords.put("nurse1", "nursepass");
         roles.put("nurse1", "nurse");
         Nurse nurse1 = new Nurse("nurse1",5,"/nurses");
-        nurse1.addPatient(baby1);
         users.add(nurse1); 
             
         auth = new AuthManager();
