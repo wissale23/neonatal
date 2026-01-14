@@ -17,11 +17,11 @@ public class BabyPatientListTest {
     void getBaby_returnsCorrectBabies() {
         Baby a = BabyPatientList.getBaby(1);
         assertEquals(1, a.getId());
-        assertEquals("Person.Baby A", a.getName());
+        assertEquals("Baby A", a.getName());
 
         Baby b = BabyPatientList.getBaby(2);
         assertEquals(2, b.getId());
-        assertEquals("Person.Baby B", b.getName());
+        assertEquals("Baby B", b.getName());
     }
 
     @Test
@@ -29,4 +29,5 @@ public class BabyPatientListTest {
         Baby unknown = BabyPatientList.getBaby(999);
         assertEquals(1, unknown.getId()); // current behaviour
     }
+
 }
